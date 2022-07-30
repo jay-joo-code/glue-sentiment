@@ -1,7 +1,9 @@
 import prisma from "lib/glue/prisma"
 
 const crudEndpoints = {
-  "entry-logs": { model: prisma.entryLog },
+  topics: { model: prisma.topic },
+  categories: { model: prisma.category },
+  reviews: { model: prisma.review },
 }
 
 export default crudEndpoints

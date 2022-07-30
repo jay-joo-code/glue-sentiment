@@ -50,7 +50,9 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  tasks Task[]
+  topics     Topic[]
+  categories Category[]
+  reviews    Review[]
 
   @@map(name: "users")
 }
@@ -64,7 +66,22 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
-model Task {
+model Topic {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+  userId      Int?     @map("user_id")
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isValidated Boolean  @default(false)
+
+  name       String?   @default("")
+  categoryId Int?      @map("category_id")
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map(name: "tasks")
+}
+
+model Category {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now()) @map(name: "created_at")
   updatedAt   DateTime @updatedAt @map(name: "updated_at")
@@ -74,5 +91,26 @@ model Task {
 
   name String? @default("")
 
-  @@map(name: "tasks")
+  Topic Topic[]
+
+  @@map(name: "categories")
+}
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+  userId      Int?     @map("user_id")
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isValidated Boolean  @default(false)
+
+  content String
+  stars   Int
+  upvotes Int?   @default(0)
+
+  provider     String?
+  providerId   String?
+  providerData Json?
+
+  @@map(name: "reviews")
 }
