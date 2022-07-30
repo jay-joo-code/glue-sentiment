@@ -29,7 +29,7 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             "#1971C2",
             "#1864AB",
           ],
-          "button-dark": [
+          "button-gray": [
             "#F5F5F5",
             "#E0E1E2",
             "#D6D6D8",
@@ -41,13 +41,22 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             "#2C2E33",
             "#1A1B1E",
           ],
+
+          // text array values
+          // [muted, light, regular, dark]
+          "text-blue": ["#BCC8D5", "#9AADC0", "#617181", "#3B4550"],
         },
         spacing: {
-          xs: 4,
-          sm: 8,
-          md: 12,
+          xs: 8,
+          sm: 12,
+          md: 16,
           lg: 20,
           xl: 28,
+        },
+        fontSizes: {
+          md: 16,
+          lg: 20,
+          xl: 24,
         },
       }}
       defaultProps={{
@@ -71,6 +80,14 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
         },
         Container: {
           p: 0,
+          m: 0,
+        },
+      }}
+      styles={{
+        Container: {
+          root: {
+            maxWidth: "unset",
+          },
         },
       }}
     >

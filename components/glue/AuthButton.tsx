@@ -17,7 +17,7 @@ const AuthButton = () => {
   if (status !== "authenticated") {
     return (
       <Link href="/api/auth/signin">
-        <Button variant="light" color="button-dark" compact>
+        <Button variant="light" color="button-gray" compact>
           Sign in
         </Button>
       </Link>
@@ -49,7 +49,7 @@ const AuthButton = () => {
         </MenuItem>
       ))}
 
-      <MenuDivider />
+      {PUBLIC_NAV?.length > 0 && <MenuDivider />}
 
       <MenuItem onClick={() => signOut({ redirect: false })} color="red">
         Sign out

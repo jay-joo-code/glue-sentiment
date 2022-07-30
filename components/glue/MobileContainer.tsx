@@ -1,26 +1,20 @@
 import { Container } from "@mantine/core"
 import React from "react"
 import Flex from "./Flex"
-import Header from "./Header"
 
-interface IAppShellProps {
+interface IMobileContainerProps {
   children: React.ReactNode
 }
 
-const AppShell = ({ children }: IAppShellProps) => {
+const MobileContainer = ({ children }: IMobileContainerProps) => {
   return (
-    <Flex direction="column" align="center">
-      <Header />
+    <Flex justify="center">
       <Container
-        py="sm"
-        px="md"
         sx={(theme) => ({
           width: "100%",
-          minHeight: "100vh",
 
           [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-            width: "85vw",
-            maxWidth: "unset",
+            width: theme.breakpoints.xs,
           },
         })}
       >
@@ -30,4 +24,4 @@ const AppShell = ({ children }: IAppShellProps) => {
   )
 }
 
-export default AppShell
+export default MobileContainer
