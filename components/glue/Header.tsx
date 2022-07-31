@@ -67,7 +67,8 @@ const Header = () => {
                 <Text
                   size="md"
                   weight={700}
-                  color={theme.colors.brand[5]}
+                  variant="gradient"
+                  gradient={{ from: "indigo", to: "cyan", deg: 45 }}
                   sx={(theme) => ({
                     cursor: "pointer",
                   })}
