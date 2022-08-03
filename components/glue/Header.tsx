@@ -53,7 +53,7 @@ const Header = () => {
               },
             })}
           >
-            <Flex>
+            <Flex spacing="xs">
               <MediaQuery largerThan="xs" styles={{ display: "none" }}>
                 <Burger
                   opened={opened}
