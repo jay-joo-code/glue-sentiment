@@ -1,36 +1,57 @@
-import { Container, Text } from "@mantine/core"
+import { Badge, Container, Text } from "@mantine/core"
+import Flex from "components/glue/Flex"
+import Image from "next/image"
 import React from "react"
 
 interface ICategoryCardProps {
   name: string
-  svg: React.ReactNode
+  titleLabel: string
+  countLabel: string
+  svgName: string
+  isComingSoon: boolean
 }
 
-const CategoryCard = ({ name, svg }: ICategoryCardProps) => {
+const CategoryCard = ({
+  name,
+  titleLabel,
+  countLabel,
+  svgName,
+  isComingSoon,
+}: ICategoryCardProps) => {
   return (
-    <Container
-      px="md"
-      py="sm"
-      sx={(theme) => ({
-        background: theme.colors.gray[1],
-        borderRadius: "6px",
-        width: "44%",
-        height: "120px",
-        position: "relative",
-      })}
-    >
-      <Text size="lg" weight={500}>
-        {name}
-      </Text>
-      <Container
+    <Container>
+      <Flex
+        align="center"
+        justify="center"
         sx={(theme) => ({
-          position: "absolute",
-          bottom: "10px",
-          right: "10px",
+          background: theme.colors.gray[1],
+          borderRadius: "8px",
+          width: "10rem",
+          height: "14rem",
         })}
+        mb=".4rem"
       >
-        {svg}
-      </Container>
+        <div>
+          <Image
+            src={`/category-icons/${svgName}`}
+            alt=""
+            height={80}
+            width={80}
+          />
+        </div>
+      </Flex>
+      <Text mb=".2rem" ml=".2rem" weight={600} size="md">
+        {titleLabel}
+      </Text>
+      {isComingSoon ? (
+        <Badge radius="sm" size="xs">
+          Coming soon
+        </Badge>
+      ) : (
+        <Text size="xs" ml=".2rem" weight={500} color="dimmed">
+          0 {countLabel}
+        </Text>
+      )}
     </Container>
   )
 }
