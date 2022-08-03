@@ -95,6 +95,11 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             lineHeight: "1.2",
           },
         },
+        Title: {
+          root: {
+            fontWeight: 600,
+          },
+        },
       }}
     >
       {children}
