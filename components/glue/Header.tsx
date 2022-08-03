@@ -76,6 +76,9 @@ const Header = () => {
                   sentiment
                 </Text>
               </Link>
+              {/* <Text size="sm" weight={600} color="dimmed">
+                beta
+              </Text> */}
             </Flex>
             <Flex>
               {!isMobile && <NavList />}

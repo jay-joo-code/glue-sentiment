@@ -90,6 +90,11 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             maxWidth: "unset",
           },
         },
+        Text: {
+          root: {
+            lineHeight: "1.2",
+          },
+        },
       }}
     >
       {children}
