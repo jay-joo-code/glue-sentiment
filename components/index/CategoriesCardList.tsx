@@ -1,8 +1,6 @@
-import { Container, Header, Text, Title } from "@mantine/core"
+import { Container, Title } from "@mantine/core"
 import Flex from "components/glue/Flex"
-import React from "react"
 import CategoryCard from "./CategoryCard"
-import ChairIcon from "@mui/icons-material/Chair"
 
 const CategoriesCardList = () => {
   return (
