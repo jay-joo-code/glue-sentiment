@@ -20,40 +20,42 @@ const CategoriesCardList = () => {
             width: "0px",
           },
         })}
+        spacing="xs"
       >
         <CategoryCard
           name="course"
           titleLabel="Courses"
-          countLabel="courses"
           svgName="courses.svg"
           isComingSoon={false}
         />
         <CategoryCard
           name="club"
           titleLabel="Clubs"
-          countLabel="clubs"
           svgName="clubs.svg"
           isComingSoon={true}
         />
         <CategoryCard
           name="eatery"
           titleLabel="Eateries"
-          countLabel="eateries"
           svgName="eateries.svg"
           isComingSoon={true}
         />
         <CategoryCard
           name="dorm"
           titleLabel="Dorms"
-          countLabel="dorms"
           svgName="dorms.svg"
           isComingSoon={true}
         />
         <CategoryCard
           name="dining hall"
           titleLabel="Dining halls"
-          countLabel="dining halls"
           svgName="dining-halls.svg"
+          isComingSoon={true}
+        />
+        <CategoryCard
+          name="professor"
+          titleLabel="Professors"
+          svgName="professors.svg"
           isComingSoon={true}
         />
       </Flex>
