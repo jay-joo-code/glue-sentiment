@@ -9,6 +9,7 @@ interface ICategoryCardProps {
   titleLabel: string
   svgName: string
   isComingSoon: boolean
+  itemId?: string
 }
 
 const CategoryCard = ({
