@@ -1,25 +1,18 @@
 import { Badge, Container, Text } from "@mantine/core"
+import { capitalize } from "@mui/material"
+import { Category } from "@prisma/client"
 import Flex from "components/glue/Flex"
 import Image from "next/image"
 import Link from "next/link"
+import pluralize from "pluralize"
 import React from "react"
 
 interface ICategoryCardProps {
-  name: string
-  titleLabel: string
-  svgName: string
-  isComingSoon: boolean
   itemId?: string
+  category: Category
 }
 
-const CategoryCard = ({
-  name,
-  titleLabel,
-  svgName,
-  isComingSoon,
-}: ICategoryCardProps) => {
-  const countLabel = titleLabel.charAt(0).toLowerCase() + titleLabel.slice(1)
-
+const CategoryCard = ({ category }: ICategoryCardProps) => {
   return (
     <Link href={`/category/${name}`}>
       <Container
@@ -48,7 +41,7 @@ const CategoryCard = ({
         >
           <div>
             <Image
-              src={`/category-icons/${svgName}`}
+              src={`/category-icons/${category?.name}.svg`}
               alt=""
               height={80}
               width={80}
@@ -56,15 +49,15 @@ const CategoryCard = ({
           </div>
         </Flex>
         <Text mb=".2rem" ml=".2rem" weight={600} size="md">
-          {titleLabel}
+          {capitalize(pluralize(category?.name))}
         </Text>
-        {isComingSoon ? (
+        {category?.isComingSoon ? (
           <Badge radius="sm" size="xs">
             Coming soon
           </Badge>
         ) : (
           <Text size="xs" ml=".2rem" weight={500} color="dimmed">
-            0 {countLabel}
+            0 {pluralize(category?.name)}
           </Text>
         )}
       </Container>
