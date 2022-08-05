@@ -14,7 +14,7 @@ interface ICategoryCardProps {
 
 const CategoryCard = ({ category }: ICategoryCardProps) => {
   return (
-    <Link href={`/category/${name}`}>
+    <Link href={`/category/${category?.id}`}>
       <Container
         p="xs"
         sx={(theme) => ({
@@ -41,7 +41,7 @@ const CategoryCard = ({ category }: ICategoryCardProps) => {
         >
           <div>
             <Image
-              src={`/category-icons/${category?.name}.svg`}
+              src={`/category-icons/${pluralize(category?.name)}.svg`}
               alt=""
               height={80}
               width={80}
