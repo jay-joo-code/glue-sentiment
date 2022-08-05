@@ -12,7 +12,7 @@ type TChildren = React.ReactElement<{
 }>
 
 interface IHorizontalScrollMenuProps {
-  children: TChildren
+  children: TChildren | TChildren[]
 }
 
 const HorizontalScrollMenu = ({ children }: IHorizontalScrollMenuProps) => {
@@ -82,6 +82,8 @@ function RightArrow() {
 const ArrowContainer = styled.div`
   position: relative;
   background: transparent;
+  display: flex;
+  align-items: center;
 `
 
 interface IArrowButtonProps {
@@ -89,45 +91,36 @@ interface IArrowButtonProps {
 }
 
 const ArrowButton = styled.button<IArrowButtonProps>`
-  position: absolute;
-  top: 15px;
-  bottom: 15px;
-  left: 8px;
-  text-align: center;
-  margin: auto;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
   z-index: 2;
-  width: 2.5rem;
-  background: ${(props) => props.theme.grey[50]};
-  border-radius: 6px;
+  background: "#FFFFFF";
+  border-radius: 50%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  position: absolute;
+  left: 10px;
 
   /* disabled */
   display: ${(props) => props.disabled && "none"};
 
   /* isLeft */
   left: ${(props) => props.isLeft && "unset"};
-  right: ${(props) => props.isLeft && 0};
+  right: ${(props) => props.isLeft && "10px"};
 
   &:hover {
-    background: ${(props) => props.theme.grey[100]};
+    background: ${(props) => props.theme.colors.gray[0]};
   }
 `
 
 const RightIcon = styled(ChevronRightIcon)`
   width: 2.8rem !important;
-  height: 5rem !important;
-  fill: ${(props) => props.theme.text.default} !important;
+  height: 2.8rem !important;
+  fill: ${(props) => props.theme.colors.gray[7]} !important;
 `
 
 const LeftIcon = styled(ChevronLeftIcon)`
   width: 2.8rem !important;
-  height: 5rem !important;
-  fill: ${(props) => props.theme.text.default} !important;
+  height: 2.8rem !important;
+  fill: ${(props) => props.theme.colors.gray[7]} !important;
 `
 
 export default HorizontalScrollMenu
