@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchRedditComments } from "util/scrape"
+import { fetchRedditComments } from "util/scrapeReddit"
 
 export default async function handle(
   req: NextApiRequest,
