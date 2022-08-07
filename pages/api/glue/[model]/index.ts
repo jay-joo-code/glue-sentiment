@@ -2,11 +2,11 @@ import { withSentry } from "@sentry/nextjs"
 import crudEndpoints from "constants/crudEndpoints"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/react"
-import qs from "qs"
+import parseQuery from "util/glue/parseQuery"
 
 async function handle(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req })
-  const query = qs.parse(req?.url?.split("?")[1])
+  const query = parseQuery(req?.url?.split("?")[1])
   const model = crudEndpoints[req?.query?.model as string]?.model
   delete query?.model
 
