@@ -20,8 +20,6 @@ const CategoryCard = ({ category }: ICategoryCardProps) => {
   const svgFileName = pluralize(category?.name)
   const svgPath = `/category-icons/${svgFileName.replace(" ", "-")}.svg`
 
-  console.log("category", category)
-
   const renderComponent = () => (
     <Container
       p="xs"
