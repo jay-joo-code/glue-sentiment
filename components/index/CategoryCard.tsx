@@ -9,7 +9,11 @@ import React from "react"
 
 interface ICategoryCardProps {
   itemId?: string
-  category: Category
+  category: Category & {
+    _count: {
+      topics: number
+    }
+  }
 }
 
 const CategoryCard = ({ category }: ICategoryCardProps) => {
