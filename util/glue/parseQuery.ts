@@ -1,6 +1,14 @@
 import qs from "qs"
 
-const parseQuery = (query: string) => {
+interface IOptions {
+  parseNumbers?: boolean
+  parseBooleans?: boolean
+}
+
+const parseQuery = (
+  query: string,
+  { parseNumbers = true, parseBooleans = true }: IOptions
+) => {
   return qs.parse(query, {
     decoder(str, decoder, charset) {
       const strWithoutPlus = str.replace(/\+/g, " ")
@@ -9,18 +17,26 @@ const parseQuery = (query: string) => {
         return strWithoutPlus.replace(/%[0-9a-f]{2}/gi, unescape)
       }
 
-      if (/^(\d+|\d*\.\d+)$/.test(str)) {
+      if (parseNumbers && /^(\d+|\d*\.\d+)$/.test(str)) {
         return parseFloat(str)
       }
 
       const keywords = {
-        true: true,
-        false: false,
         null: null,
         undefined,
       }
+
       if (str in keywords) {
         return keywords[str]
+      }
+
+      const boolean = {
+        true: true,
+        false: false,
+      }
+
+      if (parseBooleans && str in boolean) {
+        return boolean[str]
       }
 
       // utf-8
