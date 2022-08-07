@@ -18,7 +18,7 @@ interface ICategoryCardProps {
 
 const CategoryCard = ({ category }: ICategoryCardProps) => {
   const svgFileName = pluralize(category?.name)
-  const svgPath = `/category-icons/${svgFileName.replace(" ", "-")}.svg`
+  const svgPath = `/category-illusts/${svgFileName.replace(" ", "-")}.svg`
 
   const renderComponent = () => (
     <Container

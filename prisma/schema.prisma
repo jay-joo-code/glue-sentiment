@@ -74,12 +74,15 @@ model Topic {
   subtitle      String
   desc          String? @default("")
   isInitialized Boolean @default(false)
+  stars         Int     @default(0)
 
   categoryId Int?      @map("category_id")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   provider   String?
   providerId String? @unique
+
+  reviews Review[]
 
   @@map(name: "topics")
 }
@@ -114,6 +117,9 @@ model Review {
   provider     String?
   providerId   String?
   providerData Json?
+
+  topicId Int?   @map("category_id")
+  topic   Topic? @relation(fields: [topicId], references: [id], onDelete: Cascade)
 
   @@map(name: "reviews")
 }
