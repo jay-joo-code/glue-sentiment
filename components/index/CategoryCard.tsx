@@ -16,6 +16,8 @@ const CategoryCard = ({ category }: ICategoryCardProps) => {
   const svgFileName = pluralize(category?.name)
   const svgPath = `/category-icons/${svgFileName.replace(" ", "-")}.svg`
 
+  console.log("category", category)
+
   const renderComponent = () => (
     <Container
       p="xs"
@@ -54,7 +56,7 @@ const CategoryCard = ({ category }: ICategoryCardProps) => {
         </Badge>
       ) : (
         <Text size="xs" ml=".2rem" weight={500} color="dimmed">
-          0 {pluralize(category?.name)}
+          {category?._count?.topics} {pluralize(category?.name)}
         </Text>
       )}
     </Container>

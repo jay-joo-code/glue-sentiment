@@ -1,12 +1,19 @@
 import { Container, Title } from "@mantine/core"
-import Flex from "components/glue/Flex"
 import HorizontalScrollMenu from "components/glue/HorizontalScrollMenu"
 import useSWR from "swr"
 import CategoryCard from "./CategoryCard"
-import pluralize from "pluralize"
 
 const CategoriesCardList = () => {
-  const { data: categories } = useSWR(["/glue/categories"])
+  const { data: categories } = useSWR([
+    "/glue/categories",
+    {
+      include: {
+        _count: {
+          select: { topics: true },
+        },
+      },
+    },
+  ])
 
   return (
     <Container my="3rem">

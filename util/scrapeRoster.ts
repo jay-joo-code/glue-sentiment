@@ -85,13 +85,7 @@ export const fetchAllClassesBySubject = (
     })()
   })
 
-interface IFetchAllClassesOptions {
-  reset?: boolean
-}
-
-export const fetchAllClasses = ({
-  reset = false,
-}: IFetchAllClassesOptions): Promise<boolean> =>
+export const fetchAllClasses = (): Promise<boolean> =>
   new Promise((resolve) => {
     ;(async () => {
       const courseCategory = await prisma.category.findFirst({
@@ -100,33 +94,24 @@ export const fetchAllClasses = ({
         },
       })
 
-      if (reset) {
-        // delete all existing course topics
-        await prisma.topic.deleteMany({
-          where: {
-            categoryId: courseCategory?.id,
-          },
-        })
-      }
-
       const subjects = await fetchSubjects("SP22")
-      let allClasses: any[] = []
-      const tempSubjects = [subjects[0]]
-      const promises = tempSubjects.map(
+      const allClasses = []
+      const promises = subjects.map(
         ({ value }, idx): Promise<void> =>
           new Promise((resolve) => {
             setTimeout(() => {
               ;(async () => {
                 const classes = await fetchAllClassesBySubject(value)
-                allClasses = allClasses.concat(classes)
+                classes?.forEach((classData) => allClasses.push(classData))
                 console.log(`Fetched ${classes.length} ${value} courses`)
                 resolve()
               })()
-            }, 1000 * idx)
+            }, 250 * idx)
           })
       )
       await Promise.all(promises)
-      const savePromises = allClasses?.map(async (classObj) => {
+
+      const savePromises = allClasses?.map(async (classObj, classIdx) => {
         const classData = {
           name: `${classObj?.subject} ${classObj?.catalogNbr}`,
           subtitle: classObj?.titleLong,
@@ -135,13 +120,21 @@ export const fetchAllClasses = ({
           provider: "roster",
           providerId: String(classObj?.crseId),
         }
-        await prisma.topic.upsert({
-          create: classData,
-          update: classData,
-          where: {
-            providerId: String(classObj?.crseId),
-          },
-        })
+        setTimeout(async () => {
+          await prisma.topic.upsert({
+            create: classData,
+            update: classData,
+            where: {
+              providerId: String(classObj?.crseId),
+            },
+          })
+          console.log(
+            "saved",
+            `${classObj?.subject} ${classObj?.catalogNbr}`,
+            (classIdx / allClasses?.length) * 100,
+            "% saved"
+          )
+        }, 100 * classIdx)
       })
       await Promise.all(savePromises)
       resolve(true)

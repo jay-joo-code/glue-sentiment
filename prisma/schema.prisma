@@ -94,7 +94,7 @@ model Category {
   name         String? @default("")
   isComingSoon Boolean @default(true)
 
-  Topic Topic[]
+  topics Topic[]
 
   @@map(name: "categories")
 }
