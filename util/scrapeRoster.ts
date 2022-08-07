@@ -102,7 +102,46 @@ export const fetchAllClasses = (): Promise<boolean> =>
             setTimeout(() => {
               ;(async () => {
                 const classes = await fetchAllClassesBySubject(value)
-                classes?.forEach((classData) => allClasses.push(classData))
+
+                // NOTE: synchronus save
+                // classes?.forEach((classData) => allClasses.push(classData))
+
+                const savePromises = classes?.map(
+                  async (classObj, classIdx) => {
+                    const classData = {
+                      name: `${classObj?.subject} ${classObj?.catalogNbr}`,
+                      subtitle: classObj?.titleLong,
+                      desc: classObj?.description,
+                      categoryId: courseCategory?.id,
+                      provider: "roster",
+                      providerId: String(classObj?.crseId),
+                    }
+                    setTimeout(async () => {
+                      await prisma.topic.upsert({
+                        create: classData,
+                        update: classData,
+                        where: {
+                          providerId: String(classObj?.crseId),
+                        },
+                      })
+                      console.log(
+                        "saved",
+                        `${classObj?.subject} ${classObj?.catalogNbr}`
+                      )
+
+                      // NOTE: synchronus save
+                      // console.log(
+                      //   "saved",
+                      //   `${classObj?.subject} ${classObj?.catalogNbr}`,
+                      //   (classIdx / allClasses?.length) * 100,
+                      //   "% saved"
+                      // )
+                    }, 100 * classIdx)
+                  }
+                )
+
+                await Promise.all(savePromises)
+
                 console.log(`Fetched ${classes.length} ${value} courses`)
                 resolve()
               })()
@@ -111,32 +150,33 @@ export const fetchAllClasses = (): Promise<boolean> =>
       )
       await Promise.all(promises)
 
-      const savePromises = allClasses?.map(async (classObj, classIdx) => {
-        const classData = {
-          name: `${classObj?.subject} ${classObj?.catalogNbr}`,
-          subtitle: classObj?.titleLong,
-          desc: classObj?.description,
-          categoryId: courseCategory?.id,
-          provider: "roster",
-          providerId: String(classObj?.crseId),
-        }
-        setTimeout(async () => {
-          await prisma.topic.upsert({
-            create: classData,
-            update: classData,
-            where: {
-              providerId: String(classObj?.crseId),
-            },
-          })
-          console.log(
-            "saved",
-            `${classObj?.subject} ${classObj?.catalogNbr}`,
-            (classIdx / allClasses?.length) * 100,
-            "% saved"
-          )
-        }, 100 * classIdx)
-      })
-      await Promise.all(savePromises)
+      // NOTE: synchronus save
+      // const savePromises = allClasses?.map(async (classObj, classIdx) => {
+      //   const classData = {
+      //     name: `${classObj?.subject} ${classObj?.catalogNbr}`,
+      //     subtitle: classObj?.titleLong,
+      //     desc: classObj?.description,
+      //     categoryId: courseCategory?.id,
+      //     provider: "roster",
+      //     providerId: String(classObj?.crseId),
+      //   }
+      //   setTimeout(async () => {
+      //     await prisma.topic.upsert({
+      //       create: classData,
+      //       update: classData,
+      //       where: {
+      //         providerId: String(classObj?.crseId),
+      //       },
+      //     })
+      //     console.log(
+      //       "saved",
+      //       `${classObj?.subject} ${classObj?.catalogNbr}`,
+      //       (classIdx / allClasses?.length) * 100,
+      //       "% saved"
+      //     )
+      //   }, 100 * classIdx)
+      // })
+      // await Promise.all(savePromises)
       resolve(true)
     })()
   })
