@@ -96,11 +96,11 @@ const Signin = ({ providers }: ISigninProps) => {
       align="center"
       justify="center"
       sx={(theme) => ({
-        height: "90vh",
+        height: "70vh",
       })}
     >
-      <Stack>
-        <Title order={1}>Login</Title>
+      <Stack spacing="xs">
+        <Title order={1}>Sign in</Title>
         <Text color="dimmed">Sign in to access your account</Text>
         <Stack
           mt="lg"
