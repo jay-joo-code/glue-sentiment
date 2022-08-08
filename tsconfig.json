@@ -16,7 +16,7 @@
     "incremental": true,
     "baseUrl": "."
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "sample-data"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/_document.js"],
   "ts-node": {
     "compilerOptions": {
