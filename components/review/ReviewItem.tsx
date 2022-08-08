@@ -3,18 +3,19 @@ import React from "react"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import ReactStars from "react-stars"
 import styled from "styled-components"
+import { Review } from "@prisma/client"
 
 interface IReviewItemProps {
-  stars: number
-  body: string
-  upvotes: number
+  review: Review
 }
 
-const ReviewItem = ({ stars, body, upvotes }: IReviewItemProps) => {
+const ReviewItem = ({ review }: IReviewItemProps) => {
+  const { stars, content, upvotes } = review
+  console.log("review", review)
   return (
     <Container>
       <ReactStars edit={false} value={stars} />
-      <Text>{body}</Text>
+      <Text>{content}</Text>
       <Button variant="default" leftIcon={<UpIcon />} size="xs">
         Agree {upvotes}
       </Button>

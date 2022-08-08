@@ -1,6 +1,11 @@
 import { Button, Container, Textarea, Title } from "@mantine/core"
+import { useLocalStorage } from "@mantine/hooks"
+import { showNotification } from "@mantine/notifications"
 import Flex from "components/glue/Flex"
-import React, { useState } from "react"
+import api from "lib/glue/api"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/router"
+import useSWR from "swr"
 import ReviewStars from "./ReviewStars"
 
 interface IMyReviewProps {
@@ -8,7 +13,57 @@ interface IMyReviewProps {
 }
 
 const MyReview = ({ topicId }: IMyReviewProps) => {
-  const [starsValue, setStarsValue] = useState<number>(0.5)
+  const { data: session } = useSession()
+  const { data: myReviews } = useSWR(
+    session
+      ? [
+          "/glue/reviews",
+          {
+            where: {
+              topicId,
+              userId: session?.user?.id,
+            },
+          },
+        ]
+      : null
+  )
+  const [stars, setStars] = useLocalStorage<number>({
+    key: `my-review-${topicId}-stars`,
+    defaultValue: myReviews ? myReviews[0]?.stars : 0,
+  })
+  const [content, setContent] = useLocalStorage<string>({
+    key: `my-review-${topicId}-content`,
+    defaultValue: "",
+  })
+
+  const router = useRouter()
+  const handleSave = async () => {
+    if (session) {
+      if (myReviews?.length === 0) {
+        // create new
+        await api.post("/glue/reviews", {
+          content,
+          stars,
+          topic: { connect: { id: topicId } },
+        })
+      } else {
+        // update existing
+        await api.put(`/glue/reviews/${myReviews[0]?.id}`, {
+          content,
+          stars,
+        })
+      }
+      showNotification({
+        title: "Review saved",
+        message: "Your review has been successfully saved",
+        color: "green",
+      })
+      // TODO: recalculate topic stars
+    } else {
+      router.push("/api/auth/signin")
+    }
+  }
+  // TODO: debounced autosave
 
   return (
     <Container>
@@ -16,8 +71,8 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
         My review
       </Title>
       <ReviewStars
-        value={starsValue}
-        onChange={(newValue) => setStarsValue(newValue)}
+        value={stars}
+        onChange={(newValue) => setStars(newValue)}
         edit={true}
         size={24}
       />
@@ -32,6 +87,8 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
         <Textarea
           autosize={true}
           minRows={3}
+          value={content}
+          onChange={(event) => setContent(event?.target?.value)}
           sx={(theme) => ({
             "& textarea": {
               background: theme.colors.gray[0],
@@ -40,7 +97,9 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
           })}
         />
         <Flex justify="flex-end" pr="sm">
-          <Button size="xs">Save</Button>
+          <Button size="xs" onClick={handleSave}>
+            Save
+          </Button>
         </Flex>
       </Container>
     </Container>

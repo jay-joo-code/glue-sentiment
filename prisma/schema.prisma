@@ -52,6 +52,7 @@ model User {
 
   categories Category[]
   reviews    Review[]
+  topics     Topic[]
 
   @@map(name: "users")
 }
@@ -69,6 +70,8 @@ model Topic {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
+  userId    Int?     @map("user_id")
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   name          String
   subtitle      String
@@ -111,14 +114,14 @@ model Review {
   isValidated Boolean  @default(false)
 
   content String
-  stars   Int
+  stars   Float
   upvotes Int?   @default(0)
 
   provider     String?
   providerId   String?
   providerData Json?
 
-  topicId Int?   @map("category_id")
+  topicId Int?   @map("topic_id")
   topic   Topic? @relation(fields: [topicId], references: [id], onDelete: Cascade)
 
   @@map(name: "reviews")
