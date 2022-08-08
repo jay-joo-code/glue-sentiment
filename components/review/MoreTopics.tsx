@@ -2,8 +2,6 @@ import { Container, Title } from "@mantine/core"
 import { Category, Review, Topic } from "@prisma/client"
 import TopicSearch from "components/index/TopicSearch"
 import pluralize from "pluralize"
-import React from "react"
-import useSWR from "swr"
 
 interface IMoreTopicsProps {
   topic: Topic & {
