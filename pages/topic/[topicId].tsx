@@ -5,10 +5,12 @@ import prisma from "lib/glue/prisma"
 import { GetServerSideProps } from "next"
 import { getSession } from "next-auth/react"
 import { Category, Review, Topic } from "@prisma/client"
-import { Badge, Space, Spoiler, Text, Title } from "@mantine/core"
+import { Badge, Container, Space, Spoiler, Text, Title } from "@mantine/core"
 import Flex from "components/glue/Flex"
 import ReviewStars from "components/review/ReviewStars"
 import MyReview from "components/review/MyReview"
+import AllReviews from "components/review/AllReviews"
+import MoreTopics from "components/review/MoreTopics"
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -78,8 +80,12 @@ const TopicDetailsPage = ({ topic }) => {
           {topic?.desc}
         </Text>
       </Spoiler>
-      <Space h="xl" />
+      <Container mb="4rem" />
       <MyReview topicId={topic?.id} />
+      <Container mb="4rem" />
+      <AllReviews reviews={topic?.reviews} />
+      <Container mb="4rem" />
+      <MoreTopics topic={topic} />
     </PageContainer>
   )
 }

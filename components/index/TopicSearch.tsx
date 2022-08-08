@@ -6,45 +6,55 @@ import useSWR from "swr"
 import { useDebouncedValue } from "@mantine/hooks"
 import TopicListItem from "components/topic/TopicListItem"
 
-const TopicSearch = () => {
+interface ITopicSearchProps {
+  categoryName?: string
+  renderByDefault?: boolean
+}
+
+const TopicSearch = ({
+  categoryName,
+  renderByDefault = false,
+}: ITopicSearchProps) => {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500)
-  const { data: topics } = useSWR(
-    debouncedSearchQuery
-      ? [
-          "/glue/topics",
-          {
-            where: {
-              name: {
-                contains: debouncedSearchQuery,
-                mode: "insensitive",
-              },
-            },
-            include: {
-              _count: {
-                select: { reviews: true },
-              },
-              category: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-            page: 0,
-            limit: 5,
-            parseConfig: {
-              parseNumbers: false,
-            },
+  const queryConfig = [
+    "/glue/topics",
+    {
+      where: {
+        name: {
+          contains: debouncedSearchQuery,
+          mode: "insensitive",
+        },
+        category: {
+          name: categoryName,
+        },
+      },
+      include: {
+        _count: {
+          select: { reviews: true },
+        },
+        category: {
+          select: {
+            name: true,
           },
-        ]
-      : null
-  )
+        },
+      },
+      page: 0,
+      limit: 5,
+      parseConfig: {
+        parseNumbers: false,
+      },
+    },
+  ]
+  const queryRequest = renderByDefault
+    ? queryConfig
+    : debouncedSearchQuery
+    ? queryConfig
+    : null
+  const { data: topics } = useSWR(queryRequest)
 
   return (
     <Container>
-      <Title order={2} mb="md">
-        Search
-      </Title>
       <Input
         radius="xl"
         icon={<SearchIcon />}
