@@ -11,7 +11,7 @@ interface IReviewItemProps {
 
 const ReviewItem = ({ review }: IReviewItemProps) => {
   const { stars, content, upvotes } = review
-  console.log("review", review)
+
   return (
     <Container>
       <ReactStars edit={false} value={stars} />
