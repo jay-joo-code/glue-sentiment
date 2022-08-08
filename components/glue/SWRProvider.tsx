@@ -1,7 +1,6 @@
-import { showNotification } from "@mantine/notifications"
+import qs from "qs"
 import React from "react"
 import { SWRConfig } from "swr"
-import qs from "qs"
 
 interface ISWRProviderProps {
   children: React.ReactNode

@@ -12,7 +12,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   if (session) {
     return {
-      redirect: { destination: "/" },
       props: { providers: [] },
     }
   }
@@ -24,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   }
 }
 
-export interface ISigninProps {
+interface ISigninProps {
   providers?: Provider
 }
 
