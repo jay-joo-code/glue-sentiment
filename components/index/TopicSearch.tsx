@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import useSWR from "swr"
 import { useDebouncedValue } from "@mantine/hooks"
 import TopicListItem from "components/topic/TopicListItem"
+import Image from "next/image"
 
 interface ITopicSearchProps {
   categoryName?: string
@@ -67,6 +68,19 @@ const TopicSearch = ({
             <TopicListItem key={topic?.id} topic={topic} />
           ))}
         </Container>
+      )}
+
+      {/* empty state */}
+      {(renderByDefault || debouncedSearchQuery) && topics?.length === 0 && (
+        <Flex direction="column" align="center" py="3rem">
+          <Image
+            src="/empty-states/topic-search.svg"
+            alt=""
+            height={120}
+            width={150}
+          />
+          <Text weight={500}>No search results</Text>
+        </Flex>
       )}
     </Container>
   )
