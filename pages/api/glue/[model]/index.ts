@@ -32,7 +32,7 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
       const docs = await model.findMany({
         orderBy: {
           // TODO: not working
-          updatedAt: "desc",
+          updatedAt: "asc",
         },
         skip,
         take,
