@@ -83,7 +83,7 @@ const TopicDetailsPage = ({ topic }) => {
       <Container mb="4rem" />
       <MyReview topicId={topic?.id} />
       <Container mb="4rem" />
-      <AllReviews reviews={topic?.reviews} />
+      <AllReviews topicId={topic?.id} />
       <Container mb="4rem" />
       <MoreTopics topic={topic} />
     </PageContainer>
