@@ -19,8 +19,8 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
           // depend on them
           brand: [
             "#F7FCFF",
-            "#F3FAFF",
-            "#E7F5FF",
+            "#E1F2FF",
+            "#CBE8FE",
             "#74C0FC",
             "#4DABF7",
             "#339AF0",
