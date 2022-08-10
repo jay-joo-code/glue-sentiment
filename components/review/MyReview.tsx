@@ -7,6 +7,9 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import ReviewStars from "./ReviewStars"
+import useSWRImmutable from "swr/immutable"
+import { Review } from "@prisma/client"
+import getAverageReviewStars from "util/getAverageReviewStars"
 
 interface IMyReviewProps {
   topicId: number
@@ -27,10 +30,21 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
         ]
       : null
   )
+
+  const { mutate } = useSWRImmutable<Review[]>([
+    "/glue/reviews",
+    {
+      where: {
+        topicId,
+      },
+    },
+  ])
+
   const [stars, setStars] = useLocalStorage<number>({
     key: `my-review-${topicId}-stars`,
     defaultValue: myReviews ? myReviews[0]?.stars : 0,
   })
+
   const [content, setContent] = useLocalStorage<string>({
     key: `my-review-${topicId}-content`,
     defaultValue: "",
@@ -58,7 +72,13 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
         message: "Your review has been successfully saved",
         color: "green",
       })
-      // TODO: recalculate topic stars
+
+      // recalculate topic stars
+      const allReviews = await mutate()
+      const newStars = getAverageReviewStars(allReviews)
+      api.put(`/glue/topics/${topicId}`, {
+        stars: newStars,
+      })
     } else {
       router.push("/api/auth/signin")
     }
