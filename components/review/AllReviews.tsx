@@ -32,11 +32,18 @@ const AllReviews = ({ topicId }: IAllReviewsProps) => {
     setSortBy(newValue)
   }
 
-  const { data: reviews, mutate } = useSWRImmutable<Review[]>([
+  const { data: reviews, mutate } = useSWRImmutable([
     "/glue/reviews",
     {
       where: {
         topicId,
+      },
+      include: {
+        topic: {
+          include: {
+            category: true,
+          },
+        },
       },
       orderBy: sortByToQuery[sortBy],
       page: 0,
