@@ -36,7 +36,7 @@ export default async function handle(
           }
         : {}
 
-      const data = { ...req?.body, isValidated: !!session, ...userData }
+      const data = { ...req?.body, ...userData }
       delete data.id
       delete data.createdAt
       delete data.updatedAt
