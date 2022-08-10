@@ -63,7 +63,6 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
       defaultProps={{
         Text: { component: "p" },
         Paper: {
-          p: "md",
           radius: "md",
         },
         ActionIcon: {
@@ -77,7 +76,7 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
         },
         Menu: {
           transition: "fade",
-          p: "sm",
+          py: "sm",
         },
         Container: {
           p: 0,
