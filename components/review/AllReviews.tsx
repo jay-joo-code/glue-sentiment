@@ -1,4 +1,5 @@
 import { Container, Select, Stack, Text, Title } from "@mantine/core"
+import { useLocalStorage } from "@mantine/hooks"
 import { Review } from "@prisma/client"
 import Flex from "components/glue/Flex"
 import api from "lib/glue/api"
@@ -12,15 +13,32 @@ interface IAllReviewsProps {
 }
 
 const AllReviews = ({ topicId }: IAllReviewsProps) => {
+  const sortByToQuery = {
+    popular: { upvotes: "desc" },
+    recent: { createdAt: "desc" },
+  }
+
+  const reviewSortByOptions = [
+    { value: "popular", label: "Popular" },
+    { value: "recent", label: "Recent" },
+  ]
+
+  const [sortBy, setSortBy] = useLocalStorage({
+    key: `all-reviews-sort-by-${topicId}`,
+    defaultValue: "popular",
+  })
+
+  const handleSortByChange = (newValue: string) => {
+    setSortBy(newValue)
+  }
+
   const { data: reviews, mutate } = useSWRImmutable<Review[]>([
     "/glue/reviews",
     {
       where: {
         topicId,
       },
-      orderBy: {
-        createdAt: "asc",
-      },
+      orderBy: sortByToQuery[sortBy],
       page: 0,
       limit: 5,
     },
@@ -54,8 +72,11 @@ const AllReviews = ({ topicId }: IAllReviewsProps) => {
     <Container>
       <Flex align="center" justify="space-between" mb="2rem">
         <Title order={2}>All Reviews ({reviews?.length})</Title>
-        {/* TODO: sort select */}
-        {/* <Select /> */}
+        <Select
+          value={sortBy}
+          onChange={handleSortByChange}
+          data={reviewSortByOptions}
+        />
       </Flex>
       {/* TODO: infinite scrolling */}
       {reviews?.length === 0 ? (
