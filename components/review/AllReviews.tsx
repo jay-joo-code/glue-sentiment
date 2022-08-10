@@ -64,6 +64,7 @@ const AllReviews = ({ topicId }: IAllReviewsProps) => {
       {
         optimisticData: newReviews,
         rollbackOnError: true,
+        revalidate: false,
       }
     )
   }

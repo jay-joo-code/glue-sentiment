@@ -77,7 +77,7 @@ model Topic {
   subtitle      String
   desc          String? @default("")
   isInitialized Boolean @default(false)
-  stars         Int     @default(0)
+  stars         Float   @default(0)
 
   categoryId Int?      @map("category_id")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)

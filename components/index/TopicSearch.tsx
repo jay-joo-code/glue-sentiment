@@ -40,6 +40,11 @@ const TopicSearch = ({
           },
         },
       },
+      orderBy: {
+        reviews: {
+          _count: "desc",
+        },
+      },
       page: 0,
       limit: 5,
       parseConfig: {
