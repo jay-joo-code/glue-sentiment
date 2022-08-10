@@ -93,6 +93,7 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
         Text: {
           root: {
             lineHeight: "1.2",
+            whiteSpace: "pre-line",
           },
         },
         Title: {
