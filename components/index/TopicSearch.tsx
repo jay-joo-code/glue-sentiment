@@ -81,7 +81,7 @@ const TopicSearch = ({
       {/* recently viewed */}
       {!renderByDefault && !debouncedSearchQuery && (
         <Container p="sm" mt="md">
-          <Text size="sm" weight={500} mb="sm">
+          <Text size="xs" weight={500} mb="xs" color="dimmed" ml=".5rem">
             Recently viewed
           </Text>
           {recentTopics?.map((topic) => (
