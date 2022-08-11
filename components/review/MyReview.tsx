@@ -16,19 +16,16 @@ interface IMyReviewProps {
 
 const MyReview = ({ topicId }: IMyReviewProps) => {
   const { data: session } = useSession()
-  const { data: myReviews } = useGlueQuery(
-    session
-      ? {
-          url: "/glue/reviews",
-          args: {
-            where: {
-              topicId,
-              userId: session?.user?.id,
-            },
-          },
-        }
-      : null
-  )
+  const { data: myReviews } = useGlueQuery({
+    url: "/glue/reviews",
+    args: {
+      where: {
+        topicId,
+        userId: session?.user?.id,
+      },
+    },
+    disabled: !session,
+  })
 
   const { mutate } = useGlueQuery<Review[]>({
     variant: "static",
