@@ -1,5 +1,4 @@
 import { Badge, Container, Spoiler, Text, Title } from "@mantine/core"
-import { useLocalStorage } from "@mantine/hooks"
 import { Category, Review, Topic } from "@prisma/client"
 import Flex from "components/glue/Flex"
 import PageContainer from "components/glue/PageContainer"
@@ -10,7 +9,7 @@ import ReviewStars from "components/review/ReviewStars"
 import useRecentTopics from "hooks/useRecentTopics"
 import prisma from "lib/glue/prisma"
 import { GetServerSideProps } from "next"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const topic = await prisma.topic.findFirst({
@@ -40,15 +39,21 @@ interface ITopicDetailsPageProps {
 
 const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
   const [recentTopics, setRecentTopics] = useRecentTopics()
+  const [isAddedRecentTopic, setIsAddedRecentTopic] = useState<boolean>(false)
 
   useEffect(() => {
-    const newTopics = recentTopics?.filter(
-      (recentTopic) => recentTopic?.id !== topic?.id
-    )
-    if (newTopics?.length > 5) newTopics.pop()
-    newTopics?.unshift(topic)
-    setRecentTopics(newTopics)
-  }, [])
+    if (recentTopics && !isAddedRecentTopic) {
+      const newTopics = recentTopics?.filter(
+        (recentTopic) => recentTopic?.id !== topic?.id
+      )
+
+      if (newTopics?.length >= 5) newTopics.pop()
+
+      newTopics?.unshift(topic)
+      setRecentTopics(newTopics)
+      setIsAddedRecentTopic(true)
+    }
+  }, [recentTopics])
 
   return (
     <PageContainer
