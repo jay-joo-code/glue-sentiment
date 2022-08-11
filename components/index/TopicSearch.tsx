@@ -79,7 +79,7 @@ const TopicSearch = ({
       )}
 
       {/* recently viewed */}
-      {!renderByDefault && !debouncedSearchQuery && (
+      {!renderByDefault && !debouncedSearchQuery && recentTopics?.length > 0 && (
         <Container p="sm" mt="md">
           <Text size="xs" weight={500} mb="xs" color="dimmed" ml=".5rem">
             Recently viewed
