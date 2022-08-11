@@ -21,7 +21,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   })
 
   return {
-    props: { topic },
+    props: {
+      key: query?.topicId,
+      topic,
+    },
   }
 }
 
