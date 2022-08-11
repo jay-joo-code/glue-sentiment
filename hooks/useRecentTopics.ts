@@ -4,6 +4,7 @@ const useRecentTopics = () => {
   return useLocalStorage({
     key: "recently-viewed-topics",
     defaultValue: [],
+    getInitialValueInEffect: true,
   })
 }
 
