@@ -1,11 +1,11 @@
-import { Container, Input, Stack, Text, Title } from "@mantine/core"
-import Flex from "components/glue/Flex"
-import React, { useState } from "react"
-import SearchIcon from "@mui/icons-material/Search"
-import useSWR from "swr"
+import { Container, Input, Text } from "@mantine/core"
 import { useDebouncedValue } from "@mantine/hooks"
+import SearchIcon from "@mui/icons-material/Search"
+import Flex from "components/glue/Flex"
 import TopicListItem from "components/topic/TopicListItem"
+import useGlueQuery from "hooks/glue/useGlueQuery"
 import Image from "next/image"
+import { useState } from "react"
 
 interface ITopicSearchProps {
   categoryName?: string
@@ -18,9 +18,9 @@ const TopicSearch = ({
 }: ITopicSearchProps) => {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500)
-  const queryConfig = [
-    "/glue/topics",
-    {
+  const queryConfig = {
+    url: "/glue/topics",
+    args: {
       where: {
         name: {
           contains: debouncedSearchQuery,
@@ -51,13 +51,13 @@ const TopicSearch = ({
         parseNumbers: false,
       },
     },
-  ]
+  }
   const queryRequest = renderByDefault
     ? queryConfig
     : debouncedSearchQuery
     ? queryConfig
     : null
-  const { data: topics } = useSWR(queryRequest)
+  const { data: topics } = useGlueQuery(queryRequest)
 
   return (
     <Container>

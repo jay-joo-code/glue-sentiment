@@ -1,11 +1,9 @@
 import { Container, Select, Stack, Text, Title } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
-import { Review } from "@prisma/client"
 import Flex from "components/glue/Flex"
+import useGlueQuery from "hooks/glue/useGlueQuery"
 import api from "lib/glue/api"
 import Image from "next/image"
-import React from "react"
-import useSWRImmutable from "swr/immutable"
 import ReviewItem from "./ReviewItem"
 
 interface IAllReviewsProps {
@@ -32,9 +30,10 @@ const AllReviews = ({ topicId }: IAllReviewsProps) => {
     setSortBy(newValue)
   }
 
-  const { data: reviews, mutate } = useSWRImmutable([
-    "/glue/reviews",
-    {
+  const { data: reviews, mutate } = useGlueQuery({
+    variant: "static",
+    url: "/glue/reviews",
+    args: {
       where: {
         topicId,
       },
@@ -49,7 +48,7 @@ const AllReviews = ({ topicId }: IAllReviewsProps) => {
       page: 0,
       limit: 5,
     },
-  ])
+  })
 
   const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
     const newReviews = reviews?.map((review) => {

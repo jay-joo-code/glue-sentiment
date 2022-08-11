@@ -1,8 +1,6 @@
-import { Container, Space, Stack, Title } from "@mantine/core"
-import { Category, Review, Topic } from "@prisma/client"
+import { Container, Stack, Title } from "@mantine/core"
+import useGlueQuery from "hooks/glue/useGlueQuery"
 import api from "lib/glue/api"
-import React from "react"
-import useSWRImmutable from "swr/immutable"
 import ReviewItem from "./ReviewItem"
 
 interface IRecentReviewsProps {
@@ -10,9 +8,10 @@ interface IRecentReviewsProps {
 }
 
 const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
-  const { data: reviews, mutate } = useSWRImmutable([
-    "/glue/reviews",
-    {
+  const { data: reviews, mutate } = useGlueQuery({
+    variant: "static",
+    url: "/glue/reviews",
+    args: {
       where: {
         topic: {
           categoryId,
@@ -31,7 +30,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
       limit: 5,
       page: 0,
     },
-  ])
+  })
 
   const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
     const newReviews = reviews?.map((review) => {

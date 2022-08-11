@@ -1,15 +1,14 @@
 import { Button, Container, Textarea, Title } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import { showNotification } from "@mantine/notifications"
+import { Review } from "@prisma/client"
 import Flex from "components/glue/Flex"
+import useGlueQuery from "hooks/glue/useGlueQuery"
 import api from "lib/glue/api"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
-import useSWR from "swr"
-import ReviewStars from "./ReviewStars"
-import useSWRImmutable from "swr/immutable"
-import { Review } from "@prisma/client"
 import getAverageReviewStars from "util/getAverageReviewStars"
+import ReviewStars from "./ReviewStars"
 
 interface IMyReviewProps {
   topicId: number
@@ -17,28 +16,29 @@ interface IMyReviewProps {
 
 const MyReview = ({ topicId }: IMyReviewProps) => {
   const { data: session } = useSession()
-  const { data: myReviews } = useSWR(
+  const { data: myReviews } = useGlueQuery(
     session
-      ? [
-          "/glue/reviews",
-          {
+      ? {
+          url: "/glue/reviews",
+          args: {
             where: {
               topicId,
               userId: session?.user?.id,
             },
           },
-        ]
+        }
       : null
   )
 
-  const { mutate } = useSWRImmutable<Review[]>([
-    "/glue/reviews",
-    {
+  const { mutate } = useGlueQuery<Review[]>({
+    variant: "static",
+    url: "/glue/reviews",
+    args: {
       where: {
         topicId,
       },
     },
-  ])
+  })
 
   const [stars, setStars] = useLocalStorage<number>({
     key: `my-review-${topicId}-stars`,
