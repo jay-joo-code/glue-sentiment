@@ -1,22 +1,15 @@
-import PageContainer from "components/glue/PageContainer"
-import { useRouter } from "next/router"
-import React from "react"
-import prisma from "lib/glue/prisma"
-import { GetServerSideProps } from "next"
-import { getSession } from "next-auth/react"
+import { Badge, Container, Spoiler, Text, Title } from "@mantine/core"
 import { Category, Review, Topic } from "@prisma/client"
-import { Badge, Container, Space, Spoiler, Text, Title } from "@mantine/core"
 import Flex from "components/glue/Flex"
-import ReviewStars from "components/review/ReviewStars"
-import MyReview from "components/review/MyReview"
+import PageContainer from "components/glue/PageContainer"
 import AllReviews from "components/review/AllReviews"
 import MoreTopics from "components/review/MoreTopics"
+import MyReview from "components/review/MyReview"
+import ReviewStars from "components/review/ReviewStars"
+import prisma from "lib/glue/prisma"
+import { GetServerSideProps } from "next"
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  res,
-  query,
-}) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const topic = await prisma.topic.findFirst({
     where: {
       id: Number(query?.topicId),
@@ -32,14 +25,14 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 }
 
-export interface ITopicDetailsPageProps {
+interface ITopicDetailsPageProps {
   topic: Topic & {
     reviews: Review[]
     category: Category
   }
 }
 
-const TopicDetailsPage = ({ topic }) => {
+const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
   return (
     <PageContainer
       title={`${topic?.name} | Sentiment - Reviews at Cornell`}
