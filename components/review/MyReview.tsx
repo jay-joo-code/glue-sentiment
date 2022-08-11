@@ -49,6 +49,26 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
 
   const router = useRouter()
   const handleSave = async () => {
+    // validation
+    if (stars < 1) {
+      showNotification({
+        title: "Please input atleast one star",
+        message: "",
+        color: "red",
+      })
+      return
+    }
+
+    if (content?.length < 20) {
+      showNotification({
+        title: "Your review must be atleast 20 characters long",
+        message: "",
+        color: "red",
+      })
+      return
+    }
+
+    // save logic
     if (session) {
       if (myReviews?.length === 0) {
         // create new
