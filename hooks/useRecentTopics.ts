@@ -1,10 +1,9 @@
-import { useLocalStorage } from "@mantine/hooks"
+import useGlueLocalStorage from "./glue/useGlueLocalStorage"
 
 const useRecentTopics = () => {
-  return useLocalStorage({
+  return useGlueLocalStorage({
     key: "recently-viewed-topics",
     defaultValue: [],
-    getInitialValueInEffect: true,
   })
 }
 
