@@ -5,8 +5,6 @@ import Flex from "components/glue/Flex"
 import ReviewStars from "components/review/ReviewStars"
 import categoryNameToIcon from "constants/categoryNameToIcon"
 import Link from "next/link"
-import React from "react"
-import ReactStars from "react-stars"
 
 interface ITopicListItemProps {
   topic: Topic & {
