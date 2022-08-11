@@ -2,32 +2,23 @@ import useSWRImmutable from "swr/immutable"
 import useSWR, { SWRConfiguration } from "swr"
 
 interface IGlueQueryConfig extends SWRConfiguration {
-  url: string
+  url?: string
   args?: any
   variant?: "default" | "static" | "infinite-scroll"
+  disabled?: boolean
 }
 
-const useGlueQuery = <T = any>({
-  url,
-  args = {},
-  variant = "default",
-  ...rest
-}: IGlueQueryConfig) => {
-  const defaultQueryData = useSWR<T>(
-    {
-      url,
-      args,
-    },
-    { ...rest }
-  )
-
-  const staticQueryData = useSWRImmutable<T>(
-    {
-      url,
-      args,
-    },
-    { ...rest }
-  )
+const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
+  const {
+    url,
+    args = {},
+    variant = "default",
+    disabled = false,
+    ...rest
+  } = config || {}
+  const queryConfig = !config || disabled ? null : { url, args }
+  const defaultQueryData = useSWR<T>(queryConfig, { ...rest })
+  const staticQueryData = useSWRImmutable<T>(queryConfig, { ...rest })
 
   if (variant === "default") {
     return defaultQueryData
