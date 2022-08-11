@@ -1,4 +1,5 @@
 import { Badge, Container, Spoiler, Text, Title } from "@mantine/core"
+import { useLocalStorage } from "@mantine/hooks"
 import { Category, Review, Topic } from "@prisma/client"
 import Flex from "components/glue/Flex"
 import PageContainer from "components/glue/PageContainer"
@@ -6,8 +7,10 @@ import AllReviews from "components/review/AllReviews"
 import MoreTopics from "components/review/MoreTopics"
 import MyReview from "components/review/MyReview"
 import ReviewStars from "components/review/ReviewStars"
+import useRecentTopics from "hooks/useRecentTopics"
 import prisma from "lib/glue/prisma"
 import { GetServerSideProps } from "next"
+import { useEffect } from "react"
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const topic = await prisma.topic.findFirst({
@@ -36,6 +39,17 @@ interface ITopicDetailsPageProps {
 }
 
 const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
+  const [recentTopics, setRecentTopics] = useRecentTopics()
+
+  useEffect(() => {
+    const newTopics = recentTopics?.filter(
+      (recentTopic) => recentTopic?.id !== topic?.id
+    )
+    if (newTopics?.length > 5) newTopics.pop()
+    newTopics?.unshift(topic)
+    setRecentTopics(newTopics)
+  }, [])
+
   return (
     <PageContainer
       title={`${topic?.name} | Sentiment - Reviews at Cornell`}

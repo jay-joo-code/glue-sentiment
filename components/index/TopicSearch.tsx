@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import Flex from "components/glue/Flex"
 import TopicListItem from "components/topic/TopicListItem"
 import useGlueQuery from "hooks/glue/useGlueQuery"
+import useRecentTopics from "hooks/useRecentTopics"
 import Image from "next/image"
 import { useState } from "react"
 
@@ -59,6 +60,8 @@ const TopicSearch = ({
     : null
   const { data: topics } = useGlueQuery(queryRequest)
 
+  const [recentTopics] = useRecentTopics()
+
   return (
     <Container>
       <Input
@@ -70,6 +73,18 @@ const TopicSearch = ({
       {topics?.length > 0 && (
         <Container p="sm" mt="md">
           {topics?.map((topic) => (
+            <TopicListItem key={topic?.id} topic={topic} />
+          ))}
+        </Container>
+      )}
+
+      {/* recently viewed */}
+      {!renderByDefault && !debouncedSearchQuery && (
+        <Container p="sm" mt="md">
+          <Text size="sm" weight={500} mb="sm">
+            Recently viewed
+          </Text>
+          {recentTopics?.map((topic) => (
             <TopicListItem key={topic?.id} topic={topic} />
           ))}
         </Container>
