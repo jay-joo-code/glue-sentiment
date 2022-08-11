@@ -76,7 +76,6 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
         },
         Menu: {
           transition: "fade",
-          py: "sm",
         },
         Container: {
           p: 0,

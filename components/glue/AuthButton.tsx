@@ -1,7 +1,6 @@
 import { Avatar, Button, Menu } from "@mantine/core"
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
-import MenuDivider from "./MenuDivider"
 import MenuItem from "./MenuItem"
 
 const AuthButton = () => {
@@ -49,7 +48,7 @@ const AuthButton = () => {
         </MenuItem>
       ))}
 
-      {PUBLIC_NAV?.length > 0 && <MenuDivider />}
+      {/* {PUBLIC_NAV?.length > 0 && <MenuDivider />} */}
 
       <MenuItem onClick={() => signOut({ redirect: false })} color="red">
         Sign out
