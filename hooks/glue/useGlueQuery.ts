@@ -13,7 +13,7 @@ interface IGlueQueryConfig extends SWRConfiguration {
 }
 
 interface IOptimisticUpdate<T = any> {
-  variant: "update" | "append-start" | "append-end" | "delete"
+  variant: "create" | "update" | "append-start" | "append-end" | "delete"
   itemData: any
   asyncRequest: (prevData: T) => T
 }
