@@ -1,19 +1,13 @@
-import { Container, Stack, Title } from "@mantine/core"
-import useGlueQuery from "hooks/glue/useGlueQuery"
-import api from "lib/glue/api"
 import ReviewItem from "./ReviewItem"
-import InfiniteScrollComponent from "react-infinite-scroll-component"
+import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
+import api from "lib/glue/api"
 
 interface IRecentReviewsProps {
   categoryId?: number
 }
 
 const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
-  const {
-    data: reviews,
-    optimisticUpdate,
-    refetch,
-  } = useGlueQuery({
+  const queryConfig = {
     url: "/glue/reviews",
     args: {
       where: {
@@ -31,45 +25,39 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
       orderBy: {
         createdAt: "desc",
       },
-      limit: 6,
     },
-  })
-
-  const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
-    optimisticUpdate({
-      variant: "update",
-      itemData: {
-        id: reviewId,
-        upvotes: newUpvotes,
-      },
-      asyncRequest: async () => {
-        await api.put(`/glue/reviews/${reviewId}`, {
-          upvotes: newUpvotes,
-        })
-        const reviews = await refetch()
-        return reviews
-      },
-    })
   }
 
   return (
-    <Container>
-      <Title order={2} mb="lg">
-        Recent reviews
-      </Title>
-      {/* <InfiniteScrollComponent> */}
-      <Stack>
-        {reviews?.map((review) => (
+    <GlueInfiniteScroll queryConfig={queryConfig} limit={2}>
+      {(providedData) => {
+        const { data, optimisticUpdate } = providedData
+
+        const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
+          optimisticUpdate({
+            variant: "update",
+            itemData: {
+              id: reviewId,
+              upvotes: newUpvotes,
+            },
+            asyncRequest: async () => {
+              api.put(`/glue/reviews/${reviewId}`, {
+                upvotes: newUpvotes,
+              })
+            },
+          })
+        }
+
+        return data.map((review) => (
           <ReviewItem
             key={review?.id}
             review={review}
             onUpvoteToggle={onUpvoteToggle}
             renderTopic={true}
           />
-        ))}
-      </Stack>
-      {/* </InfiniteScrollComponent> */}
-    </Container>
+        ))
+      }}
+    </GlueInfiniteScroll>
   )
 }
 
