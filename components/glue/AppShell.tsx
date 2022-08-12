@@ -2,6 +2,7 @@ import { Container } from "@mantine/core"
 import React from "react"
 import Flex from "./Flex"
 import Header from "./Header"
+import Footer from "./Footer"
 
 interface IAppShellProps {
   children: React.ReactNode
@@ -27,6 +28,7 @@ const AppShell = ({ children }: IAppShellProps) => {
       >
         {children}
       </Container>
+      <Footer />
     </Flex>
   )
 }
