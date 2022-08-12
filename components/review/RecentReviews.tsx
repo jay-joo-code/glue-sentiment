@@ -9,7 +9,11 @@ interface IRecentReviewsProps {
 }
 
 const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
-  const { data: reviews, mutate } = useGlueQuery({
+  const {
+    data: reviews,
+    optimisticUpdate,
+    refetch,
+  } = useGlueQuery({
     url: "/glue/reviews",
     args: {
       where: {
@@ -32,28 +36,20 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
   })
 
   const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
-    const newReviews = reviews?.map((review) => {
-      if (review?.id === reviewId) {
-        return {
-          ...review,
-          upvotes: newUpvotes,
-        }
-      }
-      return review
-    })
-    mutate(
-      async () => {
+    optimisticUpdate({
+      variant: "update",
+      itemData: {
+        id: reviewId,
+        upvotes: newUpvotes,
+      },
+      asyncRequest: async () => {
         await api.put(`/glue/reviews/${reviewId}`, {
           upvotes: newUpvotes,
         })
-        return newReviews
+        const reviews = await refetch()
+        return reviews
       },
-      {
-        optimisticData: newReviews,
-        rollbackOnError: true,
-        revalidate: false,
-      }
-    )
+    })
   }
 
   return (
