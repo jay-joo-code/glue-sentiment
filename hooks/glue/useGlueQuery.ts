@@ -1,3 +1,4 @@
+import api from "lib/glue/api"
 import useSWR, { SWRConfiguration } from "swr"
 import useSWRImmutable from "swr/immutable"
 
@@ -13,7 +14,7 @@ interface IGlueQueryConfig extends SWRConfiguration {
 
 interface IOptimisticUpdate<T = any> {
   variant: "update" | "append-start" | "append-end" | "delete"
-  itemData: T
+  itemData: any
   asyncRequest: (prevData: T) => T
 }
 
@@ -35,14 +36,42 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
       }
   const queryData = useSWR<T>(queryConfig, { ...refetchConfig, ...rest })
 
-  const optimisticUpdate = ({
+  const optimisticUpdate = <T>({
     variant,
     itemData,
     asyncRequest,
-  }: IOptimisticUpdate) => {}
+  }: IOptimisticUpdate) => {
+    if (Array.isArray(queryData?.data)) {
+      if (variant === "update") {
+        const newData = queryData?.data?.map((item) => {
+          if (item?.id === itemData?.id) {
+            return {
+              ...item,
+              ...itemData,
+            }
+          }
+          return item
+        })
+        queryData?.mutate(
+          async () => {
+            const res = await asyncRequest(queryData?.data)
+            return res
+          },
+          {
+            optimisticData: newData as any,
+            rollbackOnError: true,
+            revalidate: false,
+          }
+        )
+      }
+    } else {
+    }
+  }
 
   return {
     ...queryData,
+    optimisticUpdate,
+    refetch: queryData?.mutate,
   }
 }
 
