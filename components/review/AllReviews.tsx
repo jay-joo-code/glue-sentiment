@@ -31,7 +31,7 @@ const AllReviews = ({ topicId }: IAllReviewsProps) => {
   }
 
   const { data: reviews, mutate } = useGlueQuery({
-    variant: "static",
+    autoRefetch: false,
     url: "/glue/reviews",
     args: {
       where: {

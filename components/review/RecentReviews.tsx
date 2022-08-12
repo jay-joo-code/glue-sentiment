@@ -2,6 +2,7 @@ import { Container, Stack, Title } from "@mantine/core"
 import useGlueQuery from "hooks/glue/useGlueQuery"
 import api from "lib/glue/api"
 import ReviewItem from "./ReviewItem"
+import InfiniteScrollComponent from "react-infinite-scroll-component"
 
 interface IRecentReviewsProps {
   categoryId?: number
@@ -9,7 +10,6 @@ interface IRecentReviewsProps {
 
 const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
   const { data: reviews, mutate } = useGlueQuery({
-    variant: "static",
     url: "/glue/reviews",
     args: {
       where: {
@@ -27,8 +27,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
       orderBy: {
         createdAt: "desc",
       },
-      limit: 5,
-      page: 0,
+      limit: 6,
     },
   })
 
@@ -62,6 +61,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
       <Title order={2} mb="lg">
         Recent reviews
       </Title>
+      {/* <InfiniteScrollComponent> */}
       <Stack>
         {reviews?.map((review) => (
           <ReviewItem
@@ -72,6 +72,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
           />
         ))}
       </Stack>
+      {/* </InfiniteScrollComponent> */}
     </Container>
   )
 }

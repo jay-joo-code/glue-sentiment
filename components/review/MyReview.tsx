@@ -28,7 +28,7 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
   })
 
   const { mutate } = useGlueQuery<Review[]>({
-    variant: "static",
+    autoRefetch: false,
     url: "/glue/reviews",
     args: {
       where: {
