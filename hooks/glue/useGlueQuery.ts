@@ -1,9 +1,16 @@
-import api from "lib/glue/api"
 import useSWR, { SWRConfiguration } from "swr"
-import useSWRImmutable from "swr/immutable"
 
-// NOTE: useSWRInfinite is unusable
-// it has terrible support for mutate, optimistic updates
+/* NOTE:
+useSWRInfinite has terrible support for mutate, optimistic updates
+but it's also basically impossible to implement inf scroll with useSwrQuery
+so I have to use useSWRInfinite even if it's horrible
+
+I have to use unstable_serialize to access the key,
+which might be removed in future versions of swr.
+But hopefully, that future version will have better mutation support.
+
+Ended up building GlueInfiniteScroll.tsx separately. fml.
+*/
 
 interface IGlueQueryConfig extends SWRConfiguration {
   url?: string
@@ -34,16 +41,15 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
       }
-  const queryData = useSWR<T>(queryConfig, { ...refetchConfig, ...rest })
-
+  const defaultQueryData = useSWR<T>(queryConfig, { ...refetchConfig, ...rest })
   const optimisticUpdate = <T>({
     variant,
     itemData,
     asyncRequest,
   }: IOptimisticUpdate) => {
-    if (Array.isArray(queryData?.data)) {
+    if (Array.isArray(defaultQueryData?.data)) {
       if (variant === "update") {
-        const newData = queryData?.data?.map((item) => {
+        const newData = defaultQueryData?.data?.map((item) => {
           if (item?.id === itemData?.id) {
             return {
               ...item,
@@ -52,9 +58,9 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
           }
           return item
         })
-        queryData?.mutate(
+        defaultQueryData?.mutate(
           async () => {
-            const res = await asyncRequest(queryData?.data)
+            const res = await asyncRequest(defaultQueryData?.data)
             return res
           },
           {
@@ -69,9 +75,9 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
   }
 
   return {
-    ...queryData,
+    ...defaultQueryData,
     optimisticUpdate,
-    refetch: queryData?.mutate,
+    refetch: defaultQueryData?.mutate,
   }
 }
 
