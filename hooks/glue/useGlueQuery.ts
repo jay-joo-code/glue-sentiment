@@ -1,32 +1,48 @@
-import useSWRImmutable from "swr/immutable"
 import useSWR, { SWRConfiguration } from "swr"
+import useSWRImmutable from "swr/immutable"
+
+// NOTE: useSWRInfinite is unusable
+// it has terrible support for mutate, optimistic updates
 
 interface IGlueQueryConfig extends SWRConfiguration {
   url?: string
   args?: any
-  variant?: "default" | "static" | "infinite-scroll"
   disabled?: boolean
+  autoRefetch?: boolean
+}
+
+interface IOptimisticUpdate<T = any> {
+  variant: "update" | "append-start" | "append-end" | "delete"
+  itemData: T
+  asyncRequest: (prevData: T) => T
 }
 
 const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
   const {
     url,
     args = {},
-    variant = "default",
     disabled = false,
+    autoRefetch = true,
     ...rest
   } = config || {}
   const queryConfig = !config || disabled ? null : { url, args }
-  const defaultQueryData = useSWR<T>(queryConfig, { ...rest })
-  const staticQueryData = useSWRImmutable<T>(queryConfig, { ...rest })
+  const refetchConfig = autoRefetch
+    ? {}
+    : {
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+      }
+  const queryData = useSWR<T>(queryConfig, { ...refetchConfig, ...rest })
 
-  if (variant === "default") {
-    return defaultQueryData
-  } else if (variant === "static") {
-    return staticQueryData
-  } else if (variant === "infinite-scroll") {
-    // TODO:
-    return
+  const optimisticUpdate = ({
+    variant,
+    itemData,
+    asyncRequest,
+  }: IOptimisticUpdate) => {}
+
+  return {
+    ...queryData,
   }
 }
 
