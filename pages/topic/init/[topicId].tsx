@@ -109,18 +109,18 @@ const TopicDetailsInitPage = ({ topic }) => {
             {(style) => (
               <div style={style}>
                 <Timeline active={2} bulletSize={12} lineWidth={2}>
-                  <Timeline.Item title="Scraping Reddit comments">
+                  <Timeline.Item title="Scrape Reddit comments">
                     <Text color="dimmed" size="sm" mt=".5rem">
                       Sentiment gathers initial review data from Reddit
                     </Text>
                   </Timeline.Item>
-                  <Timeline.Item title="Running Sentiment AI analysis">
+                  <Timeline.Item title="Run Sentiment AI analysis">
                     <Text color="dimmed" size="sm" mt=".5rem">
                       Sentiment AI reads over the Reddit comments and assigns
                       star ratings to the reviews.
                     </Text>
                   </Timeline.Item>
-                  <Timeline.Item title="Finalizing the review data ..." />
+                  <Timeline.Item title="Finalize the review data ..." />
                 </Timeline>
               </div>
             )}
