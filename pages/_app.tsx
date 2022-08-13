@@ -14,8 +14,9 @@ import { ThemeProvider } from "styled-components"
 import "styles/glue/reset.css"
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter()
-  useScrollRestoration(router)
+  // NOTE: uncomment to persist scroll position on route change
+  // const router = useRouter()
+  // useScrollRestoration(router)
   const theme = useMantineTheme()
 
   return (
