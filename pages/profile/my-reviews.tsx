@@ -69,7 +69,7 @@ const MyReviewsPage = () => {
                     No reviews!
                   </Text>
                   <Text size="sm" color="dimmed">
-                    Make sure you're signed in to the correct account
+                    Make sure you&apos;re signed in to the correct account
                   </Text>
                 </div>
               </Flex>
