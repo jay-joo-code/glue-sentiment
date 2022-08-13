@@ -23,10 +23,20 @@ const TopicSearch = ({
     url: "/glue/topics",
     args: {
       where: {
-        name: {
-          contains: debouncedSearchQuery,
-          mode: "insensitive",
-        },
+        OR: [
+          {
+            name: {
+              contains: debouncedSearchQuery,
+              mode: "insensitive",
+            },
+          },
+          {
+            subtitle: {
+              contains: debouncedSearchQuery,
+              mode: "insensitive",
+            },
+          },
+        ],
         category: {
           name: categoryName,
         },
