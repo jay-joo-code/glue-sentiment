@@ -22,6 +22,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   })
 
+  if (!topic?.isInitialized) {
+    return {
+      redirect: {
+        destination: `/topic/init/${topic?.id}`,
+        permanent: false,
+      },
+    }
+  }
+
   return {
     props: {
       key: query?.topicId,
