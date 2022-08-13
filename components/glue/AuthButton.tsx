@@ -8,8 +8,8 @@ const AuthButton = () => {
 
   const PUBLIC_NAV = [
     {
-      label: "My tasks",
-      href: "/tasks/my-tasks",
+      label: "My reviews",
+      href: "/profile/my-reviews",
     },
   ]
 
