@@ -1,15 +1,13 @@
-import { Badge, Button, Container, Spoiler, Stack, Text } from "@mantine/core"
-import React from "react"
+import { Button, Container, Spoiler, Stack, Text } from "@mantine/core"
+import { useLocalStorage } from "@mantine/hooks"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
-import ReactStars from "react-stars"
-import styled from "styled-components"
+import { capitalize } from "@mui/material"
 import { Category, Review, Topic } from "@prisma/client"
 import Flex from "components/glue/Flex"
 import moment from "moment"
-import api from "lib/glue/api"
-import { useLocalStorage } from "@mantine/hooks"
 import Link from "next/link"
-import { capitalize } from "@mui/material"
+import styled from "styled-components"
+import ReviewStars from "./ReviewStars"
 
 interface IReviewItemProps {
   review: Review & {
@@ -68,7 +66,7 @@ const ReviewItem = ({
       >
         <Stack spacing="md">
           <Flex align="center" spacing="xs">
-            <ReactStars edit={false} value={stars} />
+            <ReviewStars edit={false} value={review?.stars} size={18} />
             <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
           </Flex>
           <Spoiler

@@ -36,7 +36,7 @@ const TopicListItem = ({ topic }: ITopicListItemProps) => {
             </Text>
             {topic?._count?.reviews > 0 && (
               <Flex align="center" mt=".5rem" spacing="xs">
-                <ReviewStars value={topic?.stars} />
+                <ReviewStars value={topic?.stars} allowHalf={true} />
                 <Text weight={500} size="xs">
                   {topic?._count?.reviews} reviews
                 </Text>

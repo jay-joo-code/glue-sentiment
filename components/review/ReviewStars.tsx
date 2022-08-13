@@ -1,11 +1,12 @@
 import React from "react"
-import ReactStars from "react-stars"
+import ReactStars from "react-rating-stars-component"
 
 interface IReviewStarsProps {
   value: number
   size?: number
   edit?: boolean
   onChange?: (newRating: number) => void
+  allowHalf?: boolean
 }
 
 const ReviewStars = ({
@@ -13,16 +14,16 @@ const ReviewStars = ({
   onChange,
   size = 14,
   edit = false,
+  allowHalf = false,
 }: IReviewStarsProps) => {
   return (
     <ReactStars
-      count={5}
-      color2={"#ffd700"}
-      onChange={onChange}
-      half={true}
       value={value}
+      count={5}
+      onChange={onChange}
       size={size}
       edit={edit}
+      isHalf={allowHalf}
     />
   )
 }
