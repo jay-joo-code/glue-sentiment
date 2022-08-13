@@ -33,10 +33,10 @@ const Footer = () => {
             cursor: "pointer",
           })}
         >
-          template
+          sentiment
         </Text>
         <Text color="dimmed" size="sm">
-          email@gmail.com
+          cornellsentiment@gmail.com
         </Text>
       </Flex>
     </Flex>
