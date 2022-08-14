@@ -3,12 +3,30 @@ import React from "react"
 
 interface IIconButtonProps extends ActionIconProps<"button"> {
   tooltipLabel?: string
+  position?:
+    | "bottom"
+    | "left"
+    | "right"
+    | "top"
+    | "bottom-end"
+    | "bottom-start"
+    | "left-end"
+    | "left-start"
+    | "right-end"
+    | "right-start"
+    | "top-end"
+    | "top-start"
 }
 
-const IconButton = ({ tooltipLabel, children, ...rest }: IIconButtonProps) => {
+const IconButton = ({
+  tooltipLabel,
+  position,
+  children,
+  ...rest
+}: IIconButtonProps) => {
   if (tooltipLabel) {
     return (
-      <Tooltip label={tooltipLabel}>
+      <Tooltip label={tooltipLabel} position={position}>
         <ActionIcon {...rest}>{children}</ActionIcon>
       </Tooltip>
     )
