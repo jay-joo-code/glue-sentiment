@@ -1,18 +1,11 @@
-import {
-  Transition,
-  Container,
-  Stack,
-  Text,
-  Title,
-  Timeline,
-  Button,
-} from "@mantine/core"
+import { Button, Stack, Text, Timeline, Transition } from "@mantine/core"
 import Flex from "components/glue/Flex"
 import PageContainer from "components/glue/PageContainer"
+import useGlueQuery from "hooks/glue/useGlueQuery"
 import prisma from "lib/glue/prisma"
 import { GetServerSideProps } from "next"
 import Link from "next/link"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const topic = await prisma.topic.findFirst({
@@ -42,6 +35,13 @@ const TopicDetailsInitPage = ({ topic }) => {
   useEffect(() => {
     setIsLabelDisplayed(true)
   }, [])
+
+  const { data, isValidating } = useGlueQuery({
+    url: `/scrape/${topic?.id}`,
+    autoRefetch: false,
+  })
+
+  const isLoading = !data && isValidating
 
   return (
     <PageContainer
@@ -135,7 +135,9 @@ const TopicDetailsInitPage = ({ topic }) => {
               <div style={style}>
                 <Flex justify="center" mt="xl">
                   <Link href={`/topic/${topic?.id}`}>
-                    <Button radius="xl">Go to {topic?.category?.name}</Button>
+                    <Button radius="xl" loading={isLoading}>
+                      Go to {topic?.category?.name}
+                    </Button>
                   </Link>
                 </Flex>
               </div>
