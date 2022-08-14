@@ -49,7 +49,8 @@ const Header = () => {
               width: "100%",
 
               [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-                width: "85vw",
+                width: "70vw",
+                minWidth: theme.breakpoints.xs,
               },
             })}
           >
