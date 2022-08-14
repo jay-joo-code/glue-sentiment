@@ -5,7 +5,9 @@ import pluralize from "pluralize"
 
 interface IMoreTopicsProps {
   topic: Topic & {
-    reviews: Review[]
+    _count: {
+      reviews: number
+    }
     category: Category
   }
 }

@@ -17,10 +17,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       id: Number(query?.topicId),
     },
     include: {
-      reviews: {
-        where: {
-          isValid: true,
-        },
+      _count: {
+        select: { reviews: true },
       },
       category: true,
     },
@@ -45,7 +43,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
 interface ITopicDetailsPageProps {
   topic: Topic & {
-    reviews: Review[]
+    _count: {
+      reviews: number
+    }
     category: Category
   }
 }
@@ -85,7 +85,7 @@ const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
       <Flex align="center" mt="lg" spacing="xs">
         <ReviewStars value={topic?.stars} size={18} allowHalf={true} />
         <Text weight={600} size="sm">
-          {topic?.reviews?.length} reviews
+          {topic?._count?.reviews} reviews
         </Text>
       </Flex>
       <Spoiler
@@ -113,7 +113,7 @@ const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
       <Container mb="4rem" />
       <AllReviews
         topicId={topic?.id}
-        totalReviewCount={topic?.reviews?.length}
+        totalReviewCount={topic?._count?.reviews}
       />
       <Container mb="4rem" />
       <MoreTopics topic={topic} />

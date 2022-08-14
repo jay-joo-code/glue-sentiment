@@ -19,6 +19,7 @@ interface ITopicListItemProps {
 
 const TopicListItem = ({ topic }: ITopicListItemProps) => {
   const Icon = categoryNameToIcon[topic?.category?.name]
+  console.log("topic", topic)
 
   return (
     <Link href={`/topic/${topic?.id}`}>
@@ -34,7 +35,7 @@ const TopicListItem = ({ topic }: ITopicListItemProps) => {
             <Text size="sm" mt=".2rem" lineClamp={1}>
               {topic?.subtitle}
             </Text>
-            {topic?._count?.reviews > 0 && (
+            {topic?.isInitialized && (
               <Flex align="center" mt=".5rem" spacing="xs">
                 <ReviewStars value={topic?.stars} allowHalf={true} />
                 <Text weight={500} size="xs">
