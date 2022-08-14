@@ -80,7 +80,7 @@ const ReviewItem = ({
     })
   }
 
-  if (isVotedInvalid !== undefined && isVotedInvalid) {
+  if (!isAdmin && isVotedInvalid !== undefined && isVotedInvalid) {
     return null
   }
 
