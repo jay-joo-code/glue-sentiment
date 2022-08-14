@@ -36,7 +36,9 @@ const ReviewItem = ({
     key: `review-is-upvoted-${review?.id}`,
     defaultValue: false,
   })
+
   const { data: session } = useSession()
+  const isAdmin = session?.user?.email === "cornellsentiment@gmail.com"
 
   const [isVotedInvalid, setIsVotedInvalid] = useGlueLocalStorage({
     key: `review-voted-invalid-${review?.id}`,
@@ -119,24 +121,30 @@ const ReviewItem = ({
 
             {/* toolbar */}
             <Flex align="center" spacing="xs">
-              {session?.user?.email === "cornellsentiment@gmail.com" && (
+              {isAdmin ? (
+                <Flex align="center" spacing="xs">
+                  <Text size="lg" weight={600} color="dimmed">
+                    {review?.invalidVotes}
+                  </Text>
+                  <IconButton
+                    tooltipLabel="Invalidate review"
+                    color="button-gray"
+                    position="left"
+                    onClick={handleInvalidate}
+                  >
+                    <FlagOutlinedIcon />
+                  </IconButton>
+                </Flex>
+              ) : (
                 <IconButton
-                  tooltipLabel="Invalidate review"
+                  tooltipLabel="Mark as an invalid review"
                   color="button-gray"
                   position="left"
-                  onClick={handleInvalidate}
+                  onClick={handleVoteInvalid}
                 >
-                  <FlagOutlinedIcon />
+                  <CloseOutlinedIcon />
                 </IconButton>
               )}
-              <IconButton
-                tooltipLabel="Mark as an invalid review"
-                color="button-gray"
-                position="left"
-                onClick={handleVoteInvalid}
-              >
-                <CloseOutlinedIcon />
-              </IconButton>
             </Flex>
           </Flex>
           <Spoiler
@@ -150,7 +158,13 @@ const ReviewItem = ({
               },
             })}
           >
-            <Text>{content}</Text>
+            <Text
+              sx={(theme) => ({
+                lineHeight: "1.5",
+              })}
+            >
+              {content}
+            </Text>
           </Spoiler>
           <div>
             <Button

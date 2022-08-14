@@ -24,7 +24,7 @@ const AdminInvalidatePage = () => {
           args: {
             where: {
               invalidVotes: {
-                gte: 2,
+                gte: 1,
               },
               isValid: true,
             },
@@ -34,6 +34,9 @@ const AdminInvalidatePage = () => {
                   category: true,
                 },
               },
+            },
+            orderBy: {
+              invalidVotes: "desc",
             },
           },
         }}
