@@ -58,10 +58,27 @@ const GlueInfiniteScroll = ({
     }
   }
 
-  const { data, error, size, setSize, ...swrData } = useSWRInfinite(getKey)
+  const { data, error, size, setSize, ...swrData } = useSWRInfinite(getKey, {
+    revalidateFirstPage: false,
+    revalidateAll: false,
+  })
+
   const { mutate } = useSWRConfig()
 
-  const flattedData = data ? [].concat(...data) : []
+  const flattedData = []
+
+  if (data) {
+    const ids = new Set()
+    data?.forEach((page) =>
+      page?.forEach((item) => {
+        if (!ids.has(item?.id)) {
+          flattedData?.push(item)
+          ids.add(item?.id)
+        }
+      })
+    )
+  }
+
   const isLoadingInitialData = !data && !error
   const isLoadingMore =
     isLoadingInitialData ||
