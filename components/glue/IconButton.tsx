@@ -1,4 +1,5 @@
 import { ActionIcon, ActionIconProps, Tooltip } from "@mantine/core"
+import useIsMobile from "hooks/glue/isMobile"
 import React from "react"
 
 interface IIconButtonProps extends ActionIconProps<"button"> {
@@ -12,9 +13,11 @@ const IconButton = ({
   children,
   ...rest
 }: IIconButtonProps) => {
+  const isMobile = useIsMobile()
+
   if (tooltipLabel) {
     return (
-      <Tooltip label={tooltipLabel} position={position}>
+      <Tooltip label={tooltipLabel} position={position} disabled={isMobile}>
         <ActionIcon {...rest}>{children}</ActionIcon>
       </Tooltip>
     )
