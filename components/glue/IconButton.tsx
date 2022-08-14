@@ -3,19 +3,7 @@ import React from "react"
 
 interface IIconButtonProps extends ActionIconProps<"button"> {
   tooltipLabel?: string
-  position?:
-    | "bottom"
-    | "left"
-    | "right"
-    | "top"
-    | "bottom-end"
-    | "bottom-start"
-    | "left-end"
-    | "left-start"
-    | "right-end"
-    | "right-start"
-    | "top-end"
-    | "top-start"
+  position?: "bottom" | "left" | "right" | "top"
 }
 
 const IconButton = ({
