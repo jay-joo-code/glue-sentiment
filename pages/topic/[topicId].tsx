@@ -17,7 +17,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       id: Number(query?.topicId),
     },
     include: {
-      reviews: true,
+      reviews: {
+        where: {
+          isValid: true,
+        },
+      },
       category: true,
     },
   })

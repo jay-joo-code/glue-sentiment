@@ -1,21 +1,20 @@
 import { Button, Container, Spoiler, Stack, Text } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
+import { showNotification } from "@mantine/notifications"
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
+import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import { capitalize } from "@mui/material"
 import { Category, Review, Topic } from "@prisma/client"
 import Flex from "components/glue/Flex"
+import IconButton from "components/glue/IconButton"
+import useGlueLocalStorage from "hooks/glue/useGlueLocalStorage"
+import api from "lib/glue/api"
 import moment from "moment"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import styled from "styled-components"
 import ReviewStars from "./ReviewStars"
-import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined"
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
-import IconButton from "components/glue/IconButton"
-import api from "lib/glue/api"
-import { showNotification } from "@mantine/notifications"
-import { useSession } from "next-auth/react"
-import prisma from "lib/glue/prisma"
-import getAverageReviewStars from "util/getAverageReviewStars"
 
 interface IReviewItemProps {
   review: Review & {
@@ -39,7 +38,10 @@ const ReviewItem = ({
   })
   const { data: session } = useSession()
 
-  // don't render if current client marked as invalid
+  const [isVotedInvalid, setIsVotedInvalid] = useGlueLocalStorage({
+    key: `review-voted-invalid-${review?.id}`,
+    defaultValue: false,
+  })
 
   const handleUpvote = async () => {
     const newUpvotes = isUpvoted ? review?.upvotes - 1 : review?.upvotes + 1
@@ -57,6 +59,7 @@ const ReviewItem = ({
     api.put(`/glue/reviews/${review?.id}`, {
       invalidVotes: (review?.invalidVotes || 0) + 1,
     })
+    setIsVotedInvalid(true)
   }
 
   const handleInvalidate = async () => {
@@ -73,6 +76,10 @@ const ReviewItem = ({
       message: `Topic ${topic?.name} recomputed to ${topic?.stars}`,
       color: "green",
     })
+  }
+
+  if (isVotedInvalid !== undefined && isVotedInvalid) {
+    return null
   }
 
   return (
