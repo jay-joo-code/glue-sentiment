@@ -1,3 +1,4 @@
+import getAverageReviewStars from "util/getAverageReviewStars"
 import axios from "axios"
 import prisma from "lib/glue/prisma"
 import type { NextApiRequest, NextApiResponse } from "next"
@@ -54,6 +55,7 @@ const saveData = async (dataArray: any, topicId: number) => {
 
       if (!existingReview) {
         // NOTE: didn't think updating existing would be necessary
+        console.log("NEW REVIEW reviewData?.id", reviewData?.providerId)
 
         const { documentSentiment } = await fetchSentiment({
           content: reviewData?.content,
@@ -100,12 +102,19 @@ export default async function handle(
       })
 
       const reviews = await saveData(rawData, topic?.id)
+      const allReviews = await prisma.review.findMany({
+        where: {
+          topicId: Number(req?.query?.topicId),
+        },
+      })
+      const newTopicStars = getAverageReviewStars(allReviews)
       await prisma.topic.update({
         where: {
           id: Number(req?.query?.topicId),
         },
         data: {
           isInitialized: true,
+          stars: newTopicStars,
         },
       })
 

@@ -107,7 +107,10 @@ const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
       <Container mb="4rem" />
       <MyReview topicId={topic?.id} />
       <Container mb="4rem" />
-      <AllReviews topicId={topic?.id} />
+      <AllReviews
+        topicId={topic?.id}
+        totalReviewCount={topic?.reviews?.length}
+      />
       <Container mb="4rem" />
       <MoreTopics topic={topic} />
     </PageContainer>

@@ -1,4 +1,11 @@
-import { Button, Stack, Text, Timeline, Transition } from "@mantine/core"
+import {
+  Button,
+  Container,
+  Stack,
+  Text,
+  Timeline,
+  Transition,
+} from "@mantine/core"
 import Flex from "components/glue/Flex"
 import PageContainer from "components/glue/PageContainer"
 import useGlueQuery from "hooks/glue/useGlueQuery"
@@ -71,7 +78,7 @@ const TopicDetailsInitPage = ({ topic }) => {
                     fontSize: "1.5rem",
                   })}
                 >
-                  Gathering Reddit reviews for
+                  Gathering Reddit comments for
                 </Text>
               </div>
             )}
@@ -112,6 +119,7 @@ const TopicDetailsInitPage = ({ topic }) => {
                   <Timeline.Item title="Scrape Reddit comments">
                     <Text color="dimmed" size="sm" mt=".5rem">
                       Sentiment gathers initial review data from Reddit
+                      comments.
                     </Text>
                   </Timeline.Item>
                   <Timeline.Item title="Run Sentiment AI analysis">
@@ -133,12 +141,25 @@ const TopicDetailsInitPage = ({ topic }) => {
           >
             {(style) => (
               <div style={style}>
-                <Flex justify="center" mt="xl">
+                <Flex direction="column" align="center" mt="xl">
                   <Link href={`/topic/${topic?.id}`}>
                     <Button radius="xl" loading={isLoading}>
                       Go to {topic?.category?.name}
                     </Button>
                   </Link>
+                  <Container>
+                    <Text
+                      size="xs"
+                      color="dimmed"
+                      align="center"
+                      sx={(theme) => ({
+                        lineHeight: "1.5",
+                      })}
+                    >
+                      This process can take up to 3 minutes because Sentiment AI
+                      has to read hundreds of relevant Reddit comments.
+                    </Text>
+                  </Container>
                 </Flex>
               </div>
             )}
