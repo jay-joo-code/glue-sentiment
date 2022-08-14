@@ -106,12 +106,11 @@ model Category {
 }
 
 model Review {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now()) @map(name: "created_at")
-  updatedAt   DateTime @updatedAt @map(name: "updated_at")
-  userId      Int?     @map("user_id")
-  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  isValidated Boolean  @default(false)
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  userId    Int?     @map("user_id")
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   content String
   stars   Float
