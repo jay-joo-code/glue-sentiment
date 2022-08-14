@@ -15,6 +15,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
         topic: {
           categoryId,
         },
+        isValid: true,
       },
       include: {
         topic: {

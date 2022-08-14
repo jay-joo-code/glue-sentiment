@@ -8,11 +8,14 @@ import moment from "moment"
 import Link from "next/link"
 import styled from "styled-components"
 import ReviewStars from "./ReviewStars"
-// import ReportGmailerrorredOutlinedIcon from "@mui/icons-material/ReportGmailerrorredOutlined"
+import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import IconButton from "components/glue/IconButton"
 import api from "lib/glue/api"
 import { showNotification } from "@mantine/notifications"
+import { useSession } from "next-auth/react"
+import prisma from "lib/glue/prisma"
+import getAverageReviewStars from "util/getAverageReviewStars"
 
 interface IReviewItemProps {
   review: Review & {
@@ -34,6 +37,9 @@ const ReviewItem = ({
     key: `review-is-upvoted-${review?.id}`,
     defaultValue: false,
   })
+  const { data: session } = useSession()
+
+  // don't render if current client marked as invalid
 
   const handleUpvote = async () => {
     const newUpvotes = isUpvoted ? review?.upvotes - 1 : review?.upvotes + 1
@@ -41,7 +47,7 @@ const ReviewItem = ({
     setIsUpvoted(!isUpvoted)
   }
 
-  const handleMarkInvalidClick = async () => {
+  const handleVoteInvalid = async () => {
     showNotification({
       title: "This review has been marked as invalid",
       message:
@@ -50,6 +56,22 @@ const ReviewItem = ({
     })
     api.put(`/glue/reviews/${review?.id}`, {
       invalidVotes: (review?.invalidVotes || 0) + 1,
+    })
+  }
+
+  const handleInvalidate = async () => {
+    await api.put(`/glue/reviews/${review?.id}`, {
+      isValid: false,
+    })
+
+    const { data: topic } = await api.post(
+      `/recompute-stars/${review?.topic?.id}`
+    )
+
+    showNotification({
+      title: "Successfully set isValid to false",
+      message: `Topic ${topic?.name} recomputed to ${topic?.stars}`,
+      color: "green",
     })
   }
 
@@ -90,11 +112,21 @@ const ReviewItem = ({
 
             {/* toolbar */}
             <Flex align="center" spacing="xs">
+              {session?.user?.email === "cornellsentiment@gmail.com" && (
+                <IconButton
+                  tooltipLabel="Invalidate review"
+                  color="button-gray"
+                  position="left"
+                  onClick={handleInvalidate}
+                >
+                  <FlagOutlinedIcon />
+                </IconButton>
+              )}
               <IconButton
                 tooltipLabel="Mark as an invalid review"
                 color="button-gray"
                 position="left"
-                onClick={handleMarkInvalidClick}
+                onClick={handleVoteInvalid}
               >
                 <CloseOutlinedIcon />
               </IconButton>

@@ -48,6 +48,7 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
           args: {
             where: {
               topicId,
+              isValid: true,
             },
             include: {
               topic: {
