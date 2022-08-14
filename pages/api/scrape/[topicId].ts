@@ -55,7 +55,6 @@ const saveData = async (dataArray: any, topicId: number) => {
 
       if (!existingReview) {
         // NOTE: didn't think updating existing would be necessary
-        console.log("NEW REVIEW reviewData?.id", reviewData?.providerId)
 
         const { documentSentiment } = await fetchSentiment({
           content: reviewData?.content,
