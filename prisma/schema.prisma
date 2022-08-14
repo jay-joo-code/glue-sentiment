@@ -116,6 +116,9 @@ model Review {
   stars   Float
   upvotes Int?   @default(0)
 
+  isValid      Boolean @default(true)
+  invalidVotes Int     @default(0)
+
   provider     String?
   providerId   String?
   providerData Json?

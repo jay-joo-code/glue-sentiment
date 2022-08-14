@@ -8,6 +8,11 @@ import moment from "moment"
 import Link from "next/link"
 import styled from "styled-components"
 import ReviewStars from "./ReviewStars"
+// import ReportGmailerrorredOutlinedIcon from "@mui/icons-material/ReportGmailerrorredOutlined"
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
+import IconButton from "components/glue/IconButton"
+import api from "lib/glue/api"
+import { showNotification } from "@mantine/notifications"
 
 interface IReviewItemProps {
   review: Review & {
@@ -24,7 +29,7 @@ const ReviewItem = ({
   onUpvoteToggle,
   renderTopic = false,
 }: IReviewItemProps) => {
-  const { stars, content, upvotes } = review
+  const { content, upvotes } = review
   const [isUpvoted, setIsUpvoted] = useLocalStorage({
     key: `review-is-upvoted-${review?.id}`,
     defaultValue: false,
@@ -34,6 +39,18 @@ const ReviewItem = ({
     const newUpvotes = isUpvoted ? review?.upvotes - 1 : review?.upvotes + 1
     onUpvoteToggle(review?.id, newUpvotes)
     setIsUpvoted(!isUpvoted)
+  }
+
+  const handleMarkInvalidClick = async () => {
+    showNotification({
+      title: "This review has been marked as invalid",
+      message:
+        "An administrator will decide whether to permanantly delete this review",
+      color: "green",
+    })
+    api.put(`/glue/reviews/${review?.id}`, {
+      invalidVotes: (review?.invalidVotes || 0) + 1,
+    })
   }
 
   return (
@@ -65,9 +82,23 @@ const ReviewItem = ({
         })}
       >
         <Stack spacing="md">
-          <Flex align="center" spacing="xs">
-            <ReviewStars edit={false} value={review?.stars} size={18} />
-            <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
+          <Flex justify="space-between" align="center">
+            <Flex align="center" spacing="xs">
+              <ReviewStars edit={false} value={review?.stars} size={18} />
+              <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
+            </Flex>
+
+            {/* toolbar */}
+            <Flex align="center" spacing="xs">
+              <IconButton
+                tooltipLabel="Mark as an invalid review"
+                color="button-gray"
+                position="left"
+                onClick={handleMarkInvalidClick}
+              >
+                <CloseOutlinedIcon />
+              </IconButton>
+            </Flex>
           </Flex>
           <Spoiler
             maxHeight={118}
