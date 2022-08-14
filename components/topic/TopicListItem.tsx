@@ -19,7 +19,6 @@ interface ITopicListItemProps {
 
 const TopicListItem = ({ topic }: ITopicListItemProps) => {
   const Icon = categoryNameToIcon[topic?.category?.name]
-  console.log("topic", topic)
 
   return (
     <Link href={`/topic/${topic?.id}`}>
