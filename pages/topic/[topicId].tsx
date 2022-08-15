@@ -83,6 +83,9 @@ const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
         {topic?.subtitle}
       </Text>
       <Flex align="center" mt="lg" spacing="xs">
+        <Text weight={600} size="sm">
+          {topic?.stars?.toFixed(1)}
+        </Text>
         <ReviewStars value={topic?.stars} size={18} allowHalf={true} />
         <Text weight={600} size="sm">
           {topic?._count?.reviews} reviews

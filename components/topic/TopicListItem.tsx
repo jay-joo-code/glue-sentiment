@@ -36,6 +36,9 @@ const TopicListItem = ({ topic }: ITopicListItemProps) => {
             </Text>
             {topic?.isInitialized && (
               <Flex align="center" mt=".5rem" spacing="xs">
+                <Text weight={500} size="xs">
+                  {topic?.stars?.toFixed(1)}
+                </Text>
                 <ReviewStars value={topic?.stars} allowHalf={true} />
                 <Text weight={500} size="xs">
                   {topic?._count?.reviews} reviews
