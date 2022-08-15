@@ -32,7 +32,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
 
   return (
     <Container>
-      <Title order={2} mb="2rem">
+      <Title order={2} mb="md">
         Recent reviews
       </Title>
       <GlueInfiniteScroll queryConfig={queryConfig} limit={5}>
