@@ -1,16 +1,12 @@
-import {
-  Burger,
-  Container,
-  MediaQuery,
-  Text,
-  useMantineTheme,
-} from "@mantine/core"
+import { Container, Text, useMantineTheme } from "@mantine/core"
 import useIsMobile from "hooks/glue/isMobile"
 import Link from "next/link"
 import { useState } from "react"
 import AuthButton from "./AuthButton"
 import Flex from "./Flex"
+import IconButton from "./IconButton"
 import NavList from "./NavList"
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined"
 
 const Header = () => {
   const [opened, setOpened] = useState<boolean>(false)
@@ -55,14 +51,14 @@ const Header = () => {
             })}
           >
             <Flex spacing="xs">
-              <MediaQuery largerThan="xs" styles={{ display: "none" }}>
+              {/* <MediaQuery largerThan="xs" styles={{ display: "none" }}>
                 <Burger
                   opened={opened}
                   onClick={() => setOpened(!opened)}
                   size="sm"
                   color={theme.colors.dark[9]}
                 />
-              </MediaQuery>
+              </MediaQuery> */}
 
               <Link href="/">
                 <Text
@@ -83,6 +79,11 @@ const Header = () => {
             </Flex>
             <Flex>
               {!isMobile && <NavList />}
+              <Link href="/">
+                <IconButton color="brand" tooltipLabel="Search">
+                  <SearchOutlinedIcon />
+                </IconButton>
+              </Link>
               <AuthButton />
             </Flex>
           </Flex>
