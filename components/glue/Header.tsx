@@ -51,6 +51,7 @@ const Header = () => {
             })}
           >
             <Flex spacing="xs">
+              {/* NOTE: uncomment later when I have public nav items */}
               {/* <MediaQuery largerThan="xs" styles={{ display: "none" }}>
                 <Burger
                   opened={opened}
