@@ -137,7 +137,7 @@ const ReviewItem = ({
                 </Flex>
               ) : (
                 <IconButton
-                  tooltipLabel="Mark as an invalid review"
+                  tooltipLabel="Hide unhelpful review"
                   color="button-gray"
                   position="left"
                   onClick={handleVoteInvalid}
