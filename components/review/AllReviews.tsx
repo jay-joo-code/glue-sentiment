@@ -16,11 +16,15 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
   const sortByToQuery = {
     popular: { upvotes: "desc" },
     recent: { createdAt: "desc" },
+    "lower-ratings": { stars: "asc" },
+    "higher-ratings": { stars: "desc" },
   }
 
   const reviewSortByOptions = [
     { value: "popular", label: "Popular" },
     { value: "recent", label: "Recent" },
+    { value: "lower-ratings", label: "Lower ratings" },
+    { value: "higher-ratings", label: "Higher ratings" },
   ]
 
   const [sortBy, setSortBy] = useLocalStorage({
