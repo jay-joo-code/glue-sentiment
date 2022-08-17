@@ -195,6 +195,7 @@ export const fetchAllClasses = (): Promise<boolean> =>
                 },
                 data: {
                   aliases: [...prevTopic?.aliases, newName],
+                  aliasesString: [...prevTopic?.aliases, newName]?.join(" "),
                 },
               })
               console.log("saved alias", prevTopic?.name, newName)
