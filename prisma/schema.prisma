@@ -79,6 +79,7 @@ model Topic {
   isInitialized Boolean  @default(false)
   stars         Float    @default(0)
   aliases       String[]
+  allNames      String   @default("") // for search purposes, due to lack of prisma String[] substring filter support
 
   categoryId Int?      @map("category_id")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
