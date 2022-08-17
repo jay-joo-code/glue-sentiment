@@ -160,19 +160,24 @@ const ReviewItem = ({
             </Flex>
           </Flex>
           <Spoiler
-            maxHeight={118}
+            maxHeight={196}
             showLabel="Read more"
             hideLabel="Hide"
             mb="sm"
             sx={(theme) => ({
               "& .mantine-Spoiler-control": {
-                fontSize: "12px",
+                fontSize: "14px",
               },
             })}
           >
             <Text
               sx={(theme) => ({
                 lineHeight: "1.5",
+
+                // display: "-webkit-box",
+                // "-webkit-line-clamp": "7",
+                // "-webkit-box-orient": "vertical",
+                // overflow: "hidden",
               })}
             >
               {content}
