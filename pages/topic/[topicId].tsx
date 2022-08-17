@@ -65,7 +65,12 @@ const TopicDetailsPage = ({ topic, reviewCount }: ITopicDetailsPageProps) => {
 
       if (newTopics?.length >= 5) newTopics.pop()
 
-      newTopics?.unshift(topic)
+      newTopics?.unshift({
+        ...topic,
+        _count: {
+          reviews: reviewCount,
+        },
+      })
       setRecentTopics(newTopics)
       setIsAddedRecentTopic(true)
     }
