@@ -90,6 +90,18 @@ const TopicDetailsPage = ({ topic, reviewCount }: ITopicDetailsPageProps) => {
       <Text size="sm" ml=".2rem">
         {topic?.subtitle}
       </Text>
+      <Text size="sm" ml=".2rem" mt="xl" mb="xl">
+        Also known as{" "}
+        <Text
+          weight={600}
+          component="span"
+          sx={(theme) => ({
+            fontSize: "1rem",
+          })}
+        >
+          {topic?.aliases?.join(", ")}
+        </Text>
+      </Text>
       <Flex align="center" mt="lg" spacing="xs">
         <Text weight={600} size="sm">
           {topic?.stars?.toFixed(1)}
