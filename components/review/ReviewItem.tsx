@@ -53,9 +53,9 @@ const ReviewItem = ({
 
   const handleVoteInvalid = async () => {
     showNotification({
-      title: "This review has been marked as invalid",
+      title: "This review has been marked as unhelpful",
       message:
-        "An administrator will decide whether to permanantly delete this review",
+        "An administrator will decide whether to permanantly delete this unhelpful review",
       color: "green",
     })
     api.put(`/glue/reviews/${review?.id}`, {
