@@ -94,14 +94,30 @@ export default async function handle(
         },
       })
 
-      // TODO: fetch for all aliases, and merge without duplicates
+      // scrape reviews based on "name"
       const rawData = await fetchRedditComments({
         query: topic?.name,
         variant: "course",
         GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
       })
+      await saveData(rawData, topic?.id)
 
-      const reviews = await saveData(rawData, topic?.id)
+      // scrape reviews based on "aliases"
+      for (var i = 0; i < topic?.aliases?.length; i++) {
+        await new Promise<void>(async (next) => {
+          const alias = topic?.aliases[i]
+          const rawData = await fetchRedditComments({
+            query: alias,
+            variant: "course",
+            GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+          })
+          await saveData(rawData, topic?.id)
+
+          next()
+        })
+      }
+
+      // recalculate topic.stars
       const allReviews = await prisma.review.findMany({
         where: {
           topicId: Number(req?.query?.topicId),
@@ -118,7 +134,7 @@ export default async function handle(
         },
       })
 
-      res.json({ reviews })
+      res.json({ allReviews })
       break
 
     default:
