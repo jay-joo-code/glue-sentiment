@@ -89,7 +89,11 @@ const TopicSearch = ({
       {topics?.length > 0 && (
         <Container p="sm" mt="md">
           {topics?.map((topic) => (
-            <TopicListItem key={topic?.id} topic={topic} />
+            <TopicListItem
+              key={topic?.id}
+              topic={topic}
+              searchQuery={debouncedSearchQuery}
+            />
           ))}
         </Container>
       )}

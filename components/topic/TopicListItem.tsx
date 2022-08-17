@@ -15,10 +15,17 @@ interface ITopicListItemProps {
       name: string
     }
   }
+  searchQuery?: string
 }
 
-const TopicListItem = ({ topic }: ITopicListItemProps) => {
+const TopicListItem = ({ topic, searchQuery }: ITopicListItemProps) => {
   const Icon = categoryNameToIcon[topic?.category?.name]
+  const isNotMatchingName =
+    searchQuery &&
+    !topic?.name?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+  const matchedAlias = topic?.aliases?.find((alias) =>
+    alias?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+  )
 
   return (
     <Link href={`/topic/${topic?.id}`}>
@@ -29,7 +36,7 @@ const TopicListItem = ({ topic }: ITopicListItemProps) => {
           </ActionIcon>
           <Container>
             <Text size="sm" weight={600} mt=".2rem">
-              {topic?.name}
+              {isNotMatchingName ? matchedAlias : topic?.name}
             </Text>
             <Text size="sm" mt=".2rem" lineClamp={1}>
               {topic?.subtitle}
