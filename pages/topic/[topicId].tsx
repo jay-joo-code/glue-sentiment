@@ -17,9 +17,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       id: Number(query?.topicId),
     },
     include: {
-      _count: {
-        select: { reviews: true },
-      },
       category: true,
     },
   })
@@ -33,24 +30,30 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     }
   }
 
+  const reviewCount = await prisma.review.count({
+    where: {
+      topicId: topic?.id,
+      isValid: true,
+    },
+  })
+
   return {
     props: {
       key: query?.topicId,
       topic,
+      reviewCount,
     },
   }
 }
 
 interface ITopicDetailsPageProps {
   topic: Topic & {
-    _count: {
-      reviews: number
-    }
     category: Category
   }
+  reviewCount: number
 }
 
-const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
+const TopicDetailsPage = ({ topic, reviewCount }: ITopicDetailsPageProps) => {
   const [recentTopics, setRecentTopics] = useRecentTopics()
   const [isAddedRecentTopic, setIsAddedRecentTopic] = useState<boolean>(false)
 
@@ -88,7 +91,7 @@ const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
         </Text>
         <ReviewStars value={topic?.stars} size={18} allowHalf={true} />
         <Text weight={600} size="sm">
-          {topic?._count?.reviews} reviews
+          {reviewCount} reviews
         </Text>
       </Flex>
       <Spoiler
@@ -114,10 +117,7 @@ const TopicDetailsPage = ({ topic }: ITopicDetailsPageProps) => {
       <Container mb="4rem" />
       <MyReview topicId={topic?.id} />
       <Container mb="4rem" />
-      <AllReviews
-        topicId={topic?.id}
-        totalReviewCount={topic?._count?.reviews}
-      />
+      <AllReviews topicId={topic?.id} totalReviewCount={reviewCount} />
       <Container mb="4rem" />
       <MoreTopics topic={topic} />
     </PageContainer>
