@@ -31,6 +31,12 @@ const TopicSearch = ({
             },
           },
           {
+            aliasesString: {
+              contains: debouncedSearchQuery,
+              mode: "insensitive",
+            },
+          },
+          {
             subtitle: {
               contains: debouncedSearchQuery,
               mode: "insensitive",
