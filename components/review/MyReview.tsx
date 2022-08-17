@@ -135,7 +135,7 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
         />
         <Flex justify="flex-end" pr="sm">
           <Button size="xs" onClick={handleSave}>
-            Save
+            Share
           </Button>
         </Flex>
       </Container>
