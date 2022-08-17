@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next"
-import refactorAliasString from "util/refactorAliasString"
+import refactorDatabase from "util/refactorDatabase"
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  await refactorAliasString()
+  await refactorDatabase()
 
   return {
     props: {},
