@@ -50,6 +50,7 @@ const saveData = async (dataArray: any, topicId: number) => {
       const existingReview = await prisma.review.findFirst({
         where: {
           providerId: reviewData?.providerId,
+          topicId,
         },
       })
 
