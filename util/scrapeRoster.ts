@@ -95,6 +95,21 @@ export const fetchAllClasses = (): Promise<boolean> =>
       })
 
       const subjects = await fetchSubjects("SP22")
+
+      /* scrape test with CS and INFO */
+      // const subjects = [
+      //   {
+      //     value: "CS",
+      //     descr: "Jewish Studies",
+      //     descrformal: "Jewish Studies",
+      //   },
+      //   {
+      //     value: "INFO",
+      //     descr: "Jewish Studies",
+      //     descrformal: "Jewish Studies",
+      //   },
+      // ]
+
       const allClasses = []
       const promises = subjects.map(
         ({ value }, idx): Promise<void> =>
@@ -153,8 +168,9 @@ export const fetchAllClasses = (): Promise<boolean> =>
 
       // NOTE: synchronus save
       const savePromises = allClasses?.map(async (classObj, classIdx) => {
+        const newName = `${classObj?.subject} ${classObj?.catalogNbr}`
         const classData = {
-          name: `${classObj?.subject} ${classObj?.catalogNbr}`,
+          name: newName,
           subtitle: classObj?.titleLong,
           desc: classObj?.description,
           categoryId: courseCategory?.id,
@@ -162,13 +178,33 @@ export const fetchAllClasses = (): Promise<boolean> =>
           providerId: String(classObj?.crseId),
         }
         setTimeout(async () => {
-          await prisma.topic.upsert({
-            create: classData,
-            update: classData,
+          const prevTopic = await prisma.topic.findFirst({
             where: {
               providerId: String(classObj?.crseId),
             },
           })
+          if (prevTopic) {
+            if (
+              prevTopic?.name !== newName &&
+              !prevTopic?.aliases?.includes(newName)
+            ) {
+              // add to alias
+              await prisma.topic.update({
+                where: {
+                  providerId: String(classObj?.crseId),
+                },
+                data: {
+                  aliases: [...prevTopic?.aliases, newName],
+                },
+              })
+              console.log("saved alias", prevTopic?.name, newName)
+            }
+          } else {
+            // create new
+            await prisma.topic.create({
+              data: classData,
+            })
+          }
           console.log(
             "saved",
             `${classObj?.subject} ${classObj?.catalogNbr}`,
