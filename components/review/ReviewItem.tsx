@@ -15,6 +15,8 @@ import { useSession } from "next-auth/react"
 import Link from "next/link"
 import styled from "styled-components"
 import ReviewStars from "./ReviewStars"
+import EastIcon from "@mui/icons-material/East"
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 
 interface IReviewItemProps {
   review: Review & {
@@ -88,17 +90,27 @@ const ReviewItem = ({
     <Container>
       {renderTopic && (
         <Flex align="center" mb="xs" mt="sm" spacing={0}>
-          <Link href={`/category/${review?.topic?.category?.id}`}>
+          {/* category link */}
+          {/* <Link href={`/category/${review?.topic?.category?.id}`}>
             <Button variant="light" size="sm" compact={true}>
               {capitalize(review?.topic?.category?.name)}
             </Button>
-          </Link>
+          </Link> */}
           <Link href={`/topic/${review?.topic?.id}`}>
             <Button
-              variant="subtle"
+              variant="light"
               size="sm"
               color="button-gray"
               compact={true}
+              rightIcon={<ArrowForwardIcon />}
+              sx={(theme) => ({
+                "& .mantine-Button-rightIcon": {
+                  marginLeft: "4px",
+                },
+                "& svg": {
+                  width: "20px",
+                },
+              })}
             >
               {review?.topic?.name}
             </Button>
