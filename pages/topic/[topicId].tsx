@@ -84,9 +84,7 @@ const TopicDetailsPage = ({ topic, reviewCount }: ITopicDetailsPageProps) => {
       <Badge radius="sm" size="sm">
         {topic?.category?.name}
       </Badge>
-      <Title order={1} mb="xs">
-        {topic?.name}
-      </Title>
+      <Title order={1}>{topic?.name}</Title>
       <Text size="sm" ml=".2rem">
         {topic?.subtitle}
       </Text>
