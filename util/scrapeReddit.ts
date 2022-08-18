@@ -62,7 +62,7 @@ export const fetchRedditComments = async ({
 
   await Promise.all(promises)
 
-  const filteredComments = allComments?.filter((comment) => {
+  let filteredComments = allComments?.filter((comment) => {
     // NOTE: hasKeyword set to true if includes any string in the array of strings
     // const matcher = queryKeywords
     //   .filter((part) => part.trim().length !== 0)
@@ -94,8 +94,12 @@ export const fetchRedditComments = async ({
       comment?.body?.toLowerCase()?.includes("schedule") ||
       comment?.body?.trim()?.slice(-1) === "?"
 
-    return hasKeyword && comment?.ups > 1 && !isIrrelevant
+    return hasKeyword && comment?.ups > 0 && !isIrrelevant
   })
+
+  if (filteredComments?.length >= 40) {
+    filteredComments = filteredComments?.filter((comment) => comment?.ups > 1)
+  }
 
   return filteredComments?.map((comment) => {
     return {
