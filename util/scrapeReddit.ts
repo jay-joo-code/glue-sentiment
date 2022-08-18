@@ -88,27 +88,16 @@ export const fetchRedditComments = async ({
       }
     }
 
-    return hasKeyword && comment?.ups > 1
+    const isIrrelevant =
+      comment?.body?.includes("[deleted]") ||
+      comment?.body?.toLowerCase()?.includes("another great look for") ||
+      comment?.body?.toLowerCase()?.includes("schedule") ||
+      comment?.body?.trim()?.slice(-1) === "?"
+
+    return hasKeyword && comment?.ups > 1 && !isIrrelevant
   })
 
-  const sentimentPromises = filteredComments?.map(async (comment) => {
-    // NOTE: moved sentiment API calls to request handler
-    // so that API calls aren't made if a corresponding review exists for comment
-
-    // const { documentSentiment } = await fetchSentiment({
-    //   content: comment?.body,
-    //   GOOGLE_API_KEY,
-    // })
-    // comment.sentimentScore = documentSentiment?.score
-    // comment.stars = scoreToStars(documentSentiment?.score)
-    return comment
-  })
-
-  const populatedComments = await Promise.all(sentimentPromises)
-
-  populatedComments.sort((commentA, commentB) => commentB?.ups - commentA?.ups)
-
-  return populatedComments?.map((comment) => {
+  return filteredComments?.map((comment) => {
     return {
       ...comment,
       body: markdownToTxt(comment?.body),
