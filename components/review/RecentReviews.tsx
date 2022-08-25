@@ -2,6 +2,7 @@ import ReviewItem from "./ReviewItem"
 import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 import api from "lib/glue/api"
 import { Container, Stack, Title } from "@mantine/core"
+import Skeleton from "react-loading-skeleton"
 
 interface IRecentReviewsProps {
   categoryId?: number
@@ -37,7 +38,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
       </Title>
       <GlueInfiniteScroll queryConfig={queryConfig} limit={5}>
         {(providedData) => {
-          const { data, optimisticUpdate } = providedData
+          const { data, optimisticUpdate, isLoading } = providedData
 
           const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
             optimisticUpdate({
@@ -56,14 +57,20 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
 
           return (
             <Stack>
-              {data.map((review) => (
-                <ReviewItem
-                  key={review?.id}
-                  review={review}
-                  onUpvoteToggle={onUpvoteToggle}
-                  renderTopic={true}
-                />
-              ))}
+              {isLoading
+                ? [...Array(3)].map((_, idx) => (
+                    <Container key={idx} mb="xs">
+                      <Skeleton height={100} />
+                    </Container>
+                  ))
+                : data.map((review) => (
+                    <ReviewItem
+                      key={review?.id}
+                      review={review}
+                      onUpvoteToggle={onUpvoteToggle}
+                      renderTopic={true}
+                    />
+                  ))}
             </Stack>
           )
         }}
