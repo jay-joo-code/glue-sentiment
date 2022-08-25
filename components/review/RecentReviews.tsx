@@ -36,9 +36,21 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
       <Title order={2} mb="md">
         Recent reviews
       </Title>
-      <GlueInfiniteScroll queryConfig={queryConfig} limit={5}>
+      <GlueInfiniteScroll
+        queryConfig={queryConfig}
+        limit={5}
+        loader={
+          <Container>
+            {[...Array(3)].map((_, idx) => (
+              <Container key={idx} mb="md">
+                <Skeleton height={100} />
+              </Container>
+            ))}
+          </Container>
+        }
+      >
         {(providedData) => {
-          const { data, optimisticUpdate, isLoading } = providedData
+          const { data, optimisticUpdate } = providedData
 
           const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
             optimisticUpdate({
@@ -57,20 +69,14 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
 
           return (
             <Stack>
-              {isLoading
-                ? [...Array(3)].map((_, idx) => (
-                    <Container key={idx} mb="xs">
-                      <Skeleton height={100} />
-                    </Container>
-                  ))
-                : data.map((review) => (
-                    <ReviewItem
-                      key={review?.id}
-                      review={review}
-                      onUpvoteToggle={onUpvoteToggle}
-                      renderTopic={true}
-                    />
-                  ))}
+              {data.map((review) => (
+                <ReviewItem
+                  key={review?.id}
+                  review={review}
+                  onUpvoteToggle={onUpvoteToggle}
+                  renderTopic={true}
+                />
+              ))}
             </Stack>
           )
         }}
