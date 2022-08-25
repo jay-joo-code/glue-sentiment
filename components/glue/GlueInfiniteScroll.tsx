@@ -13,6 +13,7 @@ interface IProvidedData extends SWRInfiniteResponse {
   data: any[]
   mutate: (mutationFn?: IMutationFn) => any
   refetch: (mutationFn?: IMutationFn) => any
+  isLoading: boolean
 }
 
 // TODO: improve type definitions
@@ -131,6 +132,7 @@ const GlueInfiniteScroll = ({
     mutate: infiniteMutate,
     optimisticUpdate,
     refetch: infiniteMutate,
+    isLoading: swrData?.isValidating,
   }
 
   return (
