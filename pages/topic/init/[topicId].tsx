@@ -13,6 +13,7 @@ import prisma from "lib/glue/prisma"
 import { GetServerSideProps } from "next"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const topic = await prisma.topic.findFirst({
@@ -44,7 +45,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 const TopicDetailsInitPage = ({ topic }) => {
   const [isLabelDisplayed, setIsLabelDisplayed] = useState<boolean>(false)
   const [isNameDisplayed, setIsNameDisplayed] = useState<boolean>(false)
-  const [isTimeline1Displayed, setIsTimelineDisplayed] =
+  const [isTimeline1Displayed, setIsTimeline1Displayed] =
+    useState<boolean>(false)
+  const [isTimeline2Displayed, setIsTimeline2Displayed] =
+    useState<boolean>(false)
+  const [isTimeline3Displayed, setIsTimeline3Displayed] =
     useState<boolean>(false)
   const [isButtonDisplayed, setIsButtonDisplayed] = useState<boolean>(false)
 
@@ -52,8 +57,10 @@ const TopicDetailsInitPage = ({ topic }) => {
     setIsLabelDisplayed(true)
   }, [])
 
+  // TODO: uncomment
   const { data, isValidating } = useGlueQuery({
-    url: `/scrape/${topic?.id}`,
+    // url: `/scrape/${topic?.id}`,
+    url: "",
     autoRefetch: false,
   })
 
@@ -87,14 +94,15 @@ const TopicDetailsInitPage = ({ topic }) => {
                     fontSize: "1.5rem",
                   })}
                 >
-                  Gathering Reddit comments for
+                  You&apos;re the first to search for
                 </Text>
               </div>
             )}
           </Transition>
+
           <Transition
             mounted={isNameDisplayed}
-            onEntered={() => setIsTimelineDisplayed(true)}
+            onEntered={() => setIsTimeline1Displayed(true)}
             transition="fade"
             timingFunction="ease"
             duration={1000}
@@ -115,8 +123,76 @@ const TopicDetailsInitPage = ({ topic }) => {
               </div>
             )}
           </Transition>
+
+          {/* timeline 1 */}
           <Transition
             mounted={isTimeline1Displayed}
+            onEntered={() => setIsTimeline2Displayed(true)}
+            transition="fade"
+            timingFunction="ease"
+            duration={1600}
+          >
+            {(style) => (
+              <div style={style}>
+                <Flex align="start" noWrap={true}>
+                  <Container
+                    mt=".1rem"
+                    sx={(theme) => ({
+                      "& svg": {
+                        fill: theme.colors.brand[6],
+                      },
+                    })}
+                  >
+                    <CheckCircleIcon />
+                  </Container>
+                  <Container>
+                    <Text>Scraping Reddit comments</Text>
+                    <Text color="dimmed" size="sm" mt=".2rem">
+                      Sentiment gathers initial review data from Reddit
+                      comments.
+                    </Text>
+                  </Container>
+                </Flex>
+              </div>
+            )}
+          </Transition>
+
+          {/* timeline 2 */}
+          <Transition
+            mounted={isTimeline2Displayed}
+            onEntered={() => setIsTimeline3Displayed(true)}
+            transition="fade"
+            timingFunction="ease"
+            duration={1600}
+          >
+            {(style) => (
+              <div style={style}>
+                <Flex align="start" noWrap={true}>
+                  <Container
+                    mt=".1rem"
+                    sx={(theme) => ({
+                      "& svg": {
+                        fill: theme.colors.brand[6],
+                      },
+                    })}
+                  >
+                    <CheckCircleIcon />
+                  </Container>
+                  <Container>
+                    <Text>Running Sentiment AI analysis</Text>
+                    <Text color="dimmed" size="sm" mt=".2rem">
+                      Sentiment AI reads over the Reddit comments and assigns
+                      star ratings to the reviews.
+                    </Text>
+                  </Container>
+                </Flex>
+              </div>
+            )}
+          </Transition>
+
+          {/* timeine 3 */}
+          <Transition
+            mounted={isTimeline3Displayed}
             onEntered={() => setIsButtonDisplayed(true)}
             transition="fade"
             timingFunction="ease"
@@ -124,21 +200,20 @@ const TopicDetailsInitPage = ({ topic }) => {
           >
             {(style) => (
               <div style={style}>
-                <Timeline active={2} bulletSize={12} lineWidth={2}>
-                  <Timeline.Item title="Scrape Reddit comments">
-                    <Text color="dimmed" size="sm" mt=".5rem">
-                      Sentiment gathers initial review data from Reddit
-                      comments.
-                    </Text>
-                  </Timeline.Item>
-                  <Timeline.Item title="Run Sentiment AI analysis">
-                    <Text color="dimmed" size="sm" mt=".5rem">
-                      Sentiment AI reads over the Reddit comments and assigns
-                      star ratings to the reviews.
-                    </Text>
-                  </Timeline.Item>
-                  <Timeline.Item title="Finalize the review data ..." />
-                </Timeline>
+                <Flex align="start">
+                  <Container
+                    sx={(theme) => ({
+                      "& svg": {
+                        fill: theme.colors.brand[6],
+                      },
+                    })}
+                  >
+                    <CheckCircleIcon />
+                  </Container>
+                  <Container mt=".1rem">
+                    <Text>Finalizing the review data ...</Text>
+                  </Container>
+                </Flex>
               </div>
             )}
           </Transition>
