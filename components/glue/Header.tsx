@@ -80,7 +80,7 @@ const Header = () => {
             </Flex>
             <Flex>
               {!isMobile && <NavList />}
-              <Link href="/">
+              <Link href="/?isFocusSearch=true">
                 <IconButton color="brand" tooltipLabel="Search">
                   <SearchOutlinedIcon />
                 </IconButton>

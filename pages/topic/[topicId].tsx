@@ -63,7 +63,7 @@ const TopicDetailsPage = ({ topic, reviewCount }: ITopicDetailsPageProps) => {
         (recentTopic) => recentTopic?.id !== topic?.id
       )
 
-      if (newTopics?.length >= 5) newTopics.pop()
+      if (newTopics?.length >= 4) newTopics.pop()
 
       newTopics?.unshift({
         ...topic,

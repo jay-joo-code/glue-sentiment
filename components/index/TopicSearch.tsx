@@ -6,7 +6,9 @@ import TopicListItem from "components/topic/TopicListItem"
 import useGlueQuery from "hooks/glue/useGlueQuery"
 import useRecentTopics from "hooks/useRecentTopics"
 import Image from "next/image"
-import { useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useRef, useState } from "react"
+import qs from "qs"
 
 interface ITopicSearchProps {
   categoryName?: string
@@ -75,53 +77,79 @@ const TopicSearch = ({
     ? queryConfig
     : null
   const { data: topics } = useGlueQuery(queryRequest)
-
   const [recentTopics] = useRecentTopics()
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const router = useRouter()
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (router.query?.isFocusSearch === "true") {
+      inputRef.current.focus()
+      const newQuery = { ...router.query }
+      delete newQuery.isFocusSearch
+      router.replace(
+        { pathname: "/", query: qs.stringify(newQuery) },
+        undefined,
+        { shallow: true }
+      )
+    }
+  }, [router.query?.isFocusSearch])
 
   return (
     <Container>
       <Input
+        ref={inputRef}
         radius="xl"
         icon={<SearchIcon />}
         value={searchQuery}
         onChange={(event) => setSearchQuery(event?.target?.value)}
+        onFocus={() => setIsExpanded(true)}
       />
-      {topics?.length > 0 && (
-        <Container p="sm" mt="md">
-          {topics?.map((topic) => (
-            <TopicListItem
-              key={topic?.id}
-              topic={topic}
-              searchQuery={debouncedSearchQuery}
+      <Container
+        sx={(theme) => ({
+          height: "400px",
+          maxHeight: isExpanded ? "400px" : "0px",
+          overflow: "hidden",
+          transition: "max-height 300ms ease-in-out",
+        })}
+      >
+        {topics?.length > 0 && (
+          <Container p="sm" mt="md">
+            {topics?.map((topic) => (
+              <TopicListItem
+                key={topic?.id}
+                topic={topic}
+                searchQuery={debouncedSearchQuery}
+              />
+            ))}
+          </Container>
+        )}
+
+        {/* recently viewed */}
+        {!renderByDefault && !debouncedSearchQuery && recentTopics?.length > 0 && (
+          <Container p="sm" mt="md">
+            <Text size="xs" weight={500} mb="xs" color="dimmed" ml=".5rem">
+              Recently viewed
+            </Text>
+            {recentTopics?.map((topic) => (
+              <TopicListItem key={topic?.id} topic={topic} />
+            ))}
+          </Container>
+        )}
+
+        {/* empty state */}
+        {(renderByDefault || debouncedSearchQuery) && topics?.length === 0 && (
+          <Flex direction="column" align="center" py="3rem">
+            <Image
+              src="/empty-states/topic-search.svg"
+              alt=""
+              height={120}
+              width={150}
             />
-          ))}
-        </Container>
-      )}
-
-      {/* recently viewed */}
-      {!renderByDefault && !debouncedSearchQuery && recentTopics?.length > 0 && (
-        <Container p="sm" mt="md">
-          <Text size="xs" weight={500} mb="xs" color="dimmed" ml=".5rem">
-            Recently viewed
-          </Text>
-          {recentTopics?.map((topic) => (
-            <TopicListItem key={topic?.id} topic={topic} />
-          ))}
-        </Container>
-      )}
-
-      {/* empty state */}
-      {(renderByDefault || debouncedSearchQuery) && topics?.length === 0 && (
-        <Flex direction="column" align="center" py="3rem">
-          <Image
-            src="/empty-states/topic-search.svg"
-            alt=""
-            height={120}
-            width={150}
-          />
-          <Text weight={500}>No search results</Text>
-        </Flex>
-      )}
+            <Text weight={500}>No search results</Text>
+          </Flex>
+        )}
+      </Container>
     </Container>
   )
 }
