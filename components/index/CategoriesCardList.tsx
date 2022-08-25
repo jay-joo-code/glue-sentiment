@@ -15,6 +15,7 @@ const CategoriesCardList = () => {
         },
       },
     },
+    autoRefetch: false,
   })
 
   return (
