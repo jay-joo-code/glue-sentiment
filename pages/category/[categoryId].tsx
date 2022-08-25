@@ -29,7 +29,7 @@ const CategoryDetailsPage = ({ category }) => {
       <Title order={1} mb="xl">
         {categoryName}
       </Title>
-      <TopicSearch categoryName={category?.name} renderByDefault={true} />
+      <TopicSearch categoryName={category?.name} />
       <Container mb="3rem" />
       <RecentReviews categoryId={category?.id} />
     </PageContainer>
