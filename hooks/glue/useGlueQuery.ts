@@ -78,6 +78,7 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
     ...defaultQueryData,
     optimisticUpdate,
     refetch: defaultQueryData?.mutate,
+    isLoading: defaultQueryData?.isValidating,
   }
 }
 
