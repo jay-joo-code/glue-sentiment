@@ -1,15 +1,17 @@
+import prisma from "lib/glue/prisma"
 import { GetServerSideProps } from "next"
 import refactorDatabase from "util/refactorDatabase"
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  await refactorDatabase()
+  const result = await refactorDatabase()
 
   return {
-    props: {},
+    props: { result },
   }
 }
 
-const RefactorPage = () => {
+const RefactorPage = ({ result }) => {
+  console.log("result", result)
   return <div>RefactorPage</div>
 }
 
