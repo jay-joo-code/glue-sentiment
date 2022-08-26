@@ -81,7 +81,7 @@ const TopicDetailsPage = ({ topic, reviewCount }: ITopicDetailsPageProps) => {
       title={`${topic?.name} | Sentiment - Reviews at Cornell`}
       variant="mobile-only"
     >
-      <Badge radius="sm" size="sm">
+      <Badge radius="sm" size="md" mb="xs" ml="-.3rem">
         {topic?.category?.name}
       </Badge>
       <Title order={1}>{topic?.name}</Title>
