@@ -29,7 +29,7 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
 
   const [sortBy, setSortBy] = useLocalStorage({
     key: `all-reviews-sort-by-${topicId}`,
-    defaultValue: "popular",
+    defaultValue: "recent",
   })
 
   const handleSortByChange = (newValue: string) => {
