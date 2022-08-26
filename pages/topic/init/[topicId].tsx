@@ -57,10 +57,8 @@ const TopicDetailsInitPage = ({ topic }) => {
     setIsLabelDisplayed(true)
   }, [])
 
-  // TODO: uncomment
   const { data, isValidating } = useGlueQuery({
-    // url: `/scrape/${topic?.id}`,
-    url: "",
+    url: `/scrape/${topic?.id}`,
     autoRefetch: false,
   })
 
