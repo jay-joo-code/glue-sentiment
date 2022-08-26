@@ -23,9 +23,14 @@ const TopicListItem = ({ topic, searchQuery }: ITopicListItemProps) => {
   const isNotMatchingName =
     searchQuery &&
     !topic?.name?.toLowerCase()?.includes(searchQuery?.toLowerCase())
-  const matchedAlias = topic?.aliases?.find((alias) =>
-    alias?.toLowerCase()?.includes(searchQuery?.toLowerCase())
-  )
+  let hasMatchingAlias = false
+  const matchedAlias = topic?.aliases?.find((alias) => {
+    const isMatch = alias?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+    if (isMatch) {
+      hasMatchingAlias = true
+    }
+    return isMatch
+  })
 
   return (
     <Link href={`/topic/${topic?.id}`}>
@@ -36,7 +41,9 @@ const TopicListItem = ({ topic, searchQuery }: ITopicListItemProps) => {
           </ActionIcon>
           <Container>
             <Text size="sm" weight={600} mt=".2rem">
-              {isNotMatchingName ? matchedAlias : topic?.name}
+              {isNotMatchingName && hasMatchingAlias
+                ? matchedAlias
+                : topic?.name}
             </Text>
             <Text size="sm" mt=".2rem" lineClamp={1}>
               {topic?.subtitle}
