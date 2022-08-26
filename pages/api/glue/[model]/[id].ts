@@ -30,13 +30,7 @@ export default async function handle(
     }
 
     case "PUT": {
-      const userData = session
-        ? {
-            user: { connect: { email: session?.user?.email } },
-          }
-        : {}
-
-      const data = { ...req?.body, ...userData }
+      const data = { ...req?.body }
       delete data.id
       delete data.createdAt
       delete data.updatedAt
