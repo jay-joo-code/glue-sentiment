@@ -19,7 +19,7 @@ const CategoriesCardList = () => {
   })
 
   return (
-    <Container my="3rem">
+    <Container mt="lg" mb="3rem">
       <Title order={2} mb="md">
         Categories
       </Title>
