@@ -18,7 +18,9 @@ const App = ({ Component, pageProps }: AppProps) => {
   // useScrollRestoration(router)
   const theme = useMantineTheme()
 
-  ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID)
+  if (process.env.NEXT_PUBLIC_GA_ID) {
+    ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID)
+  }
 
   return (
     <SessionProvider session={pageProps.session}>
