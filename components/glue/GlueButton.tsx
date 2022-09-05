@@ -14,7 +14,10 @@ const GlueButton = React.forwardRef<HTMLButtonElement, IGlueButtonProps>(
         action: "Button click",
         label: children as string,
       })
-      onClick(event)
+
+      if (onClick) {
+        onClick(event)
+      }
     }
 
     return (
