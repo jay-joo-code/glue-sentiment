@@ -43,6 +43,12 @@ git push glue glue-master:master # to push a commit to glue/master
   - https://(app-name).vercel.app/api/auth/callback/google
   - https://proddomain.com/api/auth/callback/google
 
+### Google Analytics
+
+- Glue components track usage by default (button click, input focus, debounced input value, etc)
+- Setting the `NEXT_PUBLIC_GA_ID`env variable is required (usage tracking is enforced for Glue apps)
+- If GA reports don't show up, give it 2 days. It takes time for the usage report data to show up.
+
 ### Deployment (Vercel)
 
 1. [Create a new Sentry project](https://sentry.io/organizations/jay-joo-org/projects/new/)
