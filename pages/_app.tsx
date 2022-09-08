@@ -10,6 +10,7 @@ import { AppProps } from "next/app"
 import ReactGA from "react-ga4"
 import "react-loading-skeleton/dist/skeleton.css"
 import { ThemeProvider } from "styled-components"
+import * as amplitude from "@amplitude/analytics-browser"
 import "styles/glue/reset.css"
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -20,6 +21,10 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   if (process.env.NEXT_PUBLIC_GA_ID) {
     ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID)
+  }
+
+  if (process.env.NEXT_PUBLIC_AMPLITUDE_ID) {
+    amplitude.init(process.env.NEXT_PUBLIC_AMPLITUDE_ID)
   }
 
   return (

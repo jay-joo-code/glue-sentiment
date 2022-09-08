@@ -1,6 +1,7 @@
+import * as amplitude from "@amplitude/analytics-browser"
 import { Button, ButtonProps } from "@mantine/core"
 import React from "react"
-import ReactGA from "react-ga4"
+import { toKebabCase } from "util/glue/strings"
 
 interface IGlueButtonProps extends ButtonProps<"button"> {}
 
@@ -9,11 +10,7 @@ const GlueButton = React.forwardRef<HTMLButtonElement, IGlueButtonProps>(
     const { onClick, children, ...rest } = props
 
     const handleTrackedClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      ReactGA.event({
-        category: "Button",
-        action: "Button click",
-        label: children as string,
-      })
+      amplitude.track(`button-click-${toKebabCase(children as string)}`)
 
       if (onClick) {
         onClick(event)
