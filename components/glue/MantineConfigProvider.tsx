@@ -53,6 +53,18 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             "#2C2E33",
             "#1A1B1E",
           ],
+          "button-subtle": [
+            "#FFFFFF",
+            "#E0E1E2",
+            "#D6D6D8",
+            "#C1C2C5",
+            "#A6A7AB",
+            "#909296",
+            "#5C5F66",
+            "#373A40",
+            "#2C2E33",
+            "#1A1B1E",
+          ],
 
           // text array values
           //  0      1           2      3
