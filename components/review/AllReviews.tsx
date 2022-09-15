@@ -5,6 +5,7 @@ import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 import useGlueQuery from "hooks/glue/useGlueQuery"
 import api from "lib/glue/api"
 import Image from "next/image"
+import Skeleton from "react-loading-skeleton"
 import ReviewItem from "./ReviewItem"
 
 interface IAllReviewsProps {
@@ -66,9 +67,18 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
           },
         }}
         limit={4}
+        loader={
+          <Container>
+            {[...Array(3)].map((_, idx) => (
+              <Container key={idx} mb="md">
+                <Skeleton height={100} />
+              </Container>
+            ))}
+          </Container>
+        }
       >
         {(providedData) => {
-          const { data: reviews, optimisticUpdate } = providedData
+          const { data: reviews, optimisticUpdate, isLoading } = providedData
           const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
             optimisticUpdate({
               variant: "update",
@@ -84,7 +94,7 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
             })
           }
 
-          return reviews?.length === 0 ? (
+          return !isLoading && reviews?.length === 0 ? (
             <Flex direction="column" align="center" py="3rem">
               <Image
                 src="/empty-states/reviews.svg"
