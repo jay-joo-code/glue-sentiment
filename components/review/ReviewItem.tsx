@@ -17,6 +17,8 @@ import styled from "styled-components"
 import ReviewStars from "./ReviewStars"
 import EastIcon from "@mui/icons-material/East"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined"
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined"
 
 interface IReviewItemProps {
   review: Review & {
@@ -89,82 +91,91 @@ const ReviewItem = ({
   return (
     <Container>
       <Container
-        p="md"
-        pt={0}
+        pb="md"
         sx={(theme) => ({
           borderBottom: `1px solid ${theme.colors.gray[1]}`,
         })}
       >
-        <Stack spacing="xs">
-          <Flex justify="space-between" align="center">
-            <Flex align="center" spacing="xs">
-              {/* category link */}
-              {renderTopic && (
-                <Flex align="center" spacing={0}>
-                  <Link href={`/topic/${review?.topic?.id}`}>
-                    <Button
-                      variant="light"
-                      size="sm"
-                      color="button-gray"
-                      compact={true}
-                      // rightIcon={<ArrowForwardIcon />}
-                      sx={(theme) => ({
-                        "& .mantine-Button-rightIcon": {
-                          marginLeft: "4px",
-                        },
-                        "& svg": {
-                          width: "20px",
-                        },
-                      })}
-                    >
-                      {review?.topic?.name}
-                    </Button>
-                  </Link>
-                </Flex>
-              )}
-              <ReviewStars edit={false} value={review?.stars} size={18} />
-              <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
-            </Flex>
-
-            {/* toolbar */}
-            <Flex align="center" spacing="xs">
-              {isAdmin ? (
-                <Flex align="center" spacing="xs">
-                  <Text size="lg" weight={600} color="dimmed">
-                    {review?.invalidVotes}
-                  </Text>
-                  <IconButton
-                    tooltipLabel="Invalidate review"
-                    color="button-gray"
-                    position="left"
-                    onClick={handleInvalidate}
-                  >
-                    <FlagOutlinedIcon />
-                  </IconButton>
-                </Flex>
-              ) : (
-                <IconButton
-                  tooltipLabel="Hide unhelpful review"
-                  color="button-gray"
-                  position="left"
-                  onClick={handleVoteInvalid}
-                >
-                  <CloseOutlinedIcon />
-                </IconButton>
-              )}
-            </Flex>
+        <Flex align="flex-start" mt="sm" spacing="sm" noWrap={true}>
+          {/* up / down vote */}
+          <Flex direction="column" align="center" spacing="xs">
+            <IconButton
+              color={isUpvoted ? "brand" : "button-subtle"}
+              tooltipLabel="Upvote"
+              position="right"
+              onClick={handleUpvote}
+            >
+              <ArrowUpwardOutlinedIcon />
+            </IconButton>
+            <Text weight={700} color={isUpvoted ? "brand" : undefined}>
+              {upvotes}
+            </Text>
           </Flex>
-          <Spoiler
-            maxHeight={196}
-            showLabel="Read more"
-            hideLabel="Hide"
-            mb="sm"
+          <Stack
+            spacing="xs"
             sx={(theme) => ({
-              "& .mantine-Spoiler-control": {
-                fontSize: "14px",
-              },
+              flexGrow: 2,
             })}
           >
+            <Flex justify="space-between" align="center">
+              <Flex align="center" spacing="xs">
+                {/* category link */}
+                {renderTopic && (
+                  <Flex align="center" spacing={0}>
+                    <Link href={`/topic/${review?.topic?.id}`}>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        color="button-gray"
+                        compact={true}
+                        sx={(theme) => ({
+                          "& .mantine-Button-rightIcon": {
+                            marginLeft: "4px",
+                          },
+                          "& svg": {
+                            width: "20px",
+                          },
+                        })}
+                      >
+                        {review?.topic?.name}
+                      </Button>
+                    </Link>
+                  </Flex>
+                )}
+                <ReviewStars edit={false} value={review?.stars} size={18} />
+                <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
+              </Flex>
+
+              {/* toolbar */}
+              <Flex align="center" spacing="xs">
+                {isAdmin ? (
+                  <Flex align="center" spacing="xs">
+                    <Text size="lg" weight={600} color="dimmed">
+                      {review?.invalidVotes}
+                    </Text>
+                    <IconButton
+                      tooltipLabel="Invalidate review"
+                      color="button-gray"
+                      position="left"
+                      onClick={handleInvalidate}
+                    >
+                      <FlagOutlinedIcon />
+                    </IconButton>
+                  </Flex>
+                ) : (
+                  <IconButton
+                    tooltipLabel="Hide unhelpful review"
+                    color="button-gray"
+                    position="left"
+                    onClick={handleVoteInvalid}
+                  >
+                    <CloseOutlinedIcon />
+                  </IconButton>
+                )}
+              </Flex>
+            </Flex>
+
+            {/* review body */}
             <Text
               sx={(theme) => ({
                 lineHeight: "1.5",
@@ -177,39 +188,36 @@ const ReviewItem = ({
             >
               {content}
             </Text>
-          </Spoiler>
-          <div>
-            <Button
-              variant={isUpvoted ? "filled" : "white"}
-              leftIcon={<UpIcon />}
-              size="xs"
-              onClick={handleUpvote}
-              color={isUpvoted ? "brand" : "dark"}
-              sx={(theme) => ({
-                paddingTop: "0",
-                paddingBottom: "0",
-                paddingRight: "6px",
-                paddingLeft: "4px",
-                fontSize: ".7rem",
-                height: "24px",
 
-                "& .mantine-Button-icon": {
-                  marginRight: "3px",
+            {/* <Spoiler
+              maxHeight={196}
+              showLabel="Read more"
+              hideLabel="Hide"
+              mb="sm"
+              sx={(theme) => ({
+                "& .mantine-Spoiler-control": {
+                  fontSize: "14px",
                 },
               })}
             >
-              Agree {upvotes}
-            </Button>
-          </div>
-        </Stack>
+              <Text
+                sx={(theme) => ({
+                  lineHeight: "1.5",
+
+                  // display: "-webkit-box",
+                  // "-webkit-line-clamp": "7",
+                  // "-webkit-box-orient": "vertical",
+                  // overflow: "hidden",
+                })}
+              >
+                {content}
+              </Text>
+            </Spoiler> */}
+          </Stack>
+        </Flex>
       </Container>
     </Container>
   )
 }
-
-const UpIcon = styled(KeyboardArrowUpIcon)`
-  height: 16px;
-  width: 16px;
-`
 
 export default ReviewItem
