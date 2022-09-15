@@ -176,7 +176,7 @@ const ReviewItem = ({
             </Flex>
 
             {/* review body */}
-            <GlueSpoiler previewHeight={300}>
+            <GlueSpoiler previewHeight={300} expandOnly={true}>
               <Text
                 sx={(theme) => ({
                   lineHeight: "1.5",
