@@ -1,4 +1,4 @@
-import { Button, Container, Stack, Text } from "@mantine/core"
+import { Button, Container, Spoiler, Stack, Text } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import { showNotification } from "@mantine/notifications"
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined"
@@ -7,12 +7,14 @@ import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined"
 import { Category, Review, Topic } from "@prisma/client"
 import Flex from "components/glue/Flex"
 import GlueResponsiveRender from "components/glue/GlueResponsiveRender"
+import GlueSpoiler from "components/glue/GlueSpoiler"
 import IconButton from "components/glue/IconButton"
 import useGlueLocalStorage from "hooks/glue/useGlueLocalStorage"
 import api from "lib/glue/api"
 import moment from "moment"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
+import { useRef } from "react"
 import ReviewStars from "./ReviewStars"
 
 interface IReviewItemProps {
@@ -35,6 +37,7 @@ const ReviewItem = ({
     key: `review-is-upvoted-${review?.id}`,
     defaultValue: false,
   })
+  const textRef = useRef(null)
 
   const { data: session } = useSession()
   const isAdmin = session?.user?.email === "cornellsentiment@gmail.com"
@@ -173,43 +176,15 @@ const ReviewItem = ({
             </Flex>
 
             {/* review body */}
-            <Text
-              sx={(theme) => ({
-                lineHeight: "1.5",
-
-                // display: "-webkit-box",
-                // "-webkit-line-clamp": "7",
-                // "-webkit-box-orient": "vertical",
-                // overflow: "hidden",
-              })}
-            >
-              {content}
-            </Text>
-
-            {/* <Spoiler
-              maxHeight={196}
-              showLabel="Read more"
-              hideLabel="Hide"
-              mb="sm"
-              sx={(theme) => ({
-                "& .mantine-Spoiler-control": {
-                  fontSize: "14px",
-                },
-              })}
-            >
+            <GlueSpoiler previewHeight={300}>
               <Text
                 sx={(theme) => ({
                   lineHeight: "1.5",
-
-                  // display: "-webkit-box",
-                  // "-webkit-line-clamp": "7",
-                  // "-webkit-box-orient": "vertical",
-                  // overflow: "hidden",
                 })}
               >
                 {content}
               </Text>
-            </Spoiler> */}
+            </GlueSpoiler>
 
             {/* mobile date stamp */}
             <GlueResponsiveRender renderIn="mobile">
