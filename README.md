@@ -64,6 +64,15 @@ git push glue glue-master:master # to push a commit to glue/master
 
 - If the [too many database connections error](https://stackoverflow.com/questions/71259682/prisma-is-opening-too-many-connections-with-postgrsql-when-running-jest-end-to-e) keeps coming up, just wait 30-60 minutes. The error should go away.
 
+### Better Uptime (preventing cold starts)
+
+- a limitation of serverless functions is that they are super slow if the function hasn't been used in a while. this is known as a cold start
+- too keep the load speeds of important pages low, we need to keep the lambda functions for those pages "warm"
+- [Better Uptime](https://betterstack.com/better-uptime) is used to periodically ping the page to keep the corresponding lambda function warm
+
+1. Create a [Better Uptime](https://betterstack.com/better-uptime) account with the project email
+2. Add the pages that are important to the web app, such as frequently visited pages or conversion pages
+
 # Scripts
 
 **Pushing changes to Glue**
