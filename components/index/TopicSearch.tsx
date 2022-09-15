@@ -9,6 +9,7 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import qs from "qs"
+import Skeleton from "react-loading-skeleton"
 
 interface ITopicSearchProps {
   categoryName?: string
@@ -76,7 +77,7 @@ const TopicSearch = ({
     : debouncedSearchQuery
     ? queryConfig
     : null
-  const { data: topics } = useGlueQuery(queryRequest)
+  const { data: topics, isLoading } = useGlueQuery(queryRequest)
   const [recentTopics] = useRecentTopics()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const router = useRouter()
@@ -107,13 +108,14 @@ const TopicSearch = ({
       />
       <Container
         sx={(theme) => ({
-          height: "400px",
-          maxHeight: isExpanded ? "400px" : "0px",
+          height: "460px",
+          maxHeight: isExpanded ? "460px" : "0px",
           overflow: "hidden",
           transition: "max-height 300ms ease-in-out",
         })}
       >
-        {topics?.length > 0 && (
+        {/* search results */}
+        {!isLoading && topics?.length > 0 && (
           <Container p="sm" mt="md">
             {topics?.map((topic) => (
               <TopicListItem
@@ -125,21 +127,35 @@ const TopicSearch = ({
           </Container>
         )}
 
-        {/* recently viewed */}
-        {!renderByDefault && !debouncedSearchQuery && recentTopics?.length > 0 && (
+        {/* loading skeletons */}
+        {isLoading && (
           <Container p="sm" mt="md">
-            <Text size="xs" weight={500} mb="xs" color="dimmed" ml=".5rem">
-              Recently viewed
-            </Text>
-            {recentTopics?.map((topic) => (
-              <TopicListItem key={topic?.id} topic={topic} />
+            {[...Array(5)].map((_, idx) => (
+              <Container key={idx} mt="sm">
+                <Skeleton height={54} />
+              </Container>
             ))}
           </Container>
         )}
 
+        {/* recently viewed */}
+        {!isLoading &&
+          !renderByDefault &&
+          !debouncedSearchQuery &&
+          recentTopics?.length > 0 && (
+            <Container p="sm" mt="md">
+              <Text size="xs" weight={500} mb="xs" color="dimmed" ml=".5rem">
+                Recently viewed
+              </Text>
+              {recentTopics?.map((topic) => (
+                <TopicListItem key={topic?.id} topic={topic} />
+              ))}
+            </Container>
+          )}
+
         {/* empty state */}
-        {(renderByDefault || debouncedSearchQuery) && topics?.length === 0 && (
-          <Flex direction="column" align="center" py="3rem">
+        {!isLoading && !recentTopics?.length && !topics?.length && (
+          <Flex direction="column" align="center" justify="center" py="5rem">
             <Image
               src="/empty-states/topic-search.svg"
               alt=""
