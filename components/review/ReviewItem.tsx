@@ -95,38 +95,33 @@ const ReviewItem = ({
           borderBottom: `1px solid ${theme.colors.gray[1]}`,
         })}
       >
-        {renderTopic && (
-          <Flex align="center" mb="xs" spacing={0}>
-            {/* category link */}
-            {/* <Link href={`/category/${review?.topic?.category?.id}`}>
-              <Button variant="light" size="sm" compact={true}>
-                {capitalize(review?.topic?.category?.name)}
-              </Button>
-            </Link> */}
-            <Link href={`/topic/${review?.topic?.id}`}>
-              <Button
-                variant="light"
-                size="sm"
-                color="button-gray"
-                compact={true}
-                // rightIcon={<ArrowForwardIcon />}
-                sx={(theme) => ({
-                  "& .mantine-Button-rightIcon": {
-                    marginLeft: "4px",
-                  },
-                  "& svg": {
-                    width: "20px",
-                  },
-                })}
-              >
-                {review?.topic?.name}
-              </Button>
-            </Link>
-          </Flex>
-        )}
         <Stack spacing="xs">
           <Flex justify="space-between" align="center">
             <Flex align="center" spacing="xs">
+              {/* category link */}
+              {renderTopic && (
+                <Flex align="center" spacing={0}>
+                  <Link href={`/topic/${review?.topic?.id}`}>
+                    <Button
+                      variant="light"
+                      size="sm"
+                      color="button-gray"
+                      compact={true}
+                      // rightIcon={<ArrowForwardIcon />}
+                      sx={(theme) => ({
+                        "& .mantine-Button-rightIcon": {
+                          marginLeft: "4px",
+                        },
+                        "& svg": {
+                          width: "20px",
+                        },
+                      })}
+                    >
+                      {review?.topic?.name}
+                    </Button>
+                  </Link>
+                </Flex>
+              )}
               <ReviewStars edit={false} value={review?.stars} size={18} />
               <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
             </Flex>
