@@ -1,4 +1,4 @@
-import { Stack, Text, Title } from "@mantine/core"
+import { Container, Stack, Text, Title } from "@mantine/core"
 import Flex from "components/glue/Flex"
 import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 import PageContainer from "components/glue/PageContainer"
@@ -7,6 +7,7 @@ import api from "lib/glue/api"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 import React from "react"
+import Skeleton from "react-loading-skeleton"
 
 const MyReviewsPage = () => {
   const { data: session } = useSession()
@@ -37,9 +38,18 @@ const MyReviewsPage = () => {
             },
           },
         }}
+        loader={
+          <Container>
+            {[...Array(3)].map((_, idx) => (
+              <Container key={idx} mb="md">
+                <Skeleton height={120} />
+              </Container>
+            ))}
+          </Container>
+        }
       >
         {(providedData) => {
-          const { data, optimisticUpdate } = providedData
+          const { data, optimisticUpdate, isLoading } = providedData
           const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
             optimisticUpdate({
               variant: "update",
@@ -55,7 +65,7 @@ const MyReviewsPage = () => {
             })
           }
 
-          if (!data || data?.length === 0) {
+          if (!isLoading && (!data || data?.length === 0)) {
             return (
               <Flex direction="column" align="center" py="3rem">
                 <Image
