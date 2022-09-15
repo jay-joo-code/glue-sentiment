@@ -1,24 +1,19 @@
-import { Button, Container, Spoiler, Stack, Text } from "@mantine/core"
+import { Button, Container, Stack, Text } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import { showNotification } from "@mantine/notifications"
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined"
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
-import { capitalize } from "@mui/material"
 import { Category, Review, Topic } from "@prisma/client"
 import Flex from "components/glue/Flex"
+import GlueResponsiveRender from "components/glue/GlueResponsiveRender"
 import IconButton from "components/glue/IconButton"
 import useGlueLocalStorage from "hooks/glue/useGlueLocalStorage"
 import api from "lib/glue/api"
 import moment from "moment"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
-import styled from "styled-components"
 import ReviewStars from "./ReviewStars"
-import EastIcon from "@mui/icons-material/East"
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
-import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined"
-import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined"
 
 interface IReviewItemProps {
   review: Review & {
@@ -143,7 +138,9 @@ const ReviewItem = ({
                   </Flex>
                 )}
                 <ReviewStars edit={false} value={review?.stars} size={18} />
-                <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
+                <GlueResponsiveRender renderIn="desktop">
+                  <Text size="xs">{moment(review?.createdAt).fromNow()}</Text>
+                </GlueResponsiveRender>
               </Flex>
 
               {/* toolbar */}
@@ -213,6 +210,13 @@ const ReviewItem = ({
                 {content}
               </Text>
             </Spoiler> */}
+
+            {/* mobile date stamp */}
+            <GlueResponsiveRender renderIn="mobile">
+              <Text size="xs" mt="xs">
+                {moment(review?.createdAt).fromNow()}
+              </Text>
+            </GlueResponsiveRender>
           </Stack>
         </Flex>
       </Container>
