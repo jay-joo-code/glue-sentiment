@@ -4,11 +4,13 @@ import React, { useEffect, useRef, useState } from "react"
 interface IGlueSpoilerProps extends ContainerProps {
   children: React.ReactNode
   previewHeight: number
+  expandOnly?: boolean
 }
 
 const GlueSpoiler = ({
   children,
   previewHeight,
+  expandOnly = false,
   ...rest
 }: IGlueSpoilerProps) => {
   const [height, setHeight] = useState<number>(0)
@@ -32,7 +34,11 @@ const GlueSpoiler = ({
         }
 
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded)
+    if (!isExpanded) {
+      setIsExpanded(true)
+    } else if (isExpanded && !expandOnly) {
+      setIsExpanded(false)
+    }
   }
 
   return (
