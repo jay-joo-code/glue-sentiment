@@ -1,42 +1,30 @@
 import { Container, Title } from "@mantine/core"
-import Flex from "components/glue/Flex"
+import { Category } from "@prisma/client"
 import HorizontalScrollMenu from "components/glue/HorizontalScrollMenu"
-import useGlueQuery from "hooks/glue/useGlueQuery"
-import Skeleton from "react-loading-skeleton"
 import CategoryCard from "./CategoryCard"
 
-const CategoriesCardList = () => {
-  const { data: categories, isLoading } = useGlueQuery({
-    url: "/glue/categories",
-    args: {
-      include: {
-        _count: {
-          select: { topics: true },
-        },
-      },
-    },
-    autoRefetch: false,
-  })
+interface ICategoriesCardListProps {
+  categories: (Category & {
+    _count: {
+      topics: number
+    }
+  })[]
+}
 
+const CategoriesCardList = ({ categories }: ICategoriesCardListProps) => {
   return (
     <Container mt="lg" mb="3rem">
       <Title order={2} mb="md">
         Categories
       </Title>
       <HorizontalScrollMenu>
-        {isLoading
-          ? [...Array(3)].map((_, idx) => (
-              <Container key={idx} mr="md">
-                <Skeleton width={140} height={224} />
-              </Container>
-            ))
-          : categories?.map((category) => (
-              <CategoryCard
-                key={category?.id}
-                itemId={category?.name}
-                category={category}
-              />
-            ))}
+        {categories?.map((category) => (
+          <CategoryCard
+            key={category?.id}
+            itemId={category?.name}
+            category={category}
+          />
+        ))}
       </HorizontalScrollMenu>
     </Container>
   )
