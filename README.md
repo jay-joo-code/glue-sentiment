@@ -21,7 +21,7 @@ git push glue glue-master:master # to push a commit to glue/master
 2. Follow the steps to create a new project.
 3. Copy paste the connection strings:
 
-- `DATABASE_URL=postgres://...`
+- `DATABASE_URL=postgres://...?connection_limit=10&connect_timeout=30&pool_timeout=30&socket_timeout=30`
 - `DATABASE_URL_PROD=prisma://...`
 
 ### Google auth
