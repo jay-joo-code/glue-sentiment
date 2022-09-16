@@ -60,6 +60,11 @@ const TopicDetailsInitPage = ({ topic }) => {
   const { data, isValidating } = useGlueQuery({
     url: `/scrape/${topic?.id}`,
     autoRefetch: false,
+
+    // retry on timeout error
+    shouldRetryOnError: true,
+    errorRetryInterval: 0,
+    errorRetryCount: 10,
   })
 
   const isLoading = !data && isValidating
