@@ -83,44 +83,58 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
           lg: 20,
           xl: 24,
         },
-      }}
-      defaultProps={{
-        Text: { component: "p" },
-        Paper: {
-          radius: "md",
-        },
-        ActionIcon: {
-          variant: "light",
-          color: "dark",
-        },
-        Tooltip: {
-          transition: "fade",
-          position: "bottom",
-          placement: "center",
-        },
-        Menu: {
-          transition: "fade",
-        },
-        Container: {
-          p: 0,
-          m: 0,
-        },
-      }}
-      styles={{
-        Container: {
-          root: {
-            maxWidth: "unset",
+        components: {
+          Text: {
+            defaultProps: {
+              component: "p",
+            },
+            styles: {
+              root: {
+                lineHeight: "1.2",
+                whiteSpace: "pre-line",
+              },
+            },
           },
-        },
-        Text: {
-          root: {
-            lineHeight: "1.2",
-            whiteSpace: "pre-line",
+          Title: {
+            styles: {
+              root: {
+                fontWeight: 600,
+              },
+            },
           },
-        },
-        Title: {
-          root: {
-            fontWeight: 600,
+          Paper: {
+            defaultProps: {
+              radius: "md",
+            },
+          },
+          ActionIcon: {
+            defaultProps: {
+              variant: "light",
+              color: "dark",
+            },
+          },
+          Tooltip: {
+            defaultProps: {
+              transition: "fade",
+              position: "bottom",
+              placement: "center",
+            },
+          },
+          Menu: {
+            defaultProps: {
+              transition: "fade",
+            },
+          },
+          Container: {
+            defaultProps: {
+              p: 0,
+              m: 0,
+            },
+            styles: {
+              root: {
+                maxWidth: "unset",
+              },
+            },
           },
         },
       }}
