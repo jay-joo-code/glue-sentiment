@@ -1,7 +1,10 @@
 import { Menu, MenuItemProps } from "@mantine/core"
 import { NextLink } from "@mantine/next"
 
-interface IMenuItemProps extends MenuItemProps<"a"> {}
+interface IMenuItemProps extends MenuItemProps {
+  href?: string
+  onClick?: React.MouseEventHandler
+}
 
 const MenuItem = ({ children, href, ...rest }: IMenuItemProps) => {
   if (href) {

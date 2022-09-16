@@ -2,7 +2,7 @@ import { ActionIcon, ActionIconProps, Tooltip } from "@mantine/core"
 import useIsMobile from "hooks/glue/isMobile"
 import React from "react"
 
-interface IIconButtonProps extends ActionIconProps<"button"> {
+interface IIconButtonProps extends ActionIconProps {
   tooltipLabel?: string
   position?: "bottom" | "left" | "right" | "top"
 }
