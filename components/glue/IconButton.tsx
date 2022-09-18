@@ -1,8 +1,10 @@
 import { ActionIcon, ActionIconProps, Tooltip } from "@mantine/core"
 import useIsMobile from "hooks/glue/isMobile"
+import { PolymorphicComponentProps } from "@mantine/utils"
 import React from "react"
 
-interface IIconButtonProps extends ActionIconProps {
+interface IIconButtonProps
+  extends PolymorphicComponentProps<"button", ActionIconProps> {
   tooltipLabel?: string
   position?: "bottom" | "left" | "right" | "top"
 }
