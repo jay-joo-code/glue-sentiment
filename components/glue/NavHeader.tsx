@@ -90,7 +90,7 @@ const NavItem = styled.div<NavItemProps>`
   }
 `
 
-interface LabelProps extends TextProps<"p"> {
+interface LabelProps extends TextProps {
   $isSelected: boolean
 }
 
