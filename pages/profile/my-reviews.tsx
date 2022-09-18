@@ -1,4 +1,5 @@
 import { Container, Stack, Text, Title } from "@mantine/core"
+import { showNotification } from "@mantine/notifications"
 import Flex from "components/glue/Flex"
 import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 import PageContainer from "components/glue/PageContainer"
@@ -68,6 +69,23 @@ const MyReviewsPage = () => {
             })
           }
 
+          const onDelete = (reviewId: number) => {
+            optimisticUpdate({
+              variant: "delete",
+              itemData: {
+                id: reviewId,
+              },
+              asyncRequest: async () => {
+                api.delete(`/glue/reviews/${reviewId}`)
+              },
+            })
+            showNotification({
+              title: "Your review was deleted",
+              message: "",
+              color: "green",
+            })
+          }
+
           if (!isLoading && (!data || data?.length === 0)) {
             return (
               <Flex direction="column" align="center" py="3rem">
@@ -97,6 +115,7 @@ const MyReviewsPage = () => {
                   renderTopic={true}
                   review={review}
                   onUpvoteToggle={onUpvoteToggle}
+                  onDelete={onDelete}
                 />
               ))}
             </Stack>

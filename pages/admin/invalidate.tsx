@@ -55,6 +55,7 @@ const AdminInvalidatePage = () => {
                   key={review?.id}
                   review={review}
                   onUpvoteToggle={() => {}}
+                  onDelete={() => {}}
                   renderTopic={true}
                 />
               ))}

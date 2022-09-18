@@ -3,6 +3,7 @@ import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 import api from "lib/glue/api"
 import { Container, Stack, Title } from "@mantine/core"
 import Skeleton from "react-loading-skeleton"
+import { showNotification } from "@mantine/notifications"
 
 interface IRecentReviewsProps {
   categoryId?: number
@@ -67,6 +68,23 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
             })
           }
 
+          const onDelete = (reviewId: number) => {
+            optimisticUpdate({
+              variant: "delete",
+              itemData: {
+                id: reviewId,
+              },
+              asyncRequest: async () => {
+                api.delete(`/glue/reviews/${reviewId}`)
+              },
+            })
+            showNotification({
+              title: "Your review was deleted",
+              message: "",
+              color: "green",
+            })
+          }
+
           return (
             <Stack>
               {data.map((review) => (
@@ -74,6 +92,7 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
                   key={review?.id}
                   review={review}
                   onUpvoteToggle={onUpvoteToggle}
+                  onDelete={onDelete}
                   renderTopic={true}
                 />
               ))}

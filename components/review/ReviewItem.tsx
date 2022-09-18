@@ -15,6 +15,7 @@ import moment from "moment"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import ReviewStars from "./ReviewStars"
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
 
 interface IReviewItemProps {
   review: Review & {
@@ -23,6 +24,7 @@ interface IReviewItemProps {
     }
   }
   onUpvoteToggle: (reviewId: number, newUpvotes: number) => void
+  onDelete: (reviewId: number) => void
   renderTopic?: boolean
   isShowTutorial?: boolean
 }
@@ -30,6 +32,7 @@ interface IReviewItemProps {
 const ReviewItem = ({
   review,
   onUpvoteToggle,
+  onDelete,
   renderTopic = false,
   isShowTutorial = false,
 }: IReviewItemProps) => {
@@ -41,6 +44,7 @@ const ReviewItem = ({
 
   const { data: session } = useSession()
   const isAdmin = session?.user?.email === "cornellsentiment@gmail.com"
+  const isMyReview = session?.user?.id === review?.userId
 
   const [isVotedInvalid, setIsVotedInvalid] = useGlueLocalStorage({
     key: `review-voted-invalid-${review?.id}`,
@@ -87,6 +91,10 @@ const ReviewItem = ({
     defaultValue: false,
   })
 
+  const handleDelete = async () => {
+    onDelete(review?.id)
+  }
+
   if (!isAdmin && isVotedInvalid !== undefined && isVotedInvalid) {
     return null
   }
@@ -107,7 +115,6 @@ const ReviewItem = ({
               tooltipLabel="Upvote"
               position="right"
               onClick={handleUpvote}
-              // variant={isUpvoted ? "light" : "outline"}
             >
               <ArrowUpwardOutlinedIcon />
             </IconButton>
@@ -154,7 +161,8 @@ const ReviewItem = ({
 
               {/* toolbar */}
               <Flex align="center" spacing="xs">
-                {isAdmin ? (
+                {/* admin - invalidate review */}
+                {isAdmin && (
                   <Flex align="center" spacing="xs">
                     <Text size="lg" weight={600} color="dimmed">
                       {review?.invalidVotes}
@@ -168,7 +176,22 @@ const ReviewItem = ({
                       <FlagOutlinedIcon />
                     </IconButton>
                   </Flex>
-                ) : (
+                )}
+
+                {/* delete my review */}
+                {!isAdmin && isMyReview && (
+                  <IconButton
+                    color="red"
+                    tooltipLabel="Delete review"
+                    position="left"
+                    onClick={handleDelete}
+                  >
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                )}
+
+                {/* hide unhelpful review */}
+                {!isAdmin && !isMyReview && (
                   <Popover
                     opened={isShowTutorial && !isClosedTutorial}
                     position="bottom-end"
