@@ -1,4 +1,4 @@
-import { Button, Container, Spoiler, Stack, Text } from "@mantine/core"
+import { Button, Container, Popover, Stack, Text } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import { showNotification } from "@mantine/notifications"
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined"
@@ -14,7 +14,6 @@ import api from "lib/glue/api"
 import moment from "moment"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
-import { useRef } from "react"
 import ReviewStars from "./ReviewStars"
 
 interface IReviewItemProps {
@@ -25,19 +24,20 @@ interface IReviewItemProps {
   }
   onUpvoteToggle: (reviewId: number, newUpvotes: number) => void
   renderTopic?: boolean
+  isShowTutorial?: boolean
 }
 
 const ReviewItem = ({
   review,
   onUpvoteToggle,
   renderTopic = false,
+  isShowTutorial = false,
 }: IReviewItemProps) => {
   const { content, upvotes } = review
   const [isUpvoted, setIsUpvoted] = useLocalStorage({
     key: `review-is-upvoted-${review?.id}`,
     defaultValue: false,
   })
-  const textRef = useRef(null)
 
   const { data: session } = useSession()
   const isAdmin = session?.user?.email === "cornellsentiment@gmail.com"
@@ -81,6 +81,11 @@ const ReviewItem = ({
       color: "green",
     })
   }
+
+  const [isClosedTutorial, setIsClosedTutorial] = useGlueLocalStorage({
+    key: "is-review-item-tutorial-closed",
+    defaultValue: false,
+  })
 
   if (!isAdmin && isVotedInvalid !== undefined && isVotedInvalid) {
     return null
@@ -163,14 +168,39 @@ const ReviewItem = ({
                     </IconButton>
                   </Flex>
                 ) : (
-                  <IconButton
-                    tooltipLabel="Hide unhelpful review"
-                    color="button-gray"
-                    position="left"
-                    onClick={handleVoteInvalid}
+                  <Popover
+                    opened={isShowTutorial && !isClosedTutorial}
+                    position="bottom-end"
+                    shadow="sm"
+                    withArrow={true}
+                    width={200}
                   >
-                    <CloseOutlinedIcon />
-                  </IconButton>
+                    <Popover.Target>
+                      <IconButton
+                        tooltipLabel="Hide unhelpful review"
+                        color="button-gray"
+                        position="left"
+                        onClick={handleVoteInvalid}
+                      >
+                        <CloseOutlinedIcon />
+                      </IconButton>
+                    </Popover.Target>
+                    <Popover.Dropdown>
+                      <Text size="sm" weight={500} mb="sm">
+                        Hide uphelpful reviews with this button
+                      </Text>
+                      <Flex direction="column" align="flex-end" spacing="xs">
+                        <Button
+                          size="xs"
+                          variant="light"
+                          compact={true}
+                          onClick={() => setIsClosedTutorial(true)}
+                        >
+                          Got it!
+                        </Button>
+                      </Flex>
+                    </Popover.Dropdown>
+                  </Popover>
                 )}
               </Flex>
             </Flex>

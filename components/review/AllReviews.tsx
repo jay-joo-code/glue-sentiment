@@ -106,11 +106,12 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
             </Flex>
           ) : (
             <Stack>
-              {reviews?.map((review) => (
+              {reviews?.map((review, idx) => (
                 <ReviewItem
                   key={review?.id}
                   review={review}
                   onUpvoteToggle={onUpvoteToggle}
+                  isShowTutorial={idx === 0}
                 />
               ))}
             </Stack>
