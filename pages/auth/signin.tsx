@@ -1,9 +1,10 @@
-import { Button, Image, Stack, Text, Title } from "@mantine/core"
+import { Button, Stack, Text, Title } from "@mantine/core"
 import { showNotification } from "@mantine/notifications"
 import Flex from "components/glue/Flex"
 import { GetServerSideProps } from "next"
 import { Provider } from "next-auth/providers"
 import { getProviders, getSession, signIn } from "next-auth/react"
+import Image from "next/image"
 import { useRouter } from "next/router"
 import { useEffect, useMemo } from "react"
 
@@ -72,20 +73,16 @@ const Signin = ({ providers }: ISigninProps) => {
       <Image
         src="/glue/logos/google-logo.png"
         alt="google logo"
-        sx={(theme) => ({
-          height: "20px",
-          width: "20px",
-        })}
+        width="20px"
+        height="20px"
       />
     ),
     GitHub: (
       <Image
         src="/glue/logos/github-logo.png"
         alt="github logo"
-        sx={(theme) => ({
-          height: "20px",
-          width: "20px",
-        })}
+        width="20px"
+        height="20px"
       />
     ),
   }

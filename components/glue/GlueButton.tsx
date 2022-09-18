@@ -2,8 +2,10 @@ import * as amplitude from "@amplitude/analytics-browser"
 import { Button, ButtonProps } from "@mantine/core"
 import React from "react"
 import { toKebabCase } from "util/glue/strings"
+import { PolymorphicComponentProps } from "@mantine/utils"
 
-interface IGlueButtonProps extends ButtonProps<"button"> {}
+interface IGlueButtonProps
+  extends PolymorphicComponentProps<"button", ButtonProps> {}
 
 const GlueButton = React.forwardRef<HTMLButtonElement, IGlueButtonProps>(
   (props, ref) => {
