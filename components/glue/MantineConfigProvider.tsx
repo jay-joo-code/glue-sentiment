@@ -29,18 +29,6 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             "#4263EB",
             "#3B5BDB",
           ],
-          // brand: [
-          //   "#F7FCFF",
-          //   "#E1F2FF",
-          //   "#CBE8FE",
-          //   "#74C0FC",
-          //   "#4DABF7",
-          //   "#339AF0",
-          //   "#228BE6",
-          //   "#1C7ED6",
-          //   "#1971C2",
-          //   "#1864AB",
-          // ],
           "button-gray": [
             "#F5F5F5",
             "#E0E1E2",
@@ -53,17 +41,17 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             "#2C2E33",
             "#1A1B1E",
           ],
-          "button-subtle": [
+          "icon-button-gray": [
             "#FFFFFF",
             "#E0E1E2",
             "#D6D6D8",
             "#C1C2C5",
             "#A6A7AB",
-            "#909296",
             "#5C5F66",
-            "#373A40",
-            "#2C2E33",
-            "#1A1B1E",
+            "#5C5F66",
+            "#5C5F66",
+            "#5C5F66",
+            "#5C5F66",
           ],
 
           // text array values
