@@ -41,44 +41,65 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
       }
-  const defaultQueryData = useSWR<T>(queryConfig, { ...refetchConfig, ...rest })
+  const swrData = useSWR<T>(queryConfig, { ...refetchConfig, ...rest })
   const optimisticUpdate = <T>({
     variant,
     itemData,
     asyncRequest,
   }: IOptimisticUpdate) => {
-    if (Array.isArray(defaultQueryData?.data)) {
-      if (variant === "update") {
-        const newData = defaultQueryData?.data?.map((item) => {
-          if (item?.id === itemData?.id) {
-            return {
-              ...item,
-              ...itemData,
-            }
-          }
-          return item
-        })
-        defaultQueryData?.mutate(
-          async () => {
-            const res = await asyncRequest(defaultQueryData?.data)
-            return res
-          },
+    if (Array.isArray(swrData?.data)) {
+      switch (variant) {
+        case "update":
           {
-            optimisticData: newData as any,
-            rollbackOnError: true,
-            revalidate: false,
+            const newData = swrData?.data?.map((item) => {
+              if (item?.id === itemData?.id) {
+                return {
+                  ...item,
+                  ...itemData,
+                }
+              }
+              return item
+            })
+            swrData?.mutate(
+              async () => {
+                const res = await asyncRequest(swrData?.data)
+                return res
+              },
+              {
+                optimisticData: newData as any,
+                rollbackOnError: true,
+                revalidate: false,
+              }
+            )
           }
-        )
+          break
+        case "delete":
+          {
+            const newData = swrData?.data?.filter(
+              (item) => item?.id !== itemData?.id
+            )
+            swrData?.mutate(
+              async () => {
+                const res = await asyncRequest(swrData?.data)
+                return res
+              },
+              {
+                optimisticData: newData as any,
+                rollbackOnError: true,
+                revalidate: false,
+              }
+            )
+          }
+          break
       }
-    } else {
     }
   }
 
   return {
-    ...defaultQueryData,
+    ...swrData,
     optimisticUpdate,
-    refetch: defaultQueryData?.mutate,
-    isLoading: defaultQueryData?.isValidating,
+    refetch: swrData?.mutate,
+    isLoading: swrData?.isValidating,
   }
 }
 

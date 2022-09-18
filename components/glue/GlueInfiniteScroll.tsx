@@ -96,26 +96,44 @@ const GlueInfiniteScroll = ({
     itemData,
     asyncRequest,
   }: IInfiniteOptimisticUpdate) => {
-    if (variant === "update") {
-      // NOTE: currently, swr doesn't support rollbacks for swr infinite
-      mutate(
-        unstable_serialize(getKey),
-        (pages) => {
-          return pages?.map((page) =>
-            page?.map((item) => {
-              if (item?.id === itemData?.id) {
-                asyncRequest(item)
-                return {
-                  ...item,
-                  ...itemData,
-                }
-              }
-              return item
-            })
+    // NOTE: currently, swr doesn't support rollbacks for swr infinite
+    switch (variant) {
+      case "update":
+        {
+          mutate(
+            unstable_serialize(getKey),
+            (pages) => {
+              return pages?.map((page) =>
+                page?.map((item) => {
+                  if (item?.id === itemData?.id) {
+                    asyncRequest(item)
+                    return {
+                      ...item,
+                      ...itemData,
+                    }
+                  }
+                  return item
+                })
+              )
+            },
+            false
           )
-        },
-        false
-      )
+        }
+        break
+      case "delete":
+        {
+          mutate(
+            unstable_serialize(getKey),
+            (pages) => {
+              asyncRequest(itemData)
+              return pages?.map((page) =>
+                page?.filter((item) => item?.id !== itemData?.id)
+              )
+            },
+            false
+          )
+        }
+        break
     }
   }
 
