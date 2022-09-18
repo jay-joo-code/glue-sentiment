@@ -103,11 +103,11 @@ const ReviewItem = ({
           {/* up / down vote */}
           <Flex direction="column" align="center" spacing="xs">
             <IconButton
-              color={isUpvoted ? "brand" : "icon-button-gray"}
+              color={isUpvoted ? "brand" : "button-gray"}
               tooltipLabel="Upvote"
               position="right"
               onClick={handleUpvote}
-              variant={isUpvoted ? "light" : "outline"}
+              // variant={isUpvoted ? "light" : "outline"}
             >
               <ArrowUpwardOutlinedIcon />
             </IconButton>
@@ -161,7 +161,7 @@ const ReviewItem = ({
                     </Text>
                     <IconButton
                       tooltipLabel="Invalidate review"
-                      color="icon-button-gray"
+                      color="button-gray"
                       position="left"
                       onClick={handleInvalidate}
                     >
