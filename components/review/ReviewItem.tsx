@@ -161,7 +161,7 @@ const ReviewItem = ({
                     </Text>
                     <IconButton
                       tooltipLabel="Invalidate review"
-                      color="button-gray"
+                      color="icon-button-gray"
                       position="left"
                       onClick={handleInvalidate}
                     >
