@@ -41,18 +41,6 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             "#2C2E33",
             "#1A1B1E",
           ],
-          "icon-button-gray": [
-            "#FFFFFF",
-            "#E0E1E2",
-            "#D6D6D8",
-            "#C1C2C5",
-            "#A6A7AB",
-            "#5C5F66",
-            "#5C5F66",
-            "#5C5F66",
-            "#5C5F66",
-            "#5C5F66",
-          ],
 
           // text array values
           //  0      1           2      3
