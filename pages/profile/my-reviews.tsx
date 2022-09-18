@@ -36,6 +36,9 @@ const MyReviewsPage = () => {
                 },
               },
             },
+            orderBy: {
+              updatedAt: "desc",
+            },
           },
         }}
         loader={
