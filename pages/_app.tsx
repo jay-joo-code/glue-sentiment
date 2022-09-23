@@ -12,6 +12,7 @@ import "react-loading-skeleton/dist/skeleton.css"
 import { ThemeProvider } from "styled-components"
 import * as amplitude from "@amplitude/analytics-browser"
 import "styles/glue/reset.css"
+import { GlueRouterTransition } from "components/glue/GlueRouterTransition"
 
 const App = ({ Component, pageProps }: AppProps) => {
   // NOTE: uncomment to persist scroll position on route change
@@ -30,6 +31,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <SessionProvider session={pageProps.session}>
       <MantineConfigProvider>
+        <GlueRouterTransition />
         <ThemeProvider theme={theme}>
           <NotificationsProvider>
             <ModalsProvider>
