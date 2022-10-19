@@ -22,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
 
   // source of truth: url query
   const router = useRouter()
-  const [localValue, setLocalValue] = useState<string>(null)
+  const [localValue, setLocalValue] = useState<string>("")
   const [debouncedLocalValue] = useDebouncedValue(localValue, 300)
 
   const localOnChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
   }
 
   useEffect(() => {
-    if (sourceOfTruth === "url-query" && localValue !== null) {
+    if (sourceOfTruth === "url-query" && localValue !== "") {
       router?.replace({
         query: {
           ...router?.query,
@@ -46,7 +46,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
   }, [debouncedLocalValue])
 
   useEffect(() => {
-    if (sourceOfTruth === "url-query" && localValue === null) {
+    if (sourceOfTruth === "url-query" && localValue === "") {
       setLocalValue(router?.query[glueKey] as string)
     }
   }, [router?.query])
