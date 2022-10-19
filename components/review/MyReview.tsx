@@ -27,7 +27,7 @@ const MyReview = ({ topicId }: IMyReviewProps) => {
     disabled: !session,
   })
 
-  const { mutate } = useGlueQuery<Review[]>({
+  const { mutate } = useGlueQuery({
     autoRefetch: false,
     url: "/glue/reviews",
     args: {
