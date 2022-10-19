@@ -1,10 +1,11 @@
 import { Container, Space, Stack } from "@mantine/core"
-import useTopics from "hooks/queries/useTopics"
+import useTopics, { queryConfigTopics } from "hooks/queries/useTopics"
 import React from "react"
 import SearchIcon from "@mui/icons-material/Search"
 import Input from "components/glue/Input"
 import { useRouter } from "next/router"
 import TopicListItem from "./TopicListItem"
+import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 
 interface ITopicListProps {
   categoryId: number
@@ -12,12 +13,7 @@ interface ITopicListProps {
 
 const TopicList = ({ categoryId }: ITopicListProps) => {
   const router = useRouter()
-  const { data: topics } = useTopics({
-    categoryId,
-    query: router?.query["category-details-topic-search"] as string,
-    orderBy: "",
-  })
-  console.log("topics", topics)
+  const query = router?.query["category-details-topic-search"] as string
 
   return (
     <Container>
@@ -28,17 +24,31 @@ const TopicList = ({ categoryId }: ITopicListProps) => {
         icon={<SearchIcon />}
       />
       <Space mb="lg" />
-      <Stack spacing="xs">
-        {topics?.map((topic) => (
-          <TopicListItem
-            key={topic?.id}
-            topic={topic}
-            searchQuery={
-              router?.query["category-details-topic-search"] as string
-            }
-          />
-        ))}
-      </Stack>
+      <GlueInfiniteScroll
+        queryConfig={queryConfigTopics({
+          categoryId,
+          query,
+        })}
+        limit={10}
+      >
+        {(providedData) => {
+          const { data: topics } = providedData
+
+          return (
+            <Stack spacing="xs">
+              {topics?.map((topic) => (
+                <TopicListItem
+                  key={topic?.id}
+                  topic={topic}
+                  searchQuery={
+                    router?.query["category-details-topic-search"] as string
+                  }
+                />
+              ))}
+            </Stack>
+          )
+        }}
+      </GlueInfiniteScroll>
       <Space mb="lg" />
     </Container>
   )
