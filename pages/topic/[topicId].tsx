@@ -1,10 +1,8 @@
 import { Badge, Container, Spoiler, Text, Title } from "@mantine/core"
-import { Category, Review, Topic } from "@prisma/client"
+import { Category, Topic } from "@prisma/client"
 import Flex from "components/glue/Flex"
 import PageContainer from "components/glue/PageContainer"
 import AllReviews from "components/review/AllReviews"
-import MoreTopics from "components/review/MoreTopics"
-import MyReview from "components/review/MyReview"
 import ReviewStars from "components/review/ReviewStars"
 import useRecentTopics from "hooks/useRecentTopics"
 import prisma from "lib/glue/prisma"
@@ -131,8 +129,6 @@ const TopicDetailsPage = ({ topic, reviewCount }: ITopicDetailsPageProps) => {
           {topic?.desc}
         </Text>
       </Spoiler>
-      <Container mb="4rem" />
-      <MyReview topicId={topic?.id} />
       <Container mb="4rem" />
       <AllReviews topicId={topic?.id} totalReviewCount={reviewCount} />
     </PageContainer>

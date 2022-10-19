@@ -1,9 +1,13 @@
 import { Container, Select, Stack, Text, Title } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import { showNotification } from "@mantine/notifications"
+import CreateIcon from "@mui/icons-material/Create"
+import Button from "components/glue/Button"
 import Flex from "components/glue/Flex"
 import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
-import useGlueQuery from "hooks/glue/useGlueQuery"
+import Modal from "components/glue/Modal"
+import useIsDevice from "hooks/glue/useIsDevice"
+import useOpenModal from "hooks/glue/useOpenModal"
 import api from "lib/glue/api"
 import Image from "next/image"
 import Skeleton from "react-loading-skeleton"
@@ -15,6 +19,9 @@ interface IAllReviewsProps {
 }
 
 const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
+  const { isMobile } = useIsDevice()
+  const openModal = useOpenModal("write-review")
+
   const sortByToQuery = {
     popular: { upvotes: "desc" },
     recent: { createdAt: "desc" },
@@ -41,7 +48,22 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
   return (
     <Container>
       <Flex align="center" justify="space-between" mb="2rem">
-        <Title order={2}>All Reviews ({totalReviewCount})</Title>
+        <Flex
+          align="center"
+          justify="space-between"
+          sx={(theme) => ({
+            width: "100%",
+          })}
+        >
+          <Title order={2}>Reviews ({totalReviewCount})</Title>
+          <Button
+            size="sm"
+            leftIcon={<CreateIcon />}
+            onClick={() => openModal()}
+          >
+            {isMobile ? "Review" : "Write review"}
+          </Button>
+        </Flex>
         <Select
           value={sortBy}
           onChange={handleSortByChange}
@@ -137,6 +159,9 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
           )
         }}
       </GlueInfiniteScroll>
+      <Modal glueKey="write-review" title="Write a review">
+        <Text>test</Text>
+      </Modal>
     </Container>
   )
 }
