@@ -60,9 +60,17 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
       switch (updateArg) {
         case "update":
           {
-            swrData?.mutate(data, {
-              revalidate: false,
-            })
+            swrData?.mutate(
+              async (prevData) => {
+                return {
+                  ...prevData,
+                  ...data,
+                }
+              },
+              {
+                revalidate: false,
+              }
+            )
           }
           break
         case "update-item":

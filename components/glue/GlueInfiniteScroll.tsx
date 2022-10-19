@@ -1,5 +1,7 @@
+import { Container } from "@mantine/core"
 import useOnScreen from "hooks/glue/useOnScreen"
 import { useEffect, useRef, useState } from "react"
+import Skeleton from "react-loading-skeleton"
 import { useSWRConfig } from "swr"
 import useSWRInfinite, {
   SWRInfiniteResponse,
@@ -27,8 +29,16 @@ interface IGlueInfiniteScrollProps {
   loader?: React.ReactNode
 }
 
+type IUpdateVariant =
+  | "update"
+  | "update-item"
+  | "append-start"
+  | "append-end"
+  | "delete"
+  | "delete-item"
+
 interface IInfiniteOptimisticUpdate<T = any> {
-  variant: "create" | "update" | "append-start" | "append-end" | "delete"
+  variant: IUpdateVariant
   itemData: any
   asyncRequest: (prevData: T) => T
 }
@@ -91,6 +101,112 @@ const GlueInfiniteScroll = ({
     }
   }, [isVisible, hasMore])
 
+  const update = (updateArg: Function | IUpdateVariant, data?: any) => {
+    if (typeof updateArg === "string") {
+      switch (updateArg) {
+        case "update":
+          {
+            mutate(
+              unstable_serialize(getKey),
+              async (pages) => {
+                return {
+                  ...pages,
+                  ...data,
+                }
+              },
+              {
+                revalidate: false,
+              }
+            )
+          }
+          break
+        case "update-item":
+          {
+            mutate(
+              unstable_serialize(getKey),
+              (pages) => {
+                return pages?.map((page) =>
+                  page?.map((item) => {
+                    if (item?.id === data?.id) {
+                      return {
+                        ...item,
+                        ...data,
+                      }
+                    }
+                    return item
+                  })
+                )
+              },
+              false
+            )
+          }
+          break
+        case "delete":
+          {
+            mutate(
+              unstable_serialize(getKey),
+              async () => {
+                return null
+              },
+              false
+            )
+          }
+          break
+        case "delete-item":
+          {
+            mutate(
+              unstable_serialize(getKey),
+              async (pages) => {
+                return pages?.map((page) =>
+                  page?.filter((item) => item?.id !== data?.id)
+                )
+              },
+              false
+            )
+          }
+          break
+        // TODO:
+        // case "append-start":
+        //   {
+        //     mutate(
+        //       unstable_serialize(getKey),
+        //       async (pages) => {
+        //         const newData = [data, ...pages]
+        //         return newData
+        //       },
+        //       false
+        //     )
+        //   }
+        //   break
+        // TODO:
+        // case "append-end":
+        //   {
+        //     mutate(
+        //       unstable_serialize(getKey),
+        //       async (pages) => {
+        //         const newData = [...pages, data]
+        //         return newData
+        //       },
+        //       false
+        //     )
+        //   }
+        //   break
+      }
+    } else if (typeof updateArg === "function") {
+      mutate(
+        unstable_serialize(getKey),
+        async (pages) => {
+          const res = await updateArg(pages)
+          return res
+        },
+        false
+      )
+    }
+  }
+
+  /**
+   * @deprecated in favor of update
+   */
   const optimisticUpdate = ({
     variant,
     itemData,
@@ -148,16 +264,28 @@ const GlueInfiniteScroll = ({
     size,
     setSize,
     mutate: infiniteMutate,
+    update,
     optimisticUpdate,
     refetch: infiniteMutate,
     isLoading: swrData?.isValidating,
+    swrKey: unstable_serialize(getKey),
   }
+
+  const defaultLoader = (
+    <Container>
+      {[...Array(limit)].map((_, idx) => (
+        <Container key={idx} mb="md">
+          <Skeleton height={100} />
+        </Container>
+      ))}
+    </Container>
+  )
 
   return (
     <div>
       {children(providedData)}
       <div ref={ref}>
-        {hasMore && isLoadingMore && <div>{loader || "loading..."}</div>}
+        {hasMore && isLoadingMore && <div>{loader || defaultLoader}</div>}
       </div>
     </div>
   )

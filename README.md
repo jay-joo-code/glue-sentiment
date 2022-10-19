@@ -12,8 +12,28 @@
 git remote add glue https://github.com/jay-joo-code/glue-root.git
 git fetch --all
 git switch -c glue-master glue/master
+```
 
-git push glue glue-master:master # to push a commit to glue/master
+# Scripts
+
+**Pushing specific commits to Glue root**
+
+```bash
+$ git checkout glue-master
+$ git cherry-pick <commit-hash>
+$ git push
+```
+
+**Setting upstream to glue/master**
+
+```bash
+$ git branch -u glue/master
+```
+
+**Push to glue/master**
+
+```bash
+git push glue glue-master:master
 ```
 
 ### Database
@@ -82,13 +102,3 @@ git push glue glue-master:master # to push a commit to glue/master
 
 1. Create a [Better Uptime](https://betterstack.com/better-uptime) account with the project email
 2. Add the pages that are important to the web app, such as frequently visited pages or conversion pages
-
-# Scripts
-
-**Pushing specific commits to Glue root**
-
-```bash
-$ git checkout glue-master
-$ git cherry-pick <commit-hash>
-$ git push
-```
