@@ -1,8 +1,7 @@
-import { Container, Title } from "@mantine/core"
+import { Title } from "@mantine/core"
 import { capitalize } from "@mui/material"
 import PageContainer from "components/glue/PageContainer"
-import TopicSearch from "components/index/TopicSearch"
-import RecentReviews from "components/review/RecentReviews"
+import TopicList from "components/topic/TopicList"
 import prisma from "lib/glue/prisma"
 import { GetServerSideProps } from "next"
 import pluralize from "pluralize"
@@ -29,9 +28,7 @@ const CategoryDetailsPage = ({ category }) => {
       <Title order={1} mb="xl">
         {categoryName}
       </Title>
-      <TopicSearch categoryName={category?.name} />
-      <Container mb="3rem" />
-      <RecentReviews categoryId={category?.id} />
+      <TopicList categoryId={category?.id} />
     </PageContainer>
   )
 }
