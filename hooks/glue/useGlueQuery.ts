@@ -21,15 +21,23 @@ export interface IGlueQueryConfig extends SWRConfiguration {
   autoRefetch?: boolean
 }
 
-interface IOptimisticUpdate<T = any> {
-  variant: "create" | "update" | "append-start" | "append-end" | "delete"
+type IUpdateVariant =
+  | "update"
+  | "update-item"
+  | "append-start"
+  | "append-end"
+  | "delete"
+  | "delete-item"
+
+interface IOptimisticUpdate {
+  variant: IUpdateVariant
   itemData: any
-  asyncRequest: (prevData: T) => T
+  asyncRequest: (prevData: any) => any
   rollbackOnError?: boolean
   refetchAfterRequest?: boolean
 }
 
-const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
+const useGlueQuery = (config: IGlueQueryConfig = {}) => {
   const {
     url,
     args = {},
@@ -45,7 +53,109 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
       }
-  const swrData = useSWR<T>(swrKey, { ...refetchConfig, ...rest })
+  const swrData = useSWR(swrKey, { ...refetchConfig, ...rest })
+
+  const update = (updateArg: Function | IUpdateVariant, data?: any) => {
+    if (typeof updateArg === "string") {
+      switch (updateArg) {
+        case "update":
+          {
+            swrData?.mutate(data, {
+              revalidate: false,
+            })
+          }
+          break
+        case "update-item":
+          {
+            swrData?.mutate(
+              async (prevData) => {
+                const newData = prevData?.map((item: any) => {
+                  if (item?.id === data?.id) {
+                    return {
+                      ...item,
+                      ...data,
+                    }
+                  }
+                  return item
+                })
+                return newData
+              },
+              {
+                revalidate: false,
+              }
+            )
+          }
+          break
+        case "delete":
+          {
+            swrData?.mutate(
+              async () => {
+                return null
+              },
+              {
+                revalidate: false,
+              }
+            )
+          }
+          break
+        case "delete-item":
+          {
+            swrData?.mutate(
+              async (prevData) => {
+                const newData = prevData?.filter(
+                  (item) => item?.id !== data?.id
+                )
+                return newData
+              },
+              {
+                revalidate: false,
+              }
+            )
+          }
+          break
+        case "append-start":
+          {
+            swrData?.mutate(
+              async (prevData) => {
+                const newData = [data, ...prevData]
+                return newData
+              },
+              {
+                revalidate: false,
+              }
+            )
+          }
+          break
+        case "append-end":
+          {
+            swrData?.mutate(
+              async (prevData) => {
+                const newData = [...prevData, data]
+                return newData
+              },
+              {
+                revalidate: false,
+              }
+            )
+          }
+          break
+      }
+    } else if (typeof updateArg === "function") {
+      swrData?.mutate(
+        async (prevData) => {
+          const res = await updateArg(prevData)
+          return res
+        },
+        {
+          revalidate: false,
+        }
+      )
+    }
+  }
+
+  /**
+   * @deprecated in favor of update
+   */
   const optimisticUpdate = <T>({
     variant,
     itemData,
@@ -119,6 +229,7 @@ const useGlueQuery = <T = any>(config: IGlueQueryConfig = {}) => {
 
   return {
     ...swrData,
+    update,
     optimisticUpdate,
     refetch: swrData?.mutate,
     isLoading: swrData?.isValidating,
