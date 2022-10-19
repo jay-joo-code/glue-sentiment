@@ -1,5 +1,5 @@
 const appConfig = {
-  name: "ReferHub",
+  name: "Sentiment",
 }
 
 export default appConfig
