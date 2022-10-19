@@ -45,7 +45,7 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
     case "POST":
       const sessionData = session
         ? {
-            user: { connect: { email: session?.user?.email } },
+            userId: session?.user?.id,
           }
         : {}
 

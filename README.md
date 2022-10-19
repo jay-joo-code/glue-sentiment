@@ -4,6 +4,7 @@
 
 ### General
 
+- [ ] import this repo to clone it (click on the + sign at the top right side of the page)
 - [ ] rename .env.glue to .env
 - [ ] add glue remote:
 
@@ -38,10 +39,12 @@ git push glue glue-master:master # to push a commit to glue/master
   - http://localhost:3000
   - https://(app-name).vercel.app
   - https://proddomain.com
+  - https://www.proddomain.com
 - Authorized redirect URIs
   - http://localhost:3000/api/auth/callback/google
   - https://(app-name).vercel.app/api/auth/callback/google
   - https://proddomain.com/api/auth/callback/google
+  - https://www.proddomain.com/api/auth/callback/google
 
 ### Google Analytics
 
@@ -52,13 +55,20 @@ git push glue glue-master:master # to push a commit to glue/master
 ### Deployment (Vercel)
 
 1. [Create a new Sentry project](https://sentry.io/organizations/jay-joo-org/projects/new/)
+   1. Create a project new under Jay Joo Org
+   2. Select Next.js
+   3. Select alert me on every issue for Issue Alerts
+   4. Select all for Performance Alerts
+   5. Update project name
+   6. Add `NEXT_PUBLIC_SENTRY_DSN` to env variable (only required in production)
 2. [Create a new Vercel project](https://vercel.com/new) (this deployment should fail)
+   1. Make sure to add all environment variables
+   2. `DATABASE_URL_PROD` should be saved as `DATABASE_URL`. All other env vars have the same name as the local env vars.
+   3. Add `?schema=public&connection_limit=1` at the end of the `DATABASE_URL` env variable to prevent the [too many database connections error](https://stackoverflow.com/questions/71259682/prisma-is-opening-too-many-connections-with-postgrsql-when-running-jest-end-to-e)
 3. [Configure Vercel integration in Sentry](https://sentry.io/settings/jay-joo-org/integrations/vercel/138276/)
-4. Save the connection string `prisma://...` under the name `DATABASE_URL`. All other env vars have the same name as the local env vars.
-5. Add `?schema=public&connection_limit=1` at the end of the `DATABASE_URL` env variable to prevent the [too many database connections error](https://stackoverflow.com/questions/71259682/prisma-is-opening-too-many-connections-with-postgrsql-when-running-jest-end-to-e)
-6. Wait 3 - 10 minutes until Sentry env variables are added.
-7. Redeploy
-8. Add Vercel production endpoint to OAuth providers' redirect URLs.
+4. Wait 3 - 10 minutes until Sentry env variables are added.
+5. Redeploy
+6. (If you haven't yet) Add Vercel production endpoint to OAuth providers' redirect URLs.
 
 **Notes**
 
@@ -75,23 +85,10 @@ git push glue glue-master:master # to push a commit to glue/master
 
 # Scripts
 
-**Pushing changes to Glue**
+**Pushing specific commits to Glue root**
 
 ```bash
 $ git checkout glue-master
 $ git cherry-pick <commit-hash>
 $ git push
 ```
-
-# Logic
-
-### Required property validation
-
-- always creates an object when navigating to `/:model/edit`
-- impossible to validate required properties on the DB level
-
-### Model status
-
-- defaults to draft on create
-- update requests set status to published
-- read requests can filter for status

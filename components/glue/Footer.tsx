@@ -1,4 +1,5 @@
 import { Container, Text } from "@mantine/core"
+import appConfig from "constants/appConfig"
 import React from "react"
 import Flex from "./Flex"
 
@@ -19,10 +20,7 @@ const Footer = () => {
         justify="space-between"
         sx={(theme) => ({
           width: "100%",
-
-          [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-            width: "85vw",
-          },
+          maxWidth: theme.breakpoints.md,
         })}
       >
         <Text
@@ -33,7 +31,7 @@ const Footer = () => {
             cursor: "pointer",
           })}
         >
-          sentiment
+          {appConfig.name}
         </Text>
         <Text color="dimmed" size="sm">
           cornellsentiment@gmail.com

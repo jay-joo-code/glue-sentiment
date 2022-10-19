@@ -1,13 +1,13 @@
 import * as amplitude from "@amplitude/analytics-browser"
-import { Button, ButtonProps } from "@mantine/core"
+import { Button as MantineButton, ButtonProps } from "@mantine/core"
 import React from "react"
 import { toKebabCase } from "util/glue/strings"
 import { PolymorphicComponentProps } from "@mantine/utils"
 
-interface IGlueButtonProps
+interface IButtonProps
   extends PolymorphicComponentProps<"button", ButtonProps> {}
 
-const GlueButton = React.forwardRef<HTMLButtonElement, IGlueButtonProps>(
+const Button = React.forwardRef<HTMLButtonElement, IButtonProps>(
   (props, ref) => {
     const { onClick, children, ...rest } = props
 
@@ -20,13 +20,13 @@ const GlueButton = React.forwardRef<HTMLButtonElement, IGlueButtonProps>(
     }
 
     return (
-      <Button ref={ref} {...rest} onClick={handleTrackedClick}>
+      <MantineButton ref={ref} {...rest} onClick={handleTrackedClick}>
         {children}
-      </Button>
+      </MantineButton>
     )
   }
 )
 
-GlueButton.displayName = "GlueButton"
+Button.displayName = "Button"
 
-export default GlueButton
+export default Button

@@ -1,7 +1,8 @@
-import { Button, Group, Text, ThemeIcon, useMantineTheme } from "@mantine/core"
+import { Text, ThemeIcon, useMantineTheme } from "@mantine/core"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
+import Flex from "./Flex"
 
 interface INavItemProps {
   icon: React.ReactNode
@@ -16,20 +17,33 @@ const NavItem = ({ icon, label, href, onClick }: INavItemProps) => {
 
   return (
     <Link href={href}>
-      <Button
-        variant={router.pathname === href ? "light" : "subtle"}
-        fullWidth
-        style={{ display: "flex", justifyContent: "flex-start" }}
+      <Flex
         mb="xs"
         onClick={onClick}
+        align="center"
+        p="sm"
+        pl="lg"
+        sx={(theme) => ({
+          width: "100%",
+          background: "#FFFFFF",
+          borderRadius: theme.radius.lg,
+        })}
       >
-        <Group style={{ width: "100%" }}>
-          <ThemeIcon color={theme.colors.blue[5]} variant="light">
-            {icon}
-          </ThemeIcon>
-          <Text color={theme.colors.gray[8]}>{label}</Text>
-        </Group>
-      </Button>
+        <ThemeIcon variant="light" color="brand" size="lg">
+          {icon}
+        </ThemeIcon>
+        <Text
+          size="lg"
+          color={
+            router.pathname === href
+              ? theme.colors.brand[6]
+              : theme.colors.text[3]
+          }
+          weight={500}
+        >
+          {label}
+        </Text>
+      </Flex>
     </Link>
   )
 }

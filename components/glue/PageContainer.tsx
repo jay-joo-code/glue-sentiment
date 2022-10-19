@@ -1,4 +1,5 @@
 import { Container } from "@mantine/core"
+import appConfig from "constants/appConfig"
 import { useSession } from "next-auth/react"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -7,7 +8,7 @@ import Flex from "./Flex"
 
 interface IPageContainerProps {
   children: React.ReactNode
-  variant: "mobile-only"
+  variant: "mobile-only" | "responsive"
   title?: string
   isPrivate?: boolean
 }
@@ -23,18 +24,27 @@ const PageContainer = ({
 
   useEffect(() => {
     if (isPrivate && status === "unauthenticated") {
-      router.push("/api/auth/signin")
+      router.push({
+        pathname: "/api/auth/signin",
+        query: {
+          callbackUrl: window.location.href,
+        },
+      })
     }
   }, [isPrivate, status])
+
+  const titleComponent = title && (
+    <Head>
+      <title>
+        {title} | {appConfig.name}
+      </title>
+    </Head>
+  )
 
   if (variant === "mobile-only") {
     return (
       <>
-        {title && (
-          <Head>
-            <title>{title}</title>
-          </Head>
-        )}
+        {titleComponent}
         <Flex justify="center">
           <Container
             sx={(theme) => ({
@@ -48,6 +58,19 @@ const PageContainer = ({
             {children}
           </Container>
         </Flex>
+      </>
+    )
+  } else if (variant === "responsive") {
+    return (
+      <>
+        {titleComponent}
+        <Container
+          sx={(theme) => ({
+            width: "100%",
+          })}
+        >
+          {children}
+        </Container>
       </>
     )
   }

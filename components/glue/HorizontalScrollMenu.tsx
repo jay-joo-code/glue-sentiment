@@ -4,7 +4,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
 import { VisibilityContext } from "react-horizontal-scrolling-menu"
 import styled from "styled-components"
-import useIsMobile from "hooks/glue/isMobile"
+import useIsDevice from "hooks/glue/useIsDevice"
 
 type TChildren = React.ReactElement<{
   // unique itemId required for every item
@@ -40,7 +40,7 @@ function LeftArrow() {
     }
   }, [isFirstItemVisible, visibleItemsWithoutSeparators])
 
-  const isMobile = useIsMobile()
+  const { isMobile } = useIsDevice()
 
   if (isMobile) return null
 
@@ -66,7 +66,7 @@ function RightArrow() {
     }
   }, [isLastItemVisible, visibleItemsWithoutSeparators])
 
-  const isMobile = useIsMobile()
+  const { isMobile } = useIsDevice()
 
   if (isMobile) return null
 

@@ -1,7 +1,7 @@
 import { Button } from "@mantine/core"
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined"
 import AlignHorizontalLeftOutlinedIcon from "@mui/icons-material/AlignHorizontalLeftOutlined"
-import useIsMobile from "hooks/glue/isMobile"
+import useIsDevice from "hooks/glue/useIsDevice"
 import Flex from "./Flex"
 import NavItem from "./NavItem"
 
@@ -10,7 +10,7 @@ export interface INavListProps {
 }
 
 const NavList = ({ closeNavOverlay }: INavListProps) => {
-  const isMobile = useIsMobile()
+  const { isMobile } = useIsDevice()
 
   // private navigation is defined in AuthButton.tsx
   const PUBLIC_NAV = [

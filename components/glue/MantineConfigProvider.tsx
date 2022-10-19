@@ -102,12 +102,10 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
             },
           },
           Container: {
-            defaultProps: {
-              p: 0,
-              m: 0,
-            },
             styles: {
               root: {
+                padding: 0,
+                margin: 0,
                 maxWidth: "unset",
               },
             },
