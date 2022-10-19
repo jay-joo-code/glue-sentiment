@@ -33,12 +33,6 @@ const Modal = React.forwardRef<HTMLDivElement, IModalProps>((props, ref) => {
     if (onCloseProp) onCloseProp()
   }
 
-  console.log(
-    "router?.query[modalKey]",
-    router?.query[modalKey],
-    Boolean(router?.query[modalKey])
-  )
-
   // TODO: tracking open, close
   // const handleTrackedClick = (event: React.MouseEvent<HTMLModalElement>) => {
   //   amplitude.track(`Modal-click-${toKebabCase(children as string)}`)
