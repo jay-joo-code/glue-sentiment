@@ -1,13 +1,43 @@
-import * as amplitude from "@amplitude/analytics-browser"
 import { Container, Modal as MantineModal, ModalProps } from "@mantine/core"
-import React from "react"
-import { toKebabCase } from "util/glue/strings"
 import { PolymorphicComponentProps } from "@mantine/utils"
+import { useRouter } from "next/router"
+import React from "react"
 
-interface IModalProps extends PolymorphicComponentProps<"Modal", ModalProps> {}
+interface IModalProps
+  extends Omit<
+    PolymorphicComponentProps<"Modal", ModalProps>,
+    "opened" | "onClose" | "component"
+  > {
+  glueKey: string
+  title: string
+  onClose?: () => void
+}
 
 const Modal = React.forwardRef<HTMLDivElement, IModalProps>((props, ref) => {
-  const { children, ...rest } = props
+  const { children, glueKey, onClose: onCloseProp, ...rest } = props
+  const router = useRouter()
+  const modalKey = `modal-${glueKey}`
+
+  const handleClose = () => {
+    router?.replace(
+      {
+        query: {
+          ...router?.query,
+          [modalKey]: "false",
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
+
+    if (onCloseProp) onCloseProp()
+  }
+
+  console.log(
+    "router?.query[modalKey]",
+    router?.query[modalKey],
+    Boolean(router?.query[modalKey])
+  )
 
   // TODO: tracking open, close
   // const handleTrackedClick = (event: React.MouseEvent<HTMLModalElement>) => {
@@ -20,7 +50,13 @@ const Modal = React.forwardRef<HTMLDivElement, IModalProps>((props, ref) => {
 
   return (
     <Container ref={ref}>
-      <MantineModal {...rest}>{children}</MantineModal>
+      <MantineModal
+        {...rest}
+        opened={router?.query[modalKey] === "true"}
+        onClose={handleClose}
+      >
+        {children}
+      </MantineModal>
     </Container>
   )
 })

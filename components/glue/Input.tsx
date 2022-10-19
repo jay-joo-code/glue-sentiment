@@ -32,12 +32,16 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
 
   useEffect(() => {
     if (sourceOfTruth === "url-query" && localValue !== "") {
-      router?.replace({
-        query: {
-          ...router?.query,
-          [glueKey]: debouncedLocalValue,
+      router?.replace(
+        {
+          query: {
+            ...router?.query,
+            [glueKey]: debouncedLocalValue,
+          },
         },
-      })
+        undefined,
+        { shallow: true }
+      )
     }
 
     if (onDebouncedChange) {
