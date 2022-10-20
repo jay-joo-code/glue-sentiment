@@ -46,6 +46,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModalProps>((props, ref) => {
     <Container ref={ref}>
       <MantineModal
         {...rest}
+        centered={true}
         opened={router?.query[modalKey] === "true"}
         onClose={handleClose}
       >

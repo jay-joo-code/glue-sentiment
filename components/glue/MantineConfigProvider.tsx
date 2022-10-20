@@ -110,6 +110,22 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
               },
             },
           },
+          Modal: {
+            styles: {
+              close: {
+                background: "#E0E1E2",
+              },
+              title: {
+                fontSize: "1.8rem",
+                fontWeight: 600,
+                color: "#3B4550",
+              },
+              body: {
+                paddingTop: ".5rem",
+                paddingBottom: ".5rem",
+              },
+            },
+          },
         },
       }}
     >

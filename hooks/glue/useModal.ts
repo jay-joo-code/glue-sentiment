@@ -1,8 +1,9 @@
 import { useRouter } from "next/router"
 
-const useOpenModal = (glueKey: string) => {
+const useModal = (glueKey: string) => {
   const router = useRouter()
   const modalKey = `modal-${glueKey}`
+
   const openModal = () => {
     router?.replace(
       {
@@ -15,6 +16,20 @@ const useOpenModal = (glueKey: string) => {
       { shallow: true }
     )
   }
-  return openModal
+
+  const closeModal = () => {
+    router?.replace(
+      {
+        query: {
+          ...router?.query,
+          [modalKey]: "false",
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
+  }
+
+  return { openModal, closeModal }
 }
-export default useOpenModal
+export default useModal
