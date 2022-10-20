@@ -7,10 +7,11 @@ import Flex from "components/glue/Flex"
 import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 import Modal from "components/glue/Modal"
 import useIsDevice from "hooks/glue/useIsDevice"
-import useOpenModal from "hooks/glue/useOpenModal"
+import useModal from "hooks/glue/useModal"
 import api from "lib/glue/api"
 import Image from "next/image"
 import Skeleton from "react-loading-skeleton"
+import CreateReviewForm from "./CreateReviewForm"
 import ReviewItem from "./ReviewItem"
 
 interface IAllReviewsProps {
@@ -20,7 +21,7 @@ interface IAllReviewsProps {
 
 const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
   const { isMobile } = useIsDevice()
-  const openModal = useOpenModal("write-review")
+  const { openModal } = useModal("write-review")
 
   const sortByToQuery = {
     popular: { upvotes: "desc" },
@@ -160,7 +161,7 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
         }}
       </GlueInfiniteScroll>
       <Modal glueKey="write-review" title="Write a review">
-        <Text>test</Text>
+        <CreateReviewForm topicId={topicId} />
       </Modal>
     </Container>
   )
