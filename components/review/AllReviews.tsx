@@ -9,7 +9,9 @@ import Modal from "components/glue/Modal"
 import useIsDevice from "hooks/glue/useIsDevice"
 import useModal from "hooks/glue/useModal"
 import api from "lib/glue/api"
+import { useSession } from "next-auth/react"
 import Image from "next/image"
+import { useRouter } from "next/router"
 import Skeleton from "react-loading-skeleton"
 import CreateReviewForm from "./CreateReviewForm"
 import ReviewItem from "./ReviewItem"
@@ -22,6 +24,8 @@ interface IAllReviewsProps {
 const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
   const { isMobile } = useIsDevice()
   const { openModal } = useModal("write-review")
+  const { status } = useSession()
+  const router = useRouter()
 
   const sortByToQuery = {
     popular: { upvotes: "desc" },
@@ -46,6 +50,19 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
     setSortBy(newValue)
   }
 
+  const handleCreateReviewClick = () => {
+    if (status === "authenticated") {
+      openModal()
+    } else {
+      router.push({
+        pathname: "/api/auth/signin",
+        query: {
+          callbackUrl: window.location.href,
+        },
+      })
+    }
+  }
+
   return (
     <Container>
       <Flex align="center" justify="space-between" mb="2rem">
@@ -60,7 +77,7 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
           <Button
             size="sm"
             leftIcon={<CreateIcon />}
-            onClick={() => openModal()}
+            onClick={handleCreateReviewClick}
           >
             {isMobile ? "Review" : "Write review"}
           </Button>

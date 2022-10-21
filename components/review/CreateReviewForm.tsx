@@ -13,19 +13,11 @@ interface ICreateReviewFormProps {
 }
 
 const CreateReviewForm = ({ topicId }: ICreateReviewFormProps) => {
-  /*
-
-  stars : custom component
-  content : textarea
-
-  force sign in on form submit (persist form data)
-
-  */
   const [stars, setStars] = useState<number>(0)
   const [content, setContent] = useState<string>("")
   const { closeModal } = useModal("write-review")
 
-  const handleSubmit = (values) => {
+  const handleSubmit = () => {
     if (stars === 0) {
       showNotification({
         title: "Please select star rating",
