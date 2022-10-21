@@ -4,3 +4,6 @@ node_modules/
 .sentryclirc
 # sample-data directory used in glue-sentiment
 sample-data/
+
+# Sentry
+.sentryclirc
