@@ -7,6 +7,7 @@ const TestSentryPage = () => {
   const handleClick = async () => {
     const data = await api.get("/route/doesnt/exist")
     const foo = data.data.nice.nice
+    throw new Error("explicit error thrown")
   }
 
   return (
