@@ -4,8 +4,9 @@ import api from "lib/glue/api"
 import React from "react"
 
 const TestSentryPage = () => {
-  const handleClick = () => {
-    api.get("/route/doesnt/exist")
+  const handleClick = async () => {
+    const data = await api.get("/route/doesnt/exist")
+    const foo = data.data.nice.nice
   }
 
   return (
