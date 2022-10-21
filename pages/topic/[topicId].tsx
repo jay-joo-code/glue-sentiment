@@ -32,6 +32,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     where: {
       topicId: topic?.id,
       isValid: true,
+      invalidVotes: {
+        lt: 2,
+      },
     },
   })
 

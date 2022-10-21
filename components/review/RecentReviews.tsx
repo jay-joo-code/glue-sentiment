@@ -18,6 +18,9 @@ const RecentReviews = ({ categoryId }: IRecentReviewsProps) => {
           categoryId,
         },
         isValid: true,
+        invalidVotes: {
+          lt: 2,
+        },
       },
       include: {
         topic: {

@@ -95,6 +95,9 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
             where: {
               topicId,
               isValid: true,
+              invalidVotes: {
+                lt: 2,
+              },
             },
             include: {
               topic: {
@@ -120,6 +123,7 @@ const AllReviews = ({ topicId, totalReviewCount }: IAllReviewsProps) => {
       >
         {(providedData) => {
           const { data: reviews, optimisticUpdate, isLoading } = providedData
+          console.log("reviews[0]", reviews[0])
           const onUpvoteToggle = (reviewId: number, newUpvotes: number) => {
             optimisticUpdate({
               variant: "update",
