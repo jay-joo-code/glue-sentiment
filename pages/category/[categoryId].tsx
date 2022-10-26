@@ -28,7 +28,7 @@ const CategoryDetailsPage = ({ category }) => {
       <Title order={1} mb="xl">
         {categoryName}
       </Title>
-      <TopicList categoryId={category?.id} />
+      <TopicList categoryName={category?.name} />
     </PageContainer>
   )
 }

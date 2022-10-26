@@ -1,12 +1,12 @@
 import useGlueQuery from "hooks/glue/useGlueQuery"
 
 export interface IUseTopicsArgs {
-  categoryId: number
+  categoryName: string
   query: string
   orderBy?: string
 }
 
-export const queryConfigTopics = ({ categoryId, query }: IUseTopicsArgs) => ({
+export const queryConfigTopics = ({ categoryName, query }: IUseTopicsArgs) => ({
   url: "/glue/topics",
   args: {
     where: {
@@ -30,7 +30,9 @@ export const queryConfigTopics = ({ categoryId, query }: IUseTopicsArgs) => ({
           },
         },
       ],
-      categoryId,
+      category: {
+        name: categoryName,
+      },
     },
     include: {
       _count: {
@@ -47,13 +49,16 @@ export const queryConfigTopics = ({ categoryId, query }: IUseTopicsArgs) => ({
         _count: "desc",
       },
     },
+    parseConfig: {
+      parseNumbers: false,
+    },
   },
 })
 
-const useTopics = ({ categoryId, query }: IUseTopicsArgs) => {
+const useTopics = ({ categoryName, query }: IUseTopicsArgs) => {
   return useGlueQuery(
     queryConfigTopics({
-      categoryId,
+      categoryName,
       query,
     })
   )

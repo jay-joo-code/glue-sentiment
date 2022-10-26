@@ -8,10 +8,10 @@ import TopicListItem from "./TopicListItem"
 import GlueInfiniteScroll from "components/glue/GlueInfiniteScroll"
 
 interface ITopicListProps {
-  categoryId: number
+  categoryName: string
 }
 
-const TopicList = ({ categoryId }: ITopicListProps) => {
+const TopicList = ({ categoryName }: ITopicListProps) => {
   const router = useRouter()
   const query = router?.query["category-details-topic-search"] as string
 
@@ -26,7 +26,7 @@ const TopicList = ({ categoryId }: ITopicListProps) => {
       <Space mb="lg" />
       <GlueInfiniteScroll
         queryConfig={queryConfigTopics({
-          categoryId,
+          categoryName,
           query,
         })}
         limit={10}
