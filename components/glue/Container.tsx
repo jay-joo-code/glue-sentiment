@@ -14,6 +14,7 @@ interface IContainerProps
   extends Omit<PolymorphicComponentProps<"div", ContainerProps>, "sx"> {
   glueKey?: string
   isClickable?: boolean
+  clickableHoverColor?: string
   sx?: (theme?: MantineTheme) => CSSObject
 }
 
@@ -24,6 +25,7 @@ const Container = React.forwardRef<HTMLDivElement, IContainerProps>(
       children,
       glueKey,
       isClickable = false,
+      clickableHoverColor,
       sx,
       ...rest
     } = props
@@ -46,7 +48,8 @@ const Container = React.forwardRef<HTMLDivElement, IContainerProps>(
         sx={(theme) => ({
           cursor: isClickable && "pointer",
           "&:hover": {
-            background: isClickable && theme.colors.gray[0],
+            background:
+              isClickable && (clickableHoverColor || theme.colors.gray[0]),
           },
           ...sxObj,
         })}
