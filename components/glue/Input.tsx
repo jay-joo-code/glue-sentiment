@@ -54,21 +54,26 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
     }
   }, [sourceOfTruth, debouncedUrlQueryValue])
 
+  // onDebouncedChange
+  const [debouncedPropValue] = useDebouncedValue(propValue, 300)
+  const [isChanged, setIsChanged] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (onDebouncedChange && debouncedPropValue !== undefined && isChanged) {
+      onDebouncedChange(debouncedPropValue as string)
+    }
+  }, [debouncedPropValue])
+
   // dynamic value, onChange
   const value =
     (sourceOfTruth === "url-query" ? urlQueryValue : (propValue as string)) ||
     ""
-  const onChange =
-    sourceOfTruth === "url-query" ? urlQueryOnChange : propOnChange
-
-  // onDebouncedChange
-  const [debouncedPropValue] = useDebouncedValue(propValue, 300)
-
-  useEffect(() => {
-    if (onDebouncedChange && debouncedPropValue !== undefined) {
-      onDebouncedChange(debouncedPropValue as string)
-    }
-  }, [debouncedPropValue])
+  const onChange = (event) => {
+    setIsChanged(true)
+    if (propOnChange) propOnChange(event)
+  }
+  const dynamicOnChange =
+    sourceOfTruth === "url-query" ? urlQueryOnChange : onChange
 
   // TODO: track focus, debounced values, blur, etc
   // const handleTrackedClick = (event: React.MouseEvent<HTMLInputElement>) => {
@@ -82,7 +87,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
   // dynamic styles
   const variant = propVariant === "subtle" ? "unstyled" : propVariant
   const commonWrapperStyles = {
-    padding: ".3rem .8rem",
+    padding: ".3rem .1rem",
   }
   const dynamicStyles =
     propVariant === "subtle"
@@ -117,7 +122,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
     <MantineInput
       ref={ref}
       value={value}
-      onChange={onChange}
+      onChange={dynamicOnChange}
       variant={variant}
       styles={dynamicStyles}
       {...rest}

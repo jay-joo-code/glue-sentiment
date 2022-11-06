@@ -1,8 +1,9 @@
 import { Textarea as MantineTextarea, TextareaProps } from "@mantine/core"
 import { useDebouncedValue } from "@mantine/hooks"
 import { PolymorphicComponentProps } from "@mantine/utils"
+import useIsFirstCycle from "hooks/glue/useIsFirstCycle"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 
 interface ITextareaProps
   extends Omit<
@@ -58,18 +59,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
       }
     }, [sourceOfTruth, debouncedUrlQueryValue])
 
-    // dynamic value, onChange
-    const value =
-      (sourceOfTruth === "url-query" ? urlQueryValue : (propValue as string)) ||
-      ""
-    const onChange =
-      sourceOfTruth === "url-query" ? urlQueryOnChange : propOnChange
-
     // onDebouncedChange
     const [debouncedPropValue] = useDebouncedValue(propValue, 300)
+    const [isChanged, setIsChanged] = useState<boolean>(false)
 
     useEffect(() => {
-      if (onDebouncedChange && debouncedPropValue !== undefined) {
+      if (onDebouncedChange && debouncedPropValue !== undefined && isChanged) {
         onDebouncedChange(debouncedPropValue as string)
       }
     }, [debouncedPropValue])
@@ -83,10 +78,21 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
     //   }
     // }
 
+    // dynamic value, onChange
+    const value =
+      (sourceOfTruth === "url-query" ? urlQueryValue : (propValue as string)) ||
+      ""
+    const onChange = (event) => {
+      setIsChanged(true)
+      if (propOnChange) propOnChange(event)
+    }
+    const dynamicOnChange =
+      sourceOfTruth === "url-query" ? urlQueryOnChange : onChange
+
     // dynamic styles
     const variant = propVariant === "subtle" ? "unstyled" : propVariant
     const commonWrapperStyles = {
-      padding: ".6rem .6rem",
+      padding: ".3rem .1rem",
     }
     const dynamicStyles =
       propVariant === "subtle"
@@ -94,7 +100,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
             wrapper: {
               ...commonWrapperStyles,
               background: value?.length === 0 && theme.colors.gray[0],
-              borderRadius: theme.radius.md,
+              borderRadius: theme.radius.sm,
 
               "&:hover": {
                 background: theme.colors.gray[0],
@@ -123,7 +129,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
       <MantineTextarea
         ref={ref}
         value={value}
-        onChange={onChange}
+        onChange={dynamicOnChange}
         variant={variant}
         styles={dynamicStyles}
         {...rest}
