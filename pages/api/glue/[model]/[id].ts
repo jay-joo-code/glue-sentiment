@@ -2,6 +2,8 @@ import { withSentry } from "@sentry/nextjs"
 import crudEndpoints from "constants/crudEndpoints"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/react"
+import parseQuery from "util/glue/parseQuery"
+import qs from "qs"
 
 async function handle(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req })
@@ -20,9 +22,25 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
 
   switch (req.method) {
     case "GET": {
-      const result = await model.findUnique({
-        where: { id: Number(req?.query?.id) },
+      const queryString = req?.url?.split("?")[1]
+      const { parseConfig } = qs.parse(queryString) as any
+      const query = parseQuery(queryString, {
+        parseNumbers: parseConfig?.parseNumbers !== "false",
+        parseBooleans: parseConfig?.parseBooleans !== "false",
       })
+
+      delete query?.model
+      delete query?.parseConfig
+
+      const prismaQuery = {
+        ...query,
+        where: {
+          ...(query?.where as any),
+          id: Number(req?.query?.id),
+        },
+      }
+
+      const result = await model.findUnique(prismaQuery)
       res.json(result)
       break
     }
