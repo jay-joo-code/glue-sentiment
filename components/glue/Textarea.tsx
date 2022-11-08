@@ -4,6 +4,7 @@ import { PolymorphicComponentProps } from "@mantine/utils"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import Container from "./Container"
+import Input from "./Input"
 import Text from "./Text"
 
 interface ITextareaProps
@@ -144,20 +145,31 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
       if (propOnBlur) propOnBlur(event)
     }
 
-    const handleTextClick = () => {
-      setTimeout(() => {
-        setIsDiv(false)
-      })
+    const handleRenderTextarea = () => {
+      setIsDiv(false)
     }
 
     if (isDivOnBlur && isDiv) {
       return (
         <Container
-          onClick={handleTextClick}
+          onClick={handleRenderTextarea}
           sx={(theme) => ({
             padding: ".3rem .22rem",
           })}
         >
+          {/* dummy input component for tab focus handling */}
+          <Input
+            onFocus={handleRenderTextarea}
+            sx={(theme) => ({
+              width: 0,
+              height: 0,
+              opacity: 0,
+              zIndex: -9999,
+              padding: 0,
+            })}
+          />
+
+          {/* text component to auto link */}
           <Text
             sx={(theme) => ({
               lineHeight: 1.5,
