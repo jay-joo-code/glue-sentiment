@@ -88,6 +88,10 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
   const variant = propVariant === "subtle" ? "unstyled" : propVariant
   const commonWrapperStyles = {
     padding: ".3rem .1rem",
+
+    "& svg": {
+      marginLeft: ".5rem",
+    },
   }
   const dynamicStyles =
     propVariant === "subtle"

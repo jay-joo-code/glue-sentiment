@@ -1,9 +1,10 @@
 import { Textarea as MantineTextarea, TextareaProps } from "@mantine/core"
 import { useDebouncedValue } from "@mantine/hooks"
 import { PolymorphicComponentProps } from "@mantine/utils"
-import useIsFirstCycle from "hooks/glue/useIsFirstCycle"
 import { useRouter } from "next/router"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
+import Container from "./Container"
+import Text from "./Text"
 
 interface ITextareaProps
   extends Omit<
@@ -14,6 +15,7 @@ interface ITextareaProps
   sourceOfTruth?: "url-query"
   onDebouncedChange?: (value: string) => void
   variant?: "unstyled" | "default" | "filled" | "subtle"
+  isDivOnBlur?: boolean
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
@@ -25,6 +27,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
       value: propValue,
       onChange: propOnChange,
       onDebouncedChange,
+      onFocus: propOnFocus,
+      onBlur: propOnBlur,
+      autoFocus: propAutoFocus,
+      isDivOnBlur = false,
       ...rest
     } = props
     // TODO: fix this stupid bug that jumps the cursor to the end
@@ -125,6 +131,44 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
             },
           }
 
+    // isDivOnBlur
+    const [isDiv, setIsDiv] = useState<boolean>(true)
+
+    const onFocus = (event) => {
+      setIsDiv(false)
+      if (propOnFocus) propOnFocus(event)
+    }
+
+    const onBlur = (event) => {
+      setIsDiv(true)
+      if (propOnBlur) propOnBlur(event)
+    }
+
+    const handleTextClick = () => {
+      setTimeout(() => {
+        setIsDiv(false)
+      })
+    }
+
+    if (isDivOnBlur && isDiv) {
+      return (
+        <Container
+          onClick={handleTextClick}
+          sx={(theme) => ({
+            padding: ".3rem .22rem",
+          })}
+        >
+          <Text
+            sx={(theme) => ({
+              lineHeight: 1.5,
+            })}
+          >
+            {value}
+          </Text>
+        </Container>
+      )
+    }
+
     return (
       <MantineTextarea
         ref={ref}
@@ -132,6 +176,9 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, ITextareaProps>(
         onChange={dynamicOnChange}
         variant={variant}
         styles={dynamicStyles}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        autoFocus={isDivOnBlur ? !isDiv : propAutoFocus}
         {...rest}
       />
     )

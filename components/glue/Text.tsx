@@ -10,7 +10,7 @@ interface ITextProps extends PolymorphicComponentProps<"p", TextProps> {
 
 const Text = React.forwardRef<HTMLParagraphElement, ITextProps>(
   (props, ref) => {
-    const { children, isDisableAutolink, ...rest } = props
+    const { children, isDisableAutolink = false, ...rest } = props
 
     return (
       <MantineText ref={ref} {...rest}>
