@@ -32,6 +32,7 @@
     "axios": "^0.27.2",
     "babel-plugin-superjson-next": "^0.4.3",
     "date-and-time": "^2.4.0",
+    "date-fns": "^2.29.3",
     "dayjs": "^1.11.3",
     "moment": "^2.29.3",
     "next": "12.1.6",
