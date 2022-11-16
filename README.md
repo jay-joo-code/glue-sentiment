@@ -49,9 +49,11 @@ git push glue glue-master:master
 
 ### Database
 
-1. [Create a new Prisma Data Platform project](https://cloud.prisma.io/projects/create)
-2. Follow the steps to create a new project.
-3. Copy paste the connection strings:
+1. [Create a new Supabase project](https://app.supabase.com/)
+2. [Copy the database connection string](https://app.supabase.com/project/nsjhrzynvgbhontxkobx/settings/database)
+3. [Create a new Prisma Data Platform project](https://cloud.prisma.io/projects/create)
+4. Follow the steps to create a new project.
+5. Copy paste the connection strings into .env. Make sure to add the query parameters in the dev connection string postgres://...
 
 - `DATABASE_URL=postgres://...?connection_limit=10&connect_timeout=30&pool_timeout=30&socket_timeout=30`
 - `DATABASE_URL_PROD=prisma://...`
