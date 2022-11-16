@@ -10,6 +10,7 @@ const parseQuery = (
   { parseNumbers = true, parseBooleans = true }: IOptions
 ) => {
   return qs.parse(query, {
+    depth: 20,
     decoder(str, decoder, charset) {
       const strWithoutPlus = str.replace(/\+/g, " ")
       if (charset === "iso-8859-1") {
@@ -23,7 +24,7 @@ const parseQuery = (
 
       const keywords = {
         null: null,
-        undefined,
+        undefined: undefined,
       }
 
       if (str in keywords) {

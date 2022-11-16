@@ -56,12 +56,15 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
   const swrData = useSWR(swrKey, { ...refetchConfig, ...rest })
 
   const update = (updateArg: Function | IUpdateVariant, data?: any) => {
+    // NOTE: the first arg of mutate() should NEVER be an async function
+    // because it causes input cursors to reset on mutate
+    // https://codesandbox.io/s/distracted-elion-htxt9?file=/src/App.js:364-383
     if (typeof updateArg === "string") {
       switch (updateArg) {
         case "update":
           {
             swrData?.mutate(
-              async (prevData) => {
+              (prevData) => {
                 return {
                   ...prevData,
                   ...data,
@@ -69,6 +72,7 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
               },
               {
                 revalidate: false,
+                populateCache: true,
               }
             )
           }
@@ -76,7 +80,7 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
         case "update-item":
           {
             swrData?.mutate(
-              async (prevData) => {
+              (prevData) => {
                 const newData = prevData?.map((item: any) => {
                   if (item?.id === data?.id) {
                     return {
@@ -109,7 +113,7 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
         case "delete-item":
           {
             swrData?.mutate(
-              async (prevData) => {
+              (prevData) => {
                 const newData = prevData?.filter(
                   (item) => item?.id !== data?.id
                 )
@@ -124,7 +128,7 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
         case "append-start":
           {
             swrData?.mutate(
-              async (prevData) => {
+              (prevData) => {
                 const newData = [data, ...prevData]
                 return newData
               },
@@ -137,7 +141,7 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
         case "append-end":
           {
             swrData?.mutate(
-              async (prevData) => {
+              (prevData) => {
                 const newData = [...prevData, data]
                 return newData
               },
@@ -150,9 +154,8 @@ const useGlueQuery = (config: IGlueQueryConfig = {}) => {
       }
     } else if (typeof updateArg === "function") {
       swrData?.mutate(
-        async (prevData) => {
-          const res = await updateArg(prevData)
-          return res
+        (prevData) => {
+          return updateArg(prevData)
         },
         {
           revalidate: false,

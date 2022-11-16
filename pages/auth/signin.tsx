@@ -3,13 +3,7 @@ import { showNotification } from "@mantine/notifications"
 import Flex from "components/glue/Flex"
 import { GetServerSideProps } from "next"
 import { Provider } from "next-auth/providers"
-import {
-  getProviders,
-  getSession,
-  signIn,
-  signOut,
-  useSession,
-} from "next-auth/react"
+import { getProviders, getSession, signIn } from "next-auth/react"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useEffect, useMemo } from "react"
@@ -39,12 +33,12 @@ const Signin = ({ providers }: ISigninProps) => {
   // by auto linking accounts
 
   // sign out if already signed in
-  const { status } = useSession()
-  useEffect(() => {
-    if (status === "authenticated") {
-      signOut({ redirect: true })
-    }
-  }, [status])
+  // const { status } = useSession()
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     signOut({ redirect: true })
+  //   }
+  // }, [status])
 
   const ERROR_TO_MESSAGE = useMemo(
     () => ({

@@ -126,6 +126,17 @@ const MantineConfigProvider = ({ children }: IMantineConfigProviderProps) => {
               },
             },
           },
+          Input: {
+            styles: {
+              // don't add styles here
+              // it's shared amongst all components that extend input
+              input: {
+                // don't add padding here
+                // it creates scrollbars in textareas
+                color: "#3B4550",
+              },
+            },
+          },
         },
       }}
     >
